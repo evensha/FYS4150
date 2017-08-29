@@ -28,13 +28,22 @@ f = [ h**2*100*exp(-10*x[i]) for i in range(len(x)) ]
 
 fl_ops = 0; # floting point operations
 
-# Forward substitution:  
 
+# Forward substitution:  
+"""
 for i in range(2,n+1):  # start loop on b[2] and f[2]  
 	#print i
 	b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]   
 	f[i] = f[i] - a[i-1]*f[i-1]/b[i-1]
 	fl_ops += 6
+"""
+
+# Simplified forward substitution: 
+
+for i in range(2,n+1): 
+	b[i] = (i+1)/float(i)    
+	f[i] = f[i] + (i-1)/float(i)*f[i-1] 
+	fl_ops += 4 
 
 
 # Backward substitution:  
@@ -43,10 +52,21 @@ u = zeros(n+2)
 u[0]= 0; u[n+1]= 0 # boundary values 
 u[n] = f[n]/b[n] # n'th element of u  
 
+"""
 for i in range(n,1,-1):  # loop backwards from the second last element of u    
 	#print i
 	u[i-1] = (f[i-1] - c[i-1]*u[i])/b[i-1]  
 	fl_ops += 3
+"""
+
+
+# Simplified backward substitution:
+
+for i in range(n,1,-1): 
+	#print i
+	u[i-1] = (i-1.0)/i*(f[i-1]+u[i]) 
+	fl_ops += 3
+
 
 
 print 'Floting point operations: %d' %fl_ops
