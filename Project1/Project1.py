@@ -4,8 +4,6 @@ from matplotlib.pyplot import *
 import sys
 import time 
 
-t0 = time.clock() 
-
 alg = sys.argv[1];  # indicates if we want to run the general (g) or the simplified (s) algorithm
 n = int( sys.argv[2] ); # matrix dimension 
 
@@ -30,6 +28,7 @@ f = [ h**2*100*exp(-10*x[i]) for i in range(len(x)) ]
 
 
 fl_ops = 0; # floting point operations
+t0 = time.clock() 
 
 
 # Forward substitution:  
@@ -75,11 +74,11 @@ if alg == 's':
 
 # Floating point operations and CPU time: 
 
-print 'Floting point operations: %d' %fl_ops
-
 t1 = time.clock() 
 cpu_time = t1- t0 
 print 'CPU time: %f' %cpu_time
+
+print 'Floting point operations: %d' %fl_ops
 
 
 # Analytical solution 
@@ -95,5 +94,26 @@ legend(['Numerical','Analytical'])
 xlabel('x')
 ylabel('u(x)')
 #show()
+
+
+# Errors 
+
+
+error = zeros(n+2) 
+
+for i in range(1,n+1): 
+	error[i] = abs((u[i]-u_ana[i])/u_ana[i])
+
+max_error = max(error)
+log_error = log10(max_error) 
+
+print 'Error with n=%d: %f' %(n,log_error)
+
+
+	
+
+
+
+
 
 
