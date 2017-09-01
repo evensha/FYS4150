@@ -2,8 +2,11 @@ from math import *
 from numpy import * 
 from matplotlib.pyplot import *
 import sys
+import time 
 
-alg = sys.argv[1];  # indicates if we want to run the general (g) or the simplified (s) algorithm: 
+t0 = time.clock() 
+
+alg = sys.argv[1];  # indicates if we want to run the general (g) or the simplified (s) algorithm
 n = int( sys.argv[2] ); # matrix dimension 
 
 h = 1.0/(n+1) # step size 
@@ -66,11 +69,18 @@ if alg == 'g':
 if alg == 's': 
 	for i in range(n,1,-1): 
 		#print i
-		u[i-1] = (i-1.0)/i*(f[i-1]+u[i]) 
+		u[i-1] = (i-1)/float(i)*(f[i-1]+u[i]) 
 		fl_ops += 3
 
 
+# Floating point operations and CPU time: 
+
 print 'Floting point operations: %d' %fl_ops
+
+t1 = time.clock() 
+cpu_time = t1- t0 
+print 'CPU time: %f' %cpu_time
+
 
 # Analytical solution 
 
@@ -84,5 +94,6 @@ plot(x,u_ana,'b')
 legend(['Numerical','Analytical'])
 xlabel('x')
 ylabel('u(x)')
-show()
+#show()
+
 
