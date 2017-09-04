@@ -1,0 +1,123 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[print,sort]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx,float}
+\usepackage{amssymb}
+\usepackage{amsmath,cancel}
+\usepackage{mathrsfs}
+\usepackage{epstopdf}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{hhline}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{wrapfig}
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\vspace*{6cm}
+\Huge
+\textbf{Project 1} \\
+\vspace*{1cm}
+\LARGE
+FYS4150 - Computational Physics \\ 
+\vspace*{10cm}
+Even S. Håland 
+\end{center}
+\end{titlepage}
+
+\section{Introduction}
+
+The purpose of this project is to develop an algorithm that will be used to find a numerical solution 
+to the one-dimensional Poisson equation 
+\begin{equation}
+-u''(x) = f(x), 
+\label{poisson}
+\end{equation}
+where $x\in (0,1)$, with the Dirichlet boundary conditions $u(0)=u(1)=0$. It will be assumed that the 
+source term ($f(x)$) takes the form 
+\begin{equation}
+f(x) = 100e^{-10x}. 
+\label{f(x)}
+\end{equation}
+
+The solution we obtain numerically will be compared to a closed-form solution given by 
+\begin{equation}
+u(x) = 1- \left(1-e^{-10}\right)x - e^{-10x}. 
+\label{closed-form}
+\end{equation}
+We can easily show that this is a solution to eq. (\ref{poisson}) by taking the first and second 
+derivatives: 
+\begin{align*}
+    u'(x) & = -\left(1-e^{-10}\right) + 10e^{-10x} \\ 
+\Rightarrow \quad  u''(x) & = -100e^{-10x} \\
+\Rightarrow \: -u''(x) & = 100e^{-10x} = f(x).  
+\end{align*}
+
+The algorithm will be developed in two different stages; first a general one, and then a simplified 
+one that deals with the particular problem in this project. The two versions of the algorithm will be 
+compared in terms of number of floating point operations and CPU time. 
+
+Another important part of the project is to study the error of the numerical solution, and how it 
+evolves as we decrease the step size in the algorithm. Finally we will also solve the equation by using 
+library functions, and see why this might not be a good idea. 
+
+\section{Discretization of the Poisson equation}
+
+To solve something numerically we need to make a discrete approximation to the problem. In this case 
+we approximate $u(x)$ by $v(x_i)=v_i$, with $x_i=ih$ in the interval $x_0=0$ to $x_{n+1}=1$. The step 
+size is defined by $h=1/(n+1)$. The boundary conditions are now given by $v_0 = v_{n+1} = 0$.   
+
+The second derivative is approximated by 
+\begin{equation}
+u''(x) \approx \frac{v_{i+1} + v_{i-1} - 2v_i}{h^2}, 
+\end{equation}
+meaning that our problem can be written as 
+\begin{equation}
+-\frac{v_{i+1} + v_{i-1} - 2v_i}{h^2} = f_i, 
+\label{poisson_disc}
+\end{equation}
+where $f_i = f(x_i)$ and $i=1,\dots,n$. To simplify the expression a little bit we multiply both sides by 
+$h^2$, and define $\tilde{b}_i = h^2 f_i$.  
+
+Let us now write eq. (\ref{poisson_disc}) explicitly for some values of $i$ (and keep in mind that 
+$v_0 = v_{n+1} = 0$): 
+\begin{align*}
+i = 1 \quad & \Rightarrow \quad -v_2 + 2v_1 = \tilde{b}_1 \\ 
+i = 2 \quad & \Rightarrow \quad -v_3 - v_1 + 2v_2 = \tilde{b}_2 \\ 
+i = 2 \quad & \Rightarrow \quad -v_4 - v_2 + 2v_3 = \tilde{b}_3 \\ 
+\vdots \\
+i = n \quad & \Rightarrow \quad  - v_{n-1} + 2v_n = \tilde{b}_n \\ 
+\end{align*}
+It is now relatively easy to see that this can be written as a matrix equation if we define 
+\begin{align*}
+\mathbf{v} = \left( \begin{array}{c}
+v_1 \\ v_2 \\ \vdots \\ v_n
+\end{array} \right) 
+\quad \mbox{and} \quad
+\mathbf{\tilde{b}} = \left( \begin{array}{c}
+\tilde{b}_1 \\ \tilde{b}_2 \\ \vdots \\ \tilde{b}_n 
+\end{array} \right) . 
+\end{align*}
+The equation can then be written as $\mathbf{Av} = \mathbf{\tilde{b}}$, where $\mathbf{A}$ is the 
+tridiagonal $n\times n$-matrix given by 
+\begin{align*}
+\mathbf{A} = \left(\begin{array}{cccccc}
+2 & -1 & 0 & \cdots & \cdots & 0 \\ 
+-1 & 2 & -1 & 0 & \cdots & \cdots \\ 
+0 & -1 & 2 & -1 & 0 & \cdots \\
+\cdots & \cdots & \cdots & \cdots & \cdots & \cdots \\              
+\cdots & \cdots  & 0 & -1 & 2 & -1 \\ 
+0 & \cdots & \cdots & 0 & -1 & 2 \\  
+\end{array} \right). 
+\end{align*}
+
+\section{Developing the algorithm}
+
+
+
+\end{document}
