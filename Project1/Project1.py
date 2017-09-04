@@ -52,14 +52,14 @@ if alg == 's':
 
 # Backward substitution:  
 
-u = zeros(n+2)   
-u[0]= 0; u[n+1]= 0 # boundary values 
-u[n] = f[n]/b[n] # n'th element of u  
+v = zeros(n+2)   
+v[0]= 0; v[n+1]= 0 # boundary values 
+v[n] = f[n]/b[n] # n'th element of u  
 
 if alg == 'g':
 	for i in range(n,1,-1):  # loop backwards from the second last element of u    
 		#print i
-		u[i-1] = (f[i-1] - c[i-1]*u[i])/b[i-1]  
+		v[i-1] = (f[i-1] - c[i-1]*v[i])/b[i-1]  
 		fl_ops += 3
 
 
@@ -68,7 +68,7 @@ if alg == 'g':
 if alg == 's': 
 	for i in range(n,1,-1): 
 		#print i
-		u[i-1] = (i-1)/float(i)*(f[i-1]+u[i]) 
+		v[i-1] = (i-1)/float(i)*(f[i-1]+v[i]) 
 		fl_ops += 3
 
 
@@ -83,37 +83,51 @@ print 'Floting point operations: %d' %fl_ops
 
 # Analytical solution 
 
-u_ana = [1-(1-exp(-10))*x[i] - exp(-10*x[i]) for i in range(len(x))]
+u = [1-(1-exp(-10))*x[i] - exp(-10*x[i]) for i in range(len(x))]
 
 
 # Plot numerical and analytical solution together
 
-plot(x,u,'r')
-plot(x,u_ana,'b')
+plot(x,v,'r')
+plot(x,u,'b')
 legend(['Numerical','Analytical'])
 xlabel('x')
 ylabel('u(x)')
-#show()
+show()
 
 
 # Errors 
 
-
 error = zeros(n+2) 
 
 for i in range(1,n+1): 
-	error[i] = abs((u[i]-u_ana[i])/u_ana[i])
+	error[i] = abs((v[i]-u[i])/u[i])
 
 max_error = max(error)
 log_error = log10(max_error) 
 
 print 'Error with n=%d: %f' %(n,log_error)
 
+"""
+A = array(zeros((n,n))) 
 
-	
+for i in range(n): 
+	for j in range(n): 
+		if i == j: 
+			A[i][j] = 2 
+		if i == j-1 or j == i-1: 
+			A[i][j] = -1 
 
+f_1 = [f[i] for i in range(1,n+1)]
+print A
+from numpy.linalg import solve 
 
+#print f 
+#print f_1
 
-
+u_1 = solve(A,f_1)
+print u_1
+print u_ana
+"""
 
 
