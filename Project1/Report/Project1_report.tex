@@ -82,16 +82,19 @@ meaning that our problem can be written as
 \label{poisson_disc}
 \end{equation}
 where $f_i = f(x_i)$ and $i=1,\dots,n$. To simplify the expression a little bit we multiply both sides by 
-$h^2$, and define $\tilde{b}_i = h^2 f_i$.  
+$h^2$, and define $y_i = h^2 f_i$.\footnote{In the project description it is suggested to use 
+$\tilde{b}_i = h^2 f_i$, but I found that this can be quite confusing, as $b$ is used to denote 
+the diagonal elements of the matrix $\mathbf{A}$, meaning that $\tilde{b}$ is very convenient to use when 
+doing the Gauss elimination.}  
 
 Let us now write eq. (\ref{poisson_disc}) explicitly for some values of $i$ (and keep in mind that 
 $v_0 = v_{n+1} = 0$): 
 \begin{align*}
-i = 1 \quad & \Rightarrow \quad -v_2 + 2v_1 = \tilde{b}_1 \\ 
-i = 2 \quad & \Rightarrow \quad -v_3 - v_1 + 2v_2 = \tilde{b}_2 \\ 
-i = 2 \quad & \Rightarrow \quad -v_4 - v_2 + 2v_3 = \tilde{b}_3 \\ 
+i = 1 \quad & \Rightarrow \quad -v_2 + 2v_1 = y_1 \\ 
+i = 2 \quad & \Rightarrow \quad -v_3 - v_1 + 2v_2 = y_2 \\ 
+i = 2 \quad & \Rightarrow \quad -v_4 - v_2 + 2v_3 = y_3 \\ 
 \vdots \\
-i = n \quad & \Rightarrow \quad  - v_{n-1} + 2v_n = \tilde{b}_n \\ 
+i = n \quad & \Rightarrow \quad  - v_{n-1} + 2v_n = y_n \\ 
 \end{align*}
 It is now relatively easy to see that this can be written as a matrix equation if we define 
 \begin{align*}
@@ -99,11 +102,11 @@ It is now relatively easy to see that this can be written as a matrix equation i
 v_1 \\ v_2 \\ \vdots \\ v_n
 \end{array} \right) 
 \quad \mbox{and} \quad
-\mathbf{\tilde{b}} = \left( \begin{array}{c}
-\tilde{b}_1 \\ \tilde{b}_2 \\ \vdots \\ \tilde{b}_n 
+\mathbf{y} = \left( \begin{array}{c}
+y_1 \\ y_2 \\ \vdots \\ y_n 
 \end{array} \right) . 
 \end{align*}
-The equation can then be written as $\mathbf{Av} = \mathbf{\tilde{b}}$, where $\mathbf{A}$ is the 
+The equation can then be written as $\mathbf{Av} = \mathbf{y}$, where $\mathbf{A}$ is the 
 tridiagonal $n\times n$-matrix given by 
 \begin{align*}
 \mathbf{A} = \left(\begin{array}{cccccc}
@@ -113,11 +116,111 @@ tridiagonal $n\times n$-matrix given by
 \cdots & \cdots & \cdots & \cdots & \cdots & \cdots \\              
 \cdots & \cdots  & 0 & -1 & 2 & -1 \\ 
 0 & \cdots & \cdots & 0 & -1 & 2 \\  
-\end{array} \right). 
+\end{array} \right),  
 \end{align*}
+meaning that to solve the problem we need to solve this equation for $\mathbf{v}$. 
 
 \section{Developing the algorithm}
 
+When solving a matrix equation we make use of Gaussian elimination. A general tridiagonal matrix can be 
+written in terms of vectors $a$, $b$ and $c$ as  
+\begin{align*}
+\mathbf{A} = \left(\begin{array}{cccccc}
+b_1 & c_1 & 0 & \cdots & \cdots & 0 \\ 
+a_1 & b_2 & c_2 & 0 & \cdots & \cdots \\ 
+0 & a_2 & b_3 & c_3 & 0 & \cdots \\
+\cdots & \cdots & \cdots & \cdots & \cdots & \cdots \\              
+\cdots & \cdots  & 0 & a_{n-2} & b_{n-1} & c_{n-1} \\ 
+0 & \cdots & \cdots & 0 & a_{n-1} & b_n \\  
+\end{array} \right), 
+\end{align*}
+so what we actually want to do is to eliminate all $a$'s in the matrix. We see that to eliminate $a_1$ 
+we must multiply the first row by $\frac{a_1}{b_1}$, and then subtract it from the second row, meaning that 
+the second row becomes 
+\begin{align*}
+\left( \begin{array}{cccccc}
+0 & b_2 - \frac{c_1 a_1}{b_1} & c_2 & 0 & \cdots & 0 
+\end{array} \right). 
+\end{align*}
+(Notice that the $c$'s are not affected by this procedure.)  
+To simplify the expressions we would like to define 
+\begin{align*}
+\tilde{b}_2 \equiv b_2 - \frac{c_1 a_1}{b_1}.  
+\end{align*}
+The procedure then continues in the same pattern, and we realize that the new diagonal elements 
+($\tilde{b}$'s) can be written as   
+\begin{align}
+\tilde{b}_i = b_i - \frac{a_i c_{i-1}}{\tilde{b}_{i-1}}. 
+\label{btilde}
+\end{align}
+We must also remember to do the same operations on the right hand side, 
+\begin{align}
+\tilde{f}_i = y_i - \frac{a_i \tilde{f}_{i-1}}{\tilde{b}_{i-1}}. 
+\label{ftilde}
+\end{align}
+
+When the elimination is done we need to do a backwards substitution to actually solve the equation for 
+each $v_i$. Since we now have a diagonal matrix we should start at the last equation, i.e. 
+$\tilde{b}_n v_n = \tilde{f}_n$, which means that 
+\begin{align*}
+v_n = \frac{\tilde{f}_n}{\tilde{b}_n}. 
+\end{align*} 
+Now that $v_n$ is known we can move to the second last equation, solve it for $v_{n-1}$, and so on. The 
+general expression for $v_i$ becomes 
+\begin{align*}
+v_i = \frac{\tilde{f}_{i+1} - c_i v_{i+1}}{\tilde{b}_i}.
+\label{vi} 
+\end{align*}
+
+Before moving on to how I have coded this, and finally look at results, I would like to get all the 
+"maths" done by looking at how we in our case can simplify the above expressions.    
+
+\subsection{Simplifying the algorithm}
+
+We have now looked at how the matrix equation is solved when $\mathbf{A}$ is a general tridiagonal matrix. 
+However, the matrix we are studying is simplified quite a bit, as all $a_i = c_i = -1$, while 
+all $b_i = 2$. The first thing to notice is that eq. (\ref{btilde}) can be written as 
+\begin{align*}
+\tilde{b}_i = 2- \frac{1}{\tilde{b}_{i-1}}. 
+\end{align*}
+By writing the first few terms 
+\begin{align*}
+\tilde{b}_2 = 2 - \frac{1}{2} = \frac{3}{2}, \quad \tilde{b}_3 = 2- \frac{1}{3/2} = \frac{4}{3}, \quad 
+\tilde{b}_4 = 2 - \frac{1}{4/3} = \frac{5}{4}, 
+\end{align*}
+and so on, we realize that we can actually write the $\tilde{b}$'s as 
+\begin{align*}
+\tilde{b}_i = \frac{i+1}{i}. 
+\end{align*}
+By doing the same for the $\tilde{f}$'s we find that 
+\begin{align*}
+\tilde{f}_i = y_i + \frac{i-1}{i}\tilde{f}_{i-1}, 
+\end{align*}
+and finally 
+\begin{align*}
+v_{i-1} = \frac{i-1}{i}(\tilde{f}_{i-1} - v_i). 
+\end{align*}
+
+\subsection{Coding the algorithm}
+
+At the moment of writing this report I have only written the code in Python, and the code can be found in 
+the following git-repository: \vspace{0.5cm} \\ 
+\fbox{
+\href{https://github.com/evensha/FYS4150/tree/master/Project1}
+{https://github.com/evensha/FYS4150/tree/master/Project1} } \vspace{0.5cm} \\ 
+The program take two input arguments: 
+\begin{enumerate}
+\item An argument that specify if we want to run the general or the simplified algorithm ("g" for 
+general and "s" for simplified). 
+\item The matrix dimension, $n$. 
+\end{enumerate}  
+
+When writing the code I have chosen to let all arrays have $n+2$ elements, i.e. $i = 0,1,\dots,n,n+1$, to 
+make the arrays correspond to the total number of grid points (including the boundary points), and 
+to make the code as close to the mathematical expressions as possible. So 
+when looping over the arrays the loop must go from the second element ($i=1$) to the $n$'th element. 
 
 
 \end{document}
+
+

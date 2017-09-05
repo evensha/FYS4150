@@ -1,3 +1,5 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Discretization of the Poisson equation}{}% 2
 \BOOKMARK [1][-]{section.3}{Developing the algorithm}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Simplifying the algorithm}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Coding the algorithm}{section.3}% 5
