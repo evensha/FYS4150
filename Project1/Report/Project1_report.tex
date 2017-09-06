@@ -200,6 +200,9 @@ and finally
 \begin{align*}
 v_{i-1} = \frac{i-1}{i}(\tilde{f}_{i-1} - v_i). 
 \end{align*}
+When doing these simplifications the total number of floating point operations for each turn in the loop 
+is reduced from $6$ to $4$ in the forward substitution, while in the backward substitution the number 
+stays the same ($3$). 
 
 \subsection{Coding the algorithm}
 
@@ -217,8 +220,78 @@ general and "s" for simplified).
 
 When writing the code I have chosen to let all arrays have $n+2$ elements, i.e. $i = 0,1,\dots,n,n+1$, to 
 make the arrays correspond to the total number of grid points (including the boundary points), and 
-to make the code as close to the mathematical expressions as possible. So 
-when looping over the arrays the loop must go from the second element ($i=1$) to the $n$'th element. 
+to make the code as close to the mathematical expressions as possible.
+
+After making the necessary arrays ($a$, $b$, $c$, $x$, $f$ and $v$) I make the four different loops, i.e. 
+forward and backward substitution in both the general and the simplified way. The loops just update the 
+values of the array elements of $b$, $f$ and $v$, meaning that I have chosen not to make separate arrays 
+called $\tilde{b}$, $\tilde{f}$, and so on. While running the algorithm I also calculate the CPU time and
+number of floating point operations. When the algorithm is done I make an array for the closed form 
+solution, and plot it together with the numerical solution from the algorithm, and the (logarithm of) 
+the relative error is calculated by the formula
+\begin{equation}
+\epsilon_i = log_{10}\left(\left| \frac{v_i - u_i}{u_i} \right| \right). 
+\label{eq:error}
+\end{equation}
+All results are shown in the next section. 
+   
+The last part of the program is to solve the problem by using library functions. I have chosen to use 
+functions from the \texttt{scipy} library, which for instance contains the \texttt{lu()}-function for 
+LU decomposition, and \texttt{inv()} for inverting a matrix. The CPU time is calculated for this procedure 
+as well.  
+
+
+\section{Results}
+
+Figure \ref{plots} shows the numerical solution plotted together with the closed-form solution for 
+$10$, $100$ and $1000$ grid points. When $n=10$ we can see that the numerical estimate is somewhat 
+different from the analytical solution, while for $n=100$ and $n=1000$ they seem to be very similar. 
+(If one zooms closely in on the $n=100$ plot it is possible to see a slight difference around the 
+maximum of the curve, while for $n=1000$ there seems to be no observable difference between the curves.) 
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}[b]{0.495\textwidth}
+		\includegraphics[width=\textwidth]{../plot_n_10.png}
+        \caption{}
+        %\label{}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.495\textwidth}
+        \includegraphics[width=\textwidth]{../plot_n_100.png}
+        \caption{}
+        %\label{}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.495\textwidth}
+        \includegraphics[width=\textwidth]{../plot_n_1000.png}
+        \caption{}
+        %\label{}
+  \end{subfigure}
+  \caption{} 
+  \label{plots}
+\end{figure}
+
+In Table \ref{errors} the $log$-$log$ relation between $h$ and $\epsilon_i$ (defined in eq. 
+(\ref{eq:error})) is given. By considering the mathematical truncation error we expect that $\epsilon_i$ 
+increases by a factor of $2$ when $n$ is increased by a factor of $10$. We see in the table that this 
+holds up to and including $n=10^4$. After this the error seems to be more "random", which must be due to 
+limited numerical precision.
+
+\begin{table}[H]
+\begin{center}
+$\begin{array}{c|c|c} 
+n & log_{10}(h) & \epsilon_i \\ \hline 
+10^1 & -1.041 & -1.180 \\ 
+10^2 & -2.004 & -3.088 \\ 
+10^3 & -3.000 & -5.080 \\  
+10^4 & -4.000 & -7.079 \\ 
+10^5 & -5.000 & -8.843 \\ 
+10^6 & -6.000 & -6.075 \\ 
+10^7 & -7.000 & -5.525 \\ \hline 
+\end{array}$
+\end{center}
+\caption{}
+\label{errors}
+\end{table}
 
 
 \end{document}

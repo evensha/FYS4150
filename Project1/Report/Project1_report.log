@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.18)  5 SEP 2017 17:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.18)  6 SEP 2017 15:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -867,51 +867,78 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
                    \relax 
 l.92 \begin{align*}
                     [1] [2] [3]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 239.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+) [4]
+<../plot_n_10.png, id=87, 578.16pt x 433.62pt>
+File: ../plot_n_10.png Graphic file (type png)
+ <use ../plot_n_10.png>
+Package pdftex.def Info: ../plot_n_10.png used on input line 255.
+(pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
+
+<../plot_n_100.png, id=89, 578.16pt x 433.62pt>
+File: ../plot_n_100.png Graphic file (type png)
+ <use ../plot_n_100.png>
+Package pdftex.def Info: ../plot_n_100.png used on input line 260.
+(pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
+
+<../plot_n_1000.png, id=90, 578.16pt x 433.62pt>
+File: ../plot_n_1000.png Graphic file (type png)
+ <use ../plot_n_1000.png>
+Package pdftex.def Info: ../plot_n_1000.png used on input line 265.
+(pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
+
+[5 <../plot_n_10.png> <../plot_n_100.png> <../plot_n_1000.png>]
 
 Package 'standalone' INFO: See file 'Project1_report.stp' for list of sub-pream
 bles.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 224.
-[4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 224.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 297.
+[6]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 297.
  (./Project1_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 224.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 224.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 297.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 297.
 Package rerunfilecheck Info: File `Project1_report.out' has not changed.
-(rerunfilecheck)             Checksum: 2AC1D487C060B9CC1C88BE2A5642B679;322.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 224.
+(rerunfilecheck)             Checksum: 11D15A4FEC9F864A499FF0BB114EDCFE;364.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 297.
  ) 
 Here is how much of TeX's memory you used:
- 9785 strings out of 494333
- 144885 string characters out of 6163939
- 251312 words of memory out of 5000000
- 12874 multiletter control sequences out of 15000+600000
- 21293 words of font info for 63 fonts, out of 8000000 for 9000
+ 9846 strings out of 494333
+ 146137 string characters out of 6163939
+ 251419 words of memory out of 5000000
+ 12919 multiletter control sequences out of 15000+600000
+ 22375 words of font info for 65 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 67i,15n,100p,334b,352s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/ev
-en/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/even/.texmf-va
-r/fonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </home/even/.texmf-var/fonts/pk/l
-jfour/jknappen/ec/ecrm0800.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknapp
-en/ec/ecrm1200.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx17
-28.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.600pk> </
-home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on Project1_report.pdf (5 pages, 182632 bytes).
+ 67i,15n,100p,334b,535s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1095.600pk> </home/ev
+en/.texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/even/.texmf-va
+r/fonts/pk/ljfour/jknappen/ec/ecbx1440.600pk> </home/even/.texmf-var/fonts/pk/l
+jfour/jknappen/ec/ecrm1000.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecrm0700.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm08
+00.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </
+home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/even/.t
+exmf-var/fonts/pk/ljfour/jknappen/ec/ecrm2074.600pk> </home/even/.texmf-var/fon
+ts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy8.pfb>
+Output written on Project1_report.pdf (7 pages, 280163 bytes).
 PDF statistics:
- 335 PDF objects out of 1000 (max. 8388607)
- 134 compressed objects within 2 object streams
- 20 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 390 PDF objects out of 1000 (max. 8388607)
+ 162 compressed objects within 2 object streams
+ 26 named destinations out of 1000 (max. 500000)
+ 64 words of extra memory for PDF output out of 10000 (max. 10000000)
 
