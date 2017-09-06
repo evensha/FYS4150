@@ -22,9 +22,9 @@ for i in range(1,n+1):
 	c[i] = -1.0
 
 
-x = [i*h for i in range(0,n+2)] 
+x = [float(i)*h for i in range(0,n+2)]  # making the x-array, i.e. the grid points
 
-f = [ h**2*100*exp(-10*x[i]) for i in range(len(x)) ]  
+f = [ h**2*100*exp(-10*x[i]) for i in range(0,n+2) ]  # making array with function values of f for each grid point
 
 
 fl_ops = 0; # floting point operations
@@ -76,27 +76,29 @@ if alg == 's':
 
 t1 = time.clock() 
 cpu_time = t1- t0 
-print 'CPU time: %f' %cpu_time
 
+print 'CPU time: %f' %cpu_time
 print 'Floting point operations: %d' %fl_ops
 
 
-# Analytical solution 
+# Analytical solution:  
 
 u = [1-(1-exp(-10))*x[i] - exp(-10*x[i]) for i in range(len(x))]
 
 
-# Plot numerical and analytical solution together
+# Plot numerical and analytical solution together: 
 
-plot(x,v,'r')
 plot(x,u,'b')
-legend(['Numerical','Analytical'])
+plot(x,v,'r')
+legend(['Analytical','Numerical'])
 xlabel('x')
 ylabel('u(x)')
-show()
+text(0.75,0.55,'n=%d' %n,fontsize=16)
+savefig('plot_n_%d' %n)
+#show()
 
 
-# Errors 
+# Errors:  
 
 error = zeros(n+2) 
 
@@ -108,26 +110,40 @@ log_error = log10(max_error)
 
 print 'Error with n=%d: %f' %(n,log_error)
 
-"""
-A = array(zeros((n,n))) 
 
-for i in range(n): 
-	for j in range(n): 
-		if i == j: 
-			A[i][j] = 2 
-		if i == j-1 or j == i-1: 
-			A[i][j] = -1 
+# Solution using functions from the scipy library: 
 
-f_1 = [f[i] for i in range(1,n+1)]
-print A
-from numpy.linalg import solve 
+solve_with_scipy = 0
 
-#print f 
-#print f_1
+if solve_with_scipy == 1: 
+	from scipy import * 
+	from scipy.linalg import * 
 
-u_1 = solve(A,f_1)
-print u_1
-print u_ana
-"""
+	A = array(zeros((n,n))) 
+
+	for i in range(n): 
+		for j in range(n): 
+			if i == j: 
+				A[i][j] = 2 
+			if i == j-1 or j == i-1: 
+				A[i][j] = -1 
+
+
+	f_1 = [h**2*100*exp(-10*x[i]) for i in range(1,n+1)]
+
+	t2 = time.clock()
+
+	P,L,U = lu(A)
+	A_1 = inv(U).dot(inv(L))
+	v_1 = A_1.dot(f_1)
+
+	t3 = time.clock() 
+
+	cpu_time_1 = t3 - t2
+	print 'CPU time for using scipy functions: %f' %cpu_time_1
+
+
+
+
 
 
