@@ -22,63 +22,53 @@ for i in range(1,n+1):
 	c[i] = -1.0
 
 
-x = [float(i)*h for i in range(0,n+2)]  # making the x-array, i.e. the grid points
+x = [i*h for i in range(0,n+2)]  # making the x-array, i.e. the grid points
 
 f = [ h**2*100*exp(-10*x[i]) for i in range(0,n+2) ]  # making array with function values of f for each grid point
 
+v = zeros(n+2)   # the unknown array  
+v[0]= 0; v[n+1]= 0 # boundary values 
 
-fl_ops = 0; # floting point operations
-t0 = time.clock() 
+
+t0 = time.time() # start time of algorithm 
 
 
 # Forward substitution:  
 
 if alg == 'g':  
 	for i in range(2,n+1):  # start loop on b[2] and f[2]  
-		#print i
 		b[i] = b[i] - a[i-1]*c[i-1]/b[i-1]   
 		f[i] = f[i] - a[i-1]*f[i-1]/b[i-1]
-		fl_ops += 6
 
 
 # Simplified forward substitution: 
 
-if alg == 's': 
+if alg == 's':
+	b[2:n+1] = [(i+1.0)/i for i in range(2,n+1)]
 	for i in range(2,n+1): 
-		b[i] = (i+1)/float(i)    
-		f[i] = f[i] + (i-1)/float(i)*f[i-1] 
-		fl_ops += 4 
+		f[i] = f[i] + f[i-1]/b[i-1] 
 
 
 # Backward substitution:  
 
-v = zeros(n+2)   
-v[0]= 0; v[n+1]= 0 # boundary values 
-v[n] = f[n]/b[n] # n'th element of u  
-
 if alg == 'g':
-	for i in range(n,1,-1):  # loop backwards from the second last element of u    
-		#print i
+	for i in range(n+1,1,-1):  # loop backwards from the second last element of u    
 		v[i-1] = (f[i-1] - c[i-1]*v[i])/b[i-1]  
-		fl_ops += 3
 
 
 # Simplified backward substitution:
 
 if alg == 's': 
-	for i in range(n,1,-1): 
-		#print i
-		v[i-1] = (i-1)/float(i)*(f[i-1]+v[i]) 
-		fl_ops += 3
+	for i in range(n+1,1,-1): 
+		v[i-1] =(f[i-1]+v[i])/b[i-1] 
 
 
-# Floating point operations and CPU time: 
+# CPU time: 
 
-t1 = time.clock() 
-cpu_time = t1- t0 
+t1 = time.time()  # end time of algorithm
+cpu_time = t1- t0  # CPU time
 
 print 'CPU time: %f' %cpu_time
-print 'Floting point operations: %d' %fl_ops
 
 
 # Analytical solution:  
@@ -94,7 +84,8 @@ legend(['Analytical','Numerical'])
 xlabel('x')
 ylabel('u(x)')
 text(0.75,0.55,'n=%d' %n,fontsize=16)
-savefig('plot_n_%d' %n)
+if n == 10 or n == 100 or n == 1000:
+	savefig('plot_n_%d' %n)
 #show()
 
 
@@ -107,8 +98,8 @@ for i in range(1,n+1):
 
 max_error = max(error)
 log_error = log10(max_error) 
-
-print 'Error with n=%d: %f' %(n,log_error)
+log_h = log10(h) 
+print 'Error with n=%d: %f, log(h) = %f' %(n,log_error, log_h)
 
 
 # Solution using functions from the scipy library: 
@@ -141,9 +132,4 @@ if solve_with_scipy == 1:
 
 	cpu_time_1 = t3 - t2
 	print 'CPU time for using scipy functions: %f' %cpu_time_1
-
-
-
-
-
 
