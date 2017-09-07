@@ -158,9 +158,10 @@ We must also remember to do the same operations on the right hand side,
 \tilde{f}_i = y_i - \frac{a_i \tilde{f}_{i-1}}{\tilde{b}_{i-1}}. 
 \label{ftilde}
 \end{align}
+The procedure of updating $\tilde{b}_i$ and $\tilde{f}_i$ is referred to as \textit{forward substitution}. 
 
-When the elimination is done we need to do a backwards substitution to actually solve the equation for 
-each $v_i$. Since we now have a diagonal matrix we should start at the last equation, i.e. 
+When the elimination is done we need to do a \textit{backwards substitution} to actually solve the 
+equation for each $v_i$. Since we now have a diagonal matrix we should start at the last equation, i.e. 
 $\tilde{b}_n v_n = \tilde{f}_n$, which means that 
 \begin{align*}
 v_n = \frac{\tilde{f}_n}{\tilde{b}_n}. 
@@ -176,6 +177,7 @@ Before moving on to how I have coded this, and finally look at results, I would 
 "maths" done by looking at how we in our case can simplify the above expressions.    
 
 \subsection{Simplifying the algorithm}
+\label{simpl_alg}
 
 We have now looked at how the matrix equation is solved when $\mathbf{A}$ is a general tridiagonal matrix. 
 However, the matrix we are studying is simplified quite a bit, as all $a_i = c_i = -1$, while 
@@ -194,15 +196,17 @@ and so on, we realize that we can actually write the $\tilde{b}$'s as
 \end{align*}
 By doing the same for the $\tilde{f}$'s we find that 
 \begin{align*}
-\tilde{f}_i = y_i + \frac{i-1}{i}\tilde{f}_{i-1}, 
+\tilde{f}_i = y_i + \frac{i-1}{i}\tilde{f}_{i-1} = y_i + \frac{\tilde{f}_i}{\tilde{b}_{i-1}}, 
 \end{align*}
 and finally 
 \begin{align*}
-v_{i-1} = \frac{i-1}{i}(\tilde{f}_{i-1} - v_i). 
+v_{i-1} = \frac{i-1}{i}(\tilde{f}_{i-1} - v_i) = \frac{\tilde{f}_{i-1} - v_i}{\tilde{b}_{i-1}}. 
 \end{align*}
-When doing these simplifications the total number of floating point operations for each turn in the loop 
-is reduced from $6$ to $4$ in the forward substitution, while in the backward substitution the number 
-stays the same ($3$). 
+When doing these simplifications the total number of floating point operations (FLOPS) is reduced quite 
+a bit. 
+Since $\tilde{b}_i$ only depends on $i$ the full $\mathbf{\tilde{b}}$ can be calculated before starting 
+the algorithm, which reduces the number of FLOPS from $6(n-1)$ to $2(n-1)$ in the forward substitution, 
+and from $3n$ to $2n$ in the backwards substitution.  
 
 \subsection{Coding the algorithm}
 
@@ -225,10 +229,10 @@ to make the code as close to the mathematical expressions as possible.
 After making the necessary arrays ($a$, $b$, $c$, $x$, $f$ and $v$) I make the four different loops, i.e. 
 forward and backward substitution in both the general and the simplified way. The loops just update the 
 values of the array elements of $b$, $f$ and $v$, meaning that I have chosen not to make separate arrays 
-called $\tilde{b}$, $\tilde{f}$, and so on. While running the algorithm I also calculate the CPU time and
-number of floating point operations. When the algorithm is done I make an array for the closed form 
-solution, and plot it together with the numerical solution from the algorithm, and the (logarithm of) 
-the relative error is calculated by the formula
+called $\tilde{b}$, $\tilde{f}$, and so on. While running the algorithm I also calculate the CPU time. 
+When the algorithm is done I make an array for the closed form solution, and plot it together with the 
+numerical solution from the algorithm, and the (logarithm of) the relative error is calculated by the
+formula
 \begin{equation}
 \epsilon_i = log_{10}\left(\left| \frac{v_i - u_i}{u_i} \right| \right). 
 \label{eq:error}
@@ -266,9 +270,31 @@ maximum of the curve, while for $n=1000$ there seems to be no observable differe
         \caption{}
         %\label{}
   \end{subfigure}
-  \caption{} 
+  \caption{Analytical and numerical solutions for $n=10$, $100$ and $1000$.} 
   \label{plots}
 \end{figure}
+
+The point of developing the simplified algorithm is of course to reduce the amount of time we spend on 
+solving the problem. The CPU time for spent for the two different algorithms are given in Table  
+\ref{CPU}. We see that for $n=10$ the CPU time is almost the same, while for larger values of $n$ the 
+simplified algorithm is about twice as fast as the general one. 
+
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{c|l|l}
+ & \multicolumn{2}{c}{CPU time (s)}  \\
+$n$ & General alg. & Simplified alg. \\ \hline 
+$10^1$ & $3.5\cdot10^{-5}$ & $3.1\cdot10^{-5}$  \\
+$10^2$ & $3.3\cdot10^{-4}$ & $1.8\cdot10^{-4}$\\
+$10^3$ & $3.3\cdot10^{-3}$ & $1.7\cdot10^{-3}$ \\
+$10^4$ & $3.2\cdot10^{-2}$ & $1.7\cdot10^{-2}$\\
+$10^5$ & $0.33$ & $0.17$ \\
+$10^6$ & $3.28$ & $1.66$ \\ 
+\end{tabular}
+\caption{CPU time comparisons for the two algorithms.}
+\label{CPU}
+\end{center}
+\end{table}
 
 In Table \ref{errors} the $log$-$log$ relation between $h$ and $\epsilon_i$ (defined in eq. 
 (\ref{eq:error})) is given. By considering the mathematical truncation error we expect that $\epsilon_i$ 
@@ -276,7 +302,7 @@ increases by a factor of $2$ when $n$ is increased by a factor of $10$. We see i
 holds up to and including $n=10^4$. After this the error seems to be more "random", which must be due to 
 limited numerical precision.
 
-\begin{table}[H]
+\begin{table}[ht!]
 \begin{center}
 $\begin{array}{c|c|c} 
 n & log_{10}(h) & \epsilon_i \\ \hline 
@@ -286,13 +312,16 @@ n & log_{10}(h) & \epsilon_i \\ \hline
 10^4 & -4.000 & -7.079 \\ 
 10^5 & -5.000 & -8.843 \\ 
 10^6 & -6.000 & -6.075 \\ 
-10^7 & -7.000 & -5.525 \\ \hline 
+10^7 & -7.000 & -5.525 \\ 
 \end{array}$
 \end{center}
-\caption{}
+\caption{$\epsilon_i$ as function of $log_{10}(h)$.}
 \label{errors}
 \end{table}
 
+
+
+\section{Conclusions}
 
 \end{document}
 
