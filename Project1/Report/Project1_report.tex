@@ -15,6 +15,8 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{wrapfig}
 
+\hfuzz=5pt
+
 \begin{document}
 
 \begin{titlepage}
@@ -29,6 +31,14 @@ FYS4150 - Computational Physics \\
 Even S. Håland 
 \end{center}
 \end{titlepage}
+
+\section*{Abstract}
+
+In this project an algorithm for solving the one-dimensional Poisson equation is developed, and the 
+numerical solution is compared to an analytical one. A key point of the project is a study of the
+error of the numerical solution, from which we learn that we not necessarily gain anything by choosing 
+extremely small step sizes in the iterations. We will also see that the problem can be very easily 
+solved by using a library function, but that this is might not be a good idea.  
 
 \section{Introduction}
 
@@ -61,10 +71,6 @@ derivatives:
 The algorithm will be developed in two different stages; first a general one, and then a simplified 
 one that deals with the particular problem in this project. The two versions of the algorithm will be 
 compared in terms of number of floating point operations and CPU time. 
-
-Another important part of the project is to study the error of the numerical solution, and how it 
-evolves as we decrease the step size in the algorithm. Finally we will also solve the equation by using 
-library functions, and see why this might not be a good idea. 
 
 \section{Discretization of the Poisson equation}
 
@@ -210,11 +216,11 @@ and from $3n$ to $2n$ in the backwards substitution.
 
 \subsection{Coding the algorithm}
 
-At the moment of writing this report I have only written the code in Python, and the code can be found in 
-the following git-repository: \vspace{0.5cm} \\ 
+At the moment of writing this report I have only written the code in Python, and the code can be found as
+\texttt{Project1.py} in the following git-repository: \vspace{0.5cm} \\ 
 \fbox{
-\href{https://github.com/evensha/FYS4150/tree/master/Project1}
-{https://github.com/evensha/FYS4150/tree/master/Project1} } \vspace{0.5cm} \\ 
+\href{https://github.com/evensha/FYS4150/tree/master/Project1/Program}
+{https://github.com/evensha/FYS4150/tree/master/Project1/Program} } \vspace{0.5cm} \\ 
 The program take two input arguments: 
 \begin{enumerate}
 \item An argument that specify if we want to run the general or the simplified algorithm ("g" for 
@@ -239,10 +245,12 @@ formula
 \end{equation}
 All results are shown in the next section. 
    
-The last part of the program is to solve the problem by using library functions. I have chosen to use 
-functions from the \texttt{scipy} library, which for instance contains the \texttt{lu()}-function for 
-LU decomposition, and \texttt{inv()} for inverting a matrix. The CPU time is calculated for this procedure 
-as well.  
+The last part of the program is to solve the problem by using library functions. The library 
+\texttt{numpy.linalg} \cite{numpy.linalg} contains a function called \texttt{solve()}, which simply takes 
+$\mathbf{A}$ and $\mathbf{f}$ as input, and then "spits" out the solution, $\mathbf{v}$ is found by calling 
+\texttt{v = solve(A,f)}. (This function makes us of LAPACK \cite{LAPACK}, which solves the equation by 
+LU decomposition.) The purpose of doing this is to compare the efficiency of 
+the built-in functions with our algorithm, so I also calculate the CPU time spent on this operation. 
 
 
 \section{Results}
@@ -256,18 +264,18 @@ maximum of the curve, while for $n=1000$ there seems to be no observable differe
 \begin{figure}[ht!]
   \centering
   \begin{subfigure}[b]{0.495\textwidth}
-		\includegraphics[width=\textwidth]{../plot_n_10.png}
-        \caption{}
+		\includegraphics[width=\textwidth]{../Program/plot_n_10.png}
+        %\caption{}
         %\label{}
   \end{subfigure}
   \begin{subfigure}[b]{0.495\textwidth}
-        \includegraphics[width=\textwidth]{../plot_n_100.png}
-        \caption{}
+        \includegraphics[width=\textwidth]{../Program/plot_n_100.png}
+        %\caption{}
         %\label{}
   \end{subfigure}
   \begin{subfigure}[b]{0.495\textwidth}
-        \includegraphics[width=\textwidth]{../plot_n_1000.png}
-        \caption{}
+        \includegraphics[width=\textwidth]{../Program/plot_n_1000.png}
+        %\caption{}
         %\label{}
   \end{subfigure}
   \caption{Analytical and numerical solutions for $n=10$, $100$ and $1000$.} 
@@ -291,16 +299,17 @@ $10^4$ & $3.2\cdot10^{-2}$ & $1.7\cdot10^{-2}$\\
 $10^5$ & $0.33$ & $0.17$ \\
 $10^6$ & $3.28$ & $1.66$ \\ 
 \end{tabular}
-\caption{CPU time comparisons for the two algorithms.}
+\caption{CPU time comparisons for the general and simplified algorithm.}
 \label{CPU}
 \end{center}
 \end{table}
 
 In Table \ref{errors} the $log$-$log$ relation between $h$ and $\epsilon_i$ (defined in eq. 
-(\ref{eq:error})) is given. By considering the mathematical truncation error we expect that $\epsilon_i$ 
+(\ref{eq:error})) is given. By only considering the mathematical error in the approximation to the 
+second derivative we expect that $\epsilon_i$ 
 increases by a factor of $2$ when $n$ is increased by a factor of $10$. We see in the table that this 
-holds up to and including $n=10^4$. After this the error seems to be more "random", which must be due to 
-limited numerical precision. 
+holds up to and including $n=10^4$. When further increasing $n$ we can see that the error due to 
+limited numerical precision starts to dominate. 
 
 \begin{table}[ht!]
 \begin{center}
@@ -319,9 +328,58 @@ n & log_{10}(h) & \epsilon_i \\ \hline
 \label{errors}
 \end{table}
 
+At last our algorithm is compared to the \texttt{solve()}-function from \texttt{numpy.linalg()}. 
+The results are given in Table \ref{CPU_1}, and we can clearly see why it is a bad idea to use 
+library functions to solve this problem. Firstly, it is a lot slower because a full LU decomposition is 
+done, which requires $\sim n^3$ FLOPS, while we found that our simplified algorithm only requires 
+$\sim 4n$ FLOPS. Secondly, at $n=10^5$ we run out of memory when trying to define $\mathbf{A}$. A 
+matrix of size $10^5 \times 10^5$ is simply to large to handle for the computers memory. 
 
+\begin{table}[ht!]
+\begin{center}
+\begin{tabular}{c|l|l}
+ & \multicolumn{2}{c}{CPU time (s)}  \\
+$n$ & \texttt{solve()} & Simplified alg. \\ \hline 
+$10^1$ & $4.7\cdot10^{-4}$ & $3.1\cdot10^{-5}$  \\
+$10^2$ & $6.2\cdot10^{-3}$ & $1.8\cdot10^{-4}$\\
+$10^3$ & $8.2\cdot10^{-2}$ & $1.7\cdot10^{-3}$ \\
+$10^4$ & $16.6$ & $1.7\cdot10^{-2}$\\
+$10^5$ & \texttt{MemoryError} & $0.17$ \\
+\end{tabular}
+\caption{CPU time comparisons for the \texttt{solve()}-function in \texttt{numpy.linalg()} and our 
+simplified algorithm.}
+\label{CPU_1}
+\end{center}
+\end{table}
 
-\section{Conclusions}
+\section{Summary and conclusions}
+
+In this project we have seen how the Poisson equation can be written in a discrete way as a matrix 
+equation, $\mathbf{A} \mathbf{v} = \mathbf{f}$, where $\mathbf{A}$ was found to be a tridiagonal matrix. 
+First we developed an algorithm that solved the equation(s) for a general tridiagonal matrix, and then we 
+saw how the algorithm could be speeded up because our matrix $\mathbf{A}$ was particularly simple. 
+
+By comparing the numerical solution from our algorithm with an analytical one, and we saw that we were 
+able to find a good approximation to the analytical solution when choosing small enough step size, $h$. 
+However, we have also seen that even though we continue decreasing $h$ the numerical solution does not 
+necessarily become better and better, since the numerical precision is limited. 
+
+Finally we saw that a matrix equation can be solved using the \texttt{solve()}-function in the 
+\texttt{numpy.linalg} library. This is a very simple way of solving the problem, but it is much slower 
+than the algorithm we developed, and we get memory issues when $\mathbf{A}$ is sufficiently large. 
+
+%\newpage
+
+\begin{thebibliography}{40}
+
+\bibitem{numpy.linalg} \textit{Linear algebra} (\texttt{numpy.linalg}), The Scipy community. \\ 
+\href{https://docs.scipy.org/doc/numpy-1.13.0/reference/routines.linalg.html}
+{https://docs.scipy.org/doc/numpy-1.13.0/reference/routines.linalg.html} 
+
+\bibitem{LAPACK} LAPACK - \textit{Linear Algebra PACKage} \\ 
+\href{http://www.netlib.org/lapack/}{http://www.netlib.org/lapack/}
+
+\end{thebibliography}
 
 \end{document}
 
