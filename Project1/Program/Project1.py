@@ -62,6 +62,7 @@ if alg == 's':
 	for i in range(n+1,1,-1): 
 		v[i-1] =(f[i-1]+v[i])/b[i-1] 
 
+#print v
 
 # CPU time: 
 
@@ -104,11 +105,10 @@ print 'Error with n=%d: %f, log(h) = %f' %(n,log_error, log_h)
 
 # Solution using functions from the scipy library: 
 
-solve_with_scipy = 0
+solve_with_numpy = 1
 
-if solve_with_scipy == 1: 
-	from scipy import * 
-	from scipy.linalg import * 
+if solve_with_numpy == 1: 
+	from numpy.linalg import solve
 
 	A = array(zeros((n,n))) 
 
@@ -122,14 +122,12 @@ if solve_with_scipy == 1:
 
 	f_1 = [h**2*100*exp(-10*x[i]) for i in range(1,n+1)]
 
-	t2 = time.clock()
+	t2 = time.time()
 
-	P,L,U = lu(A)
-	A_1 = inv(U).dot(inv(L))
-	v_1 = A_1.dot(f_1)
+	v_1 = solve(A,f_1)
 
-	t3 = time.clock() 
+	t3 = time.time() 
 
 	cpu_time_1 = t3 - t2
-	print 'CPU time for using scipy functions: %f' %cpu_time_1
+	print 'CPU time for using numpy: %f' %cpu_time_1
 
