@@ -103,28 +103,28 @@ log_h = log10(h)
 print 'Error with n=%d: %f, log(h) = %f' %(n,log_error, log_h)
 
 
-# Solution using functions from the scipy library: 
+# Solution using the numpy library: 
 
-solve_with_numpy = 1
+solve_with_numpy = 0
 
 if solve_with_numpy == 1: 
 	from numpy.linalg import solve
 
-	A = array(zeros((n,n))) 
+	A = array(zeros((n,n)))   # define matrix A
 
-	for i in range(n): 
-		for j in range(n): 
+	for i in range(n):   
+		for j in range(n):   # set elements of A 
 			if i == j: 
 				A[i][j] = 2 
 			if i == j-1 or j == i-1: 
 				A[i][j] = -1 
 
 
-	f_1 = [h**2*100*exp(-10*x[i]) for i in range(1,n+1)]
+	f_1 = [h**2*100*exp(-10*x[i]) for i in range(1,n+1)]  # rhs of equation 
 
 	t2 = time.time()
 
-	v_1 = solve(A,f_1)
+	v_1 = solve(A,f_1)   # solve equation Av = f
 
 	t3 = time.time() 
 
