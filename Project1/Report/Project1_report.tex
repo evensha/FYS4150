@@ -15,30 +15,35 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{wrapfig}
 
+
 \hfuzz=5pt
+
 
 \begin{document}
 
 \begin{titlepage}
 \begin{center}
-\vspace*{6cm}
+\vspace*{3cm}
 \Huge
 \textbf{Project 1} \\
-\vspace*{1cm}
-\LARGE
-FYS4150 - Computational Physics \\ 
-\vspace*{10cm}
+\Large  
+FYS4150 Computational Physics 
+\vspace*{3cm} \\ 
+
 Even S. Håland 
-\end{center}
-\end{titlepage}
+\vspace*{5cm} \\
 
+\normalsize
 \section*{Abstract}
-
 In this project an algorithm for solving the one-dimensional Poisson equation is developed, and the 
 numerical solution is compared to an analytical one. A key point of the project is a study of the
 error of the numerical solution, from which we learn that we not necessarily gain anything by choosing 
 extremely small step sizes in the iterations. We will also see that the problem can be very easily 
-solved by using a library function, but that this is might not be a good idea.  
+solved by using a library function, but that this might not be a good idea.  
+
+\end{center}
+\end{titlepage}
+
 
 \section{Introduction}
 
@@ -156,12 +161,12 @@ To simplify the expressions we would like to define
 The procedure then continues in the same pattern, and we realize that the new diagonal elements 
 ($\tilde{b}$'s) can be written as   
 \begin{align}
-\tilde{b}_i = b_i - \frac{a_i c_{i-1}}{\tilde{b}_{i-1}}. 
+\tilde{b}_i = b_i - \frac{a_{i-1} c_{i-1}}{\tilde{b}_{i-1}}. 
 \label{btilde}
 \end{align}
 We must also remember to do the same operations on the right hand side, 
 \begin{align}
-\tilde{f}_i = y_i - \frac{a_i \tilde{f}_{i-1}}{\tilde{b}_{i-1}}. 
+\tilde{f}_i = y_i - \frac{a_{i-1} \tilde{f}_{i-1}}{\tilde{b}_{i-1}}. 
 \label{ftilde}
 \end{align}
 The procedure of updating $\tilde{b}_i$ and $\tilde{f}_i$ is referred to as \textit{forward substitution}. 
@@ -217,7 +222,9 @@ and from $3n$ to $2n$ in the backwards substitution.
 \subsection{Coding the algorithm}
 
 At the moment of writing this report I have only written the code in Python, and the code can be found as
-\texttt{Project1.py} in the following git-repository: \vspace{0.5cm} \\ 
+\texttt{Project1.py} in the following git-repository\footnote{The repository also contains some C$++$ code,  
+ because I want to "translate" the code to C$++$, but I didn't have time to finish this before the 
+deadline of the report. So the Python script is the only one that is relevant.} \vspace{0.5cm} \\ 
 \fbox{
 \href{https://github.com/evensha/FYS4150/tree/master/Project1/Program}
 {https://github.com/evensha/FYS4150/tree/master/Project1/Program} } \vspace{0.5cm} \\ 
@@ -247,7 +254,7 @@ All results are shown in the next section.
    
 The last part of the program is to solve the problem by using library functions. The library 
 \texttt{numpy.linalg} \cite{numpy.linalg} contains a function called \texttt{solve()}, which simply takes 
-$\mathbf{A}$ and $\mathbf{f}$ as input, and then "spits" out the solution, $\mathbf{v}$ is found by calling 
+$\mathbf{A}$ and $\mathbf{f}$ as input, and then "spits" out the solution, $\mathbf{v}$, by calling 
 \texttt{v = solve(A,f)}. (This function makes us of LAPACK \cite{LAPACK}, which solves the equation by 
 LU decomposition.) The purpose of doing this is to compare the efficiency of 
 the built-in functions with our algorithm, so I also calculate the CPU time spent on this operation. 
@@ -285,7 +292,7 @@ maximum of the curve, while for $n=1000$ there seems to be no observable differe
 The point of developing the simplified algorithm is of course to reduce the amount of time we spend on 
 solving the problem. The CPU time for spent for the two different algorithms are given in Table  
 \ref{CPU}. We see that for $n=10$ the CPU time is almost the same, while for larger values of $n$ the 
-simplified algorithm is about twice as fast as the general one. 
+simplified algorithm is almost twice as fast as the general one. 
 
 \begin{table}[ht!]
 \begin{center}
@@ -357,7 +364,8 @@ simplified algorithm.}
 In this project we have seen how the Poisson equation can be written in a discrete way as a matrix 
 equation, $\mathbf{A} \mathbf{v} = \mathbf{f}$, where $\mathbf{A}$ was found to be a tridiagonal matrix. 
 First we developed an algorithm that solved the equation(s) for a general tridiagonal matrix, and then we 
-saw how the algorithm could be speeded up because our matrix $\mathbf{A}$ was particularly simple. 
+saw how the algorithm could be speeded up by nearly a factor of two because our matrix $\mathbf{A}$ was 
+particularly simple. 
 
 By comparing the numerical solution from our algorithm with an analytical one, and we saw that we were 
 able to find a good approximation to the analytical solution when choosing small enough step size, $h$. 
