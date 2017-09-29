@@ -11,7 +11,6 @@
 using namespace std;
 using namespace arma; 
 
-ofstream ofile1, ofile2; 
 
 //--------------------------------------
 // Maximal off-diagonal matrix element  
@@ -38,42 +37,24 @@ void Jacobi_rotation( mat& A, mat& R, int k, int l, int n ){
 	double s,c;
 
 	if( A(k,l) != 0){ 	
-		//cout  << "A(k,l) = " << A(k,l) << endl; 
 		double tau, t; 
 		tau = (A(l,l) - A(k,k))/(2*A(k,l)); 
 		
-		if(tau > 0){ t =  1.0/( tau + sqrt(1.0 + tau*tau )); } // ????
-		else{ t = -1.0/( - tau + sqrt(1.0 + tau*tau )); } 
-		//cout << "tau,t = " << tau << " , " << t << endl; 
+		if(tau > 0){ t = - tau + sqrt(1.0 + tau*tau ); } // ????
+		else{ t =  - tau - sqrt(1.0 + tau*tau ); } 
 		c = 1.0/sqrt(1.0 + t*t);
 		s = c*t; 
-		//cout << "c,s = " << c << "  " << s << endl; 
 	}
 	else{ c = 1.0; s = 0.0; } 
 
 	double a_kk, a_ll, a_ik, a_il, r_ik, r_il; 
 	a_kk = A(k,k); 
 	a_ll = A(l,l);
-	/*
-	cout << "-----------------" << endl;	
-	cout << "Before rotation:" << endl;
-	cout << "l,k = " << l << "," << k << endl;
-	cout << "s,c = " << s << "," << c << endl;
-	cout << "A(k,k) = " << A(k,k) << endl; 
-	cout << "A(l,l) = " << A(l,l) << endl; 
-	cout << "-----------------" << endl;
-	*/
 	A(k,k) = a_kk*c*c - 2.0*A(k,l)*c*s + a_ll*s*s; 
 	A(l,l) = a_kk*s*s + 2.0*A(k,l)*c*s + a_ll*c*c; 
 	A(k,l) = 0.0; 
 	A(l,k) = 0.0; 
-	/*
-	cout << "-----------------" << endl;
-	cout << "After rotation:" << endl; 
-	cout << "A(k,k) = " << A(k,k) << endl; 
-	cout << "A(l,l) = " << A(l,l) << endl; 
-	cout << "-----------------" << endl; 
-	*/
+
 	for( int i = 0; i < n; i++ ){ 
 		if( i != k && i != l ){ 
 			a_ik = A(i,k); 
@@ -89,8 +70,7 @@ void Jacobi_rotation( mat& A, mat& R, int k, int l, int n ){
 
 		R(i,k) = c*r_ik - s*r_il; 
 		R(i,l) = c*r_il + s*r_ik; 
-		//cout << R(i,k) << " , " << R(i,l) << endl; 
-
+	
 	}
 	return;  
 }
@@ -128,35 +108,19 @@ void do_Jacobi(mat& A, mat& R, vec& lambda, int n){
 		iterations++;
 	}
 
-	// Put eigenvalues in a (sorted) vector
+	// Put eigenvalues in a vector
 
 	for(int i = 0; i < n; i++ ){
 			lambda(i) = A(i,i) ; 
 	}
-
-	lambda = sort(lambda); 
-
-	// Write results to file 
-/*
-	ofile1.open("Eigenvalues.txt");
-	ofile2.open("Eigenvectors.txt"); 
-
-	for(int i = 0; i < n; i++){ 
-		ofile1 << "Lambda_" << i << " = " << lambda(i) << endl;  
-		for(int j = 0; j < n; j++){ 
-			ofile2 << R(i,j) << "  " ; if(j == n-1){ofile2 << endl;}
-		}
-	}
-
-	ofile1.close(); 
-	ofile2.close(); 
-*/
+	
 	// Finish... 
 
 	finish = clock(); 
 	double time = (finish -start)/((double) CLOCKS_PER_SEC); 
 	if( n > 2 ){ 
-		cout << "Time spent: " << time << endl; 
+		if(time > 60){ cout << "Time spent: " << time/60 << endl;} 
+		else cout << "Time spent: " << time << endl;
 		cout << "Number of iterations: " << iterations << endl;
 	}
 
@@ -185,6 +149,8 @@ void Jacobi_tests(){   // To be called if you want to test the algorithm before 
 	vec l = zeros<vec>(2); 
 	do_Jacobi(T1,S,l,2);  
 
+	l = sort(l); 
+	
 	if(l(0) != 1.0 or l(1) != 6.0){   
 		cout << "DID NOT PASS EIGENVALUETEST!" << endl; exit(1); 
 	}
