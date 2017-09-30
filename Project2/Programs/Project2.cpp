@@ -17,7 +17,16 @@ ofstream ofile;
 
 int main(int argc, char *argv[]){ 
 
-	Jacobi_tests(); // Check that the algorithm works as it should  
+	// First test matrix (eigenvalues should be 1 and 6)
+
+	mat T1(2,2); 
+	T1(0,0) = 5.0; T1(0,1) = -2.0; T1(1,0) = -2.0; T1(1,1) = 2.0; 
+	Jacobi_tests(T1,2); // Check that the algorithm works as it should  
+
+	// Second test matrix 
+
+	mat T2 = ones<mat>(5,5); T2(1,2) = 5.0; 
+	Jacobi_tests(T2,5);
 
 	// Which problem should be considered? (1pHO, 2pNoInt, 2pCoulomb)
 
@@ -43,16 +52,19 @@ int main(int argc, char *argv[]){
 	double diag = 2.0/(h*h); 
 	double non_diag = -1.0/(h*h); 
 
-	// Define rho, V and A
 
-	mat  A = zeros<mat>(n, n); 
-	vec V = zeros<vec>(n); 
+	// Define necessary matrices and vectors 
+
+
+	vec V = zeros<vec>(n); // The potential 
 
 	for(int i = 0; i < n; i++ ){
 		double rho_i = rho_0 + (i+1.0)*h;	
 		if( Prob == "1pHO" or Prob == "2pNoInt" ){	V(i) = omega_r*omega_r*rho_i*rho_i; }  
 		if( Prob == "2pCoulomb" ){ V(i) = omega_r*omega_r*rho_i*rho_i + 1.0/rho_i; }
 	}
+
+	mat  A = zeros<mat>(n, n);  // The A matrix (which we want to diagonalize)  
 
 	A(0,0) = diag + V(0); 
 	A(0,1) = non_diag; 
@@ -66,41 +78,54 @@ int main(int argc, char *argv[]){
 	A(n-1, n-2) = non_diag; 
 	A(n-1, n-1) = diag + V(n-1); 
 
+	mat R = zeros<mat>(n,n); 	 // Matrix that will contain the eigenvectors 
+	vec lambda = zeros<vec>(n);  // Vector that will contain the eigenvalues 
+
 
 	// Eigenvalues from Armadillo 
 /*
-	vec eigval = eig_sym(A); 
+	vec eigval = eig_sym(A);      
 	cout << "Eigenvalues from Armadillo:" << endl; 
 	for(int i = 0; i < n; i++){
 		cout << eigval(i) << endl;
 	}
-	cout << "--------------" << endl; 
 */
-	
-	
-	mat R = zeros<mat>(n,n); 	
-	vec lambda = zeros<vec>(n); 
+
+
+	// Run the Jacobi algorithm
+
+	clock_t start, finish; 
+	start = clock(); 
 
 	do_Jacobi(A, R, lambda, n); 
 
-	map<double, vec> Eigen; 
+	finish = clock(); 
+	double time = (finish -start)/((double) CLOCKS_PER_SEC); 
 
-	for(int i = 0; i < n; i++){
+	if(time > 60){ cout << "Time spent: " << time/60.0 << " min" << endl;} 
+	else cout << "Time spent: " << time << " s" << endl;
+	
+
+	// Process the output from the Jacobi algorithm 
+
+	map<double, vec> Eigen;   // make a map to pair up eigenvectors and eigenvalues
+
+	for(int i = 0; i < n; i++){   // run over the matrix R to pick out eigenvectors 
 		vec Eigenvector = zeros<vec>(n); 
 		for(int j = 0; j < n; j++){
 			Eigenvector(j) = R(j,i); 
 		}  
-		Eigen[lambda(i)] = Eigenvector; 
+		Eigen[lambda(i)] = Eigenvector;  // pair up eigenvalues and eigenvectors 
 	}  
 
-	lambda = sort(lambda); 
+	lambda = sort(lambda);   // sort eigenvalues 
 
-	cout << "Four lowest eigenvalues:" << endl; 
-
+	cout << "Three lowest eigenvalues:" << endl; 
 	cout << lambda(0) << endl; 
 	cout << lambda(1) << endl; 
 	cout << lambda(2) << endl; 
-	cout << lambda(4) << endl; 
+	cout << "-------------------------------------" << endl; 
+
 
 	// Write eigenvectors to file 
 
