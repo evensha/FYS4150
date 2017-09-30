@@ -97,9 +97,6 @@ void do_Jacobi(mat& A, mat& R, vec& lambda, int n){
 	int p, q; 
 	double max_offdiag = offdiag(A, &p, &q, n);  // find the largest element of A (i.e. starting point of the iteration loop) 
 
-	clock_t start, finish; 
-	start = clock(); 
-
 	// Do the iterations 
 
 	while( max_offdiag  > tolerance && iterations <= max_iterations ){  // iteration loop  
@@ -108,58 +105,57 @@ void do_Jacobi(mat& A, mat& R, vec& lambda, int n){
 		iterations++;
 	}
 
+	cout << "Number of iterations: " << iterations << endl; 
+
 	// Put eigenvalues in a vector
 
 	for(int i = 0; i < n; i++ ){
 			lambda(i) = A(i,i) ; 
 	}
 	
-	// Finish... 
-
-	finish = clock(); 
-	double time = (finish -start)/((double) CLOCKS_PER_SEC); 
-	if( n > 2 ){ 
-		if(time > 60){ cout << "Time spent: " << time/60 << endl;} 
-		else cout << "Time spent: " << time << endl;
-		cout << "Number of iterations: " << iterations << endl;
-	}
-
 	return;  
 }
 
 
-void Jacobi_tests(){   // To be called if you want to test the algorithm before running it!  
+void Jacobi_tests(mat A, int n){   // To be called if you want to test the algorithm before running it!    
 
-	// Max off-diagonal element of a 2x2 matrix 
+	cout << "-------------------------------------" << endl; 
+	cout << "OUTPUT FROM TEST FUNCTION:" << endl; 
 
-	mat T2(2,2); 
-	T2(0,0) = 1.0; T2(0,1) = 10.0; T2(1,0) = 5.0; T2(1,1) = 1.0;
+	// Max off-diagonal element  
+
  	int p, q; 
-	double test_max = offdiag(T2, &p, &q, 2); 
+	double test_max = offdiag(A, &p, &q, n); 
 
-	if(test_max != 10.0 or p != 0 or q != 1){  
-		cout << "DID NOT PASS MAX OFF-DIAGONAL ELEMENT TEST!" << endl; exit(1);
-	}	
+	cout << "Max off-diagonal element: " << A(p,q) << "   k,l=" << p << "," << q  << endl; 
 
-	// Eigenvalues of 2x2 matrix 
+	// Eigenvalues 
 
-	mat T1(2,2); 
-	T1(0,0) = 5.0; T1(0,1) = -2.0; T1(1,0) = -2.0; T1(1,1) = 2.0; // setting up a matrix with known eigenvalues 1 and 6 
-	mat S = zeros<mat>(2,2);
-	vec l = zeros<vec>(2); 
-	do_Jacobi(T1,S,l,2);  
+	mat R = zeros<mat>(n,n);
+	vec l = zeros<vec>(n); 
+	do_Jacobi(A,R,l,n);  
 
 	l = sort(l); 
-	
-	if(l(0) != 1.0 or l(1) != 6.0){   
-		cout << "DID NOT PASS EIGENVALUETEST!" << endl; exit(1); 
+
+	cout << "Eigenvalues: "; 
+	for(int i = 0; i<n; i++){
+		cout << l(i) << " "; 
 	}
+	cout << endl; 	
 
+	// Dot product of eigenvectors 
 
-	cout << "---------------------" << endl; 
-	cout << "ALL TESTS PASSED! :-D" << endl; 
-	cout << "---------------------" << endl; 	
-
+	vec R1(n); vec R2(n); 
+	double c = 0;
+	for(int i = 0; i<n; i++){  // pick out two first eigenvectors 
+		R1(i) = R(i,0);  
+		R2(i) = R(i,1); 
+		c += R1(i)*R2(i); // dot product
+		//cout << R1(i) << " , " << R2(i) << endl; 
+	} 
+ 
+	cout << "Dot product: " << c << endl; 
+	cout << "-------------------------------------" << endl; 
 
 	return; 
 } 

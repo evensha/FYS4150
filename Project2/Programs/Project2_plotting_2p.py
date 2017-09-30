@@ -2,15 +2,18 @@ from math import *
 from matplotlib.pyplot import * 
 from numpy import * 
 
-omega_r = ['0.01', '0.5', '1', '5']
+#omega_r = ['0.01', '0.5', '1', '5']
+#omega_r = ['5']
+value_combs = {'0.01':50.0, '0.5':10.0, '1':10.0, '5':2.0}
+
 
 NoInt = {}
 Coulomb = {}
 
-for i in omega_r: 
+for i in value_combs.keys(): 
 	infile1 = open('Output/Eigenvectors_2pNoInt_omega'+i+'.txt', 'r')
 	infile2 = open('Output/Eigenvectors_2pCoulomb_omega'+i+'.txt', 'r')
-	
+
 	NoInt[i] = []
 	Coulomb[i] = []
 
@@ -29,23 +32,22 @@ for i in omega_r:
 	infile2.close()
 
 
+	n = len(NoInt[i]) 
 
-n = len(NoInt['1']) 
 
-h = 10.0/n 
-rho = [(i+1)*h for i in range(0,n)]
-rho = array(rho)
+	rho_N = value_combs[i] 
+	h = rho_N/n; 
+	rho = [(j+1)*h for j in range(0,n)]
+	rho = array(rho)
 
-x_range = {'0.01':12, '0.5':6, '1':5, '5':2}
 
-for i in omega_r: 
 	figure()
 	plot(rho, NoInt[i]**2, 'r' )
 	plot(rho, Coulomb[i]**2, 'b') 
 	legend(['No interaction', 'Coulomb repulsion'])
 	xlabel(r'$\rho$')
 	ylabel(r'$u(\rho)^2$')
-	xlim([0,x_range[i]])
+	xlim([0, rho_N ])
 	savefig('Output/TwoParticle_Eigenvectors_omega'+i+'.png')
 
 

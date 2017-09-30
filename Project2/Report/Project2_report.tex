@@ -197,15 +197,142 @@ e_i = -\frac{1}{h^2}.
 If we instead want to consider the two-electron case with the Coulomb interaction we simply change 
 the potential $V_i$ from $\rho_i^2$ to $\omega_r^2\rho_i^2 + 1/\rho_i$. 
 
+\section{Jacobi's method}
 
-\section{The Jacobi algorithm}
+To summarize the situation we have now reduced the Schrödinger equation to an eigenvalue problem of 
+the form $\mathbf{Au} = \lambda\mathbf{u}$, with $A\in \mathbb{R}^{n\times n}$. Our task is then to find 
+the $n$ eigenvectors ($\mathbf{u}_1, \mathbf{u}_2,\dots,\mathbf{u}_n$) and eigenvalues 
+($\lambda_1,\lambda_2,\dots,\lambda_n$) of $A$. 
+
+The idea behind Jacobi's method is to do a series of orthogonal transformations of the kind 
+\begin{align*}
+(\mathbf{SAS}^T)(\mathbf{Sv}_i) = \mathbf{Sv}_i, 
+\end{align*}
+where $\mathbf{S}$ is an orthogonal matrix satisfying $\mathbf{SS}^T = \mathbf{I}$, and $\mathbf{v}_i$ is 
+an orthogonal basis of $\mathbb{R}^n$. Our goal is then to eventually end up with a matrix on the 
+left-hand side where all non-diagonal elements are (close to) zero, which means that the elements on the 
+diagonal are (close to) the eigenvalues. 
+
+This method works because when we do an orthogonal transformation 
+\begin{align*}
+\mathbf{B} = \mathbf{SAS}^T, 
+\end{align*}
+the eigenvalues of $\mathbf{B}$ are the same as those of $\mathbf{A}$, and
+ it can be shown that \cite{Matrix Comp} if $\mathbf{A}$ is real and symmetric
+(which it is in our case) there exists an orthogonal matrix, $\mathbf{M}$, such that 
+\begin{align*}
+\mathbf{MAM}^T = diag(\lambda_1,\dots,\lambda_n).  
+\end{align*} 
+(A more careful discussion of this is found in for example refs. \cite{Matrix Comp, Lecture Notes}.) 
+
+We can also see that if the basis vectors, $\mathbf{v}_i$, are orthogonal, that is\footnote{This relation 
+actually states that the $\mathbf{v}_i$'s are \textit{orthonormal}, and not just orthogonal.} 
+\begin{align*}
+\mathbf{v}_j^T\mathbf{v}_i = \delta_{ij}, 
+\end{align*}
+then after an orthogonal transformation 
+\begin{align*}
+\mathbf{w}_i = \mathbf{Sv}_i,  
+\end{align*} 
+the dot product of the new vectors is 
+\begin{align*}
+\mathbf{w}_j^T\mathbf{w}_i & = (\mathbf{Sv}_j)^T \mathbf{Sv}_i \\
+						   & = \mathbf{v}_j^T\mathbf{S}^T \mathbf{Sv}_i \\ 
+						   & = \mathbf{v}_j^T\mathbf{v}_i \\ 
+						   & = \delta_{ij}, 
+\end{align*}
+which means that orthogonality (and the dot product) is preserved by orthogonal transformations. This 
+provides us with a nice way of testing our algorithm. 
+
+The next step is to choose a basis, $\mathbf{v}_i$, and a transformation matrix, $\mathbf{S}$. The basis 
+vectors are chosen as simply as possible, namely 
+\begin{align*}
+v_1 = \left( \begin{array}{c}
+1 \\ 0 \\ 0 \\ \vdots \\ 0
+\end{array} \right), \quad 
+v_2 = \left( \begin{array}{c}
+0 \\ 1 \\ 0 \\ \vdots \\ 0
+\end{array} \right), \dots, \quad
+v_n = \left( \begin{array}{c}
+0 \\ 0 \\ \vdots \\ 0 \\ 1
+\end{array} \right),  
+\end{align*}
+where each vector (of course) has $n$ elements. The transformation matrix is chosen to be the matrix that 
+rotates our system by an angle $\theta$ in a plane in the $n$-dimensional Euclidean space. Such a matrix 
+has elements 
+\begin{align*}
+s_{kk} = s_{ll} = \cos\theta, \: s_{kl} = - s_{lk} = -\sin\theta, \: s_{ii} = 1, 
+\end{align*}   
+where $i \neq k,l$, and for a specific rotation $k$ and $l$ are fixed numbers. All other elements of 
+$\mathbf{S}$ are zero. So when doing the transformation 
+\begin{align*}
+\mathbf{B} = \mathbf{SAS}^T, 
+\end{align*}   
+the matrix $\mathbf{B}$ gets the following elements: 
+\begin{align*}
+b_{ii} & = a_{ii},\: i\neq k,l \\
+b_{ik} & = a_{ik}\cos\theta - a_{il}\sin\theta, \: i\neq k,l \\
+b_{il} & = a_{il}\cos\theta + a_{ik}\sin\theta, \: i\neq k,l \\
+b_{kk} & = a_{kk}\cos^2\theta -2a_{kl}\cos\theta\sin\theta + a_{ll}\sin^2\theta \\
+b_{ll} & = a_{ll}\cos^2\theta +2a_{kl}\cos\theta\sin\theta + a_{kk}\sin^2\theta \\
+b_{kl} & = b_{lk} = (a_{kk} - a_{ll})\cos\theta\sin\theta + a_{kl}(\cos^2\theta - \sin^2\theta)
+\end{align*}  
+Since we eventually want all the non-diagonal elements to be zeros (within some tolerance) we should chose 
+the angle $\theta$ so that $b_{kl} = b_{lk} = 0$. From the expression for $b_{kl}$ above we can get the 
+second order equation 
+\begin{align*}
+\tan^2\theta + 2\tan\theta\tau -1 = 0, 
+\end{align*}
+where $\tau = (a_{ll}-a_{kk})/2a_{kl}$, which has the roots 
+\begin{align*}
+\tan\theta = - \tau \pm \sqrt{1 + \tau^2}. 
+\end{align*}
+By using the relations 
+\begin{align*}
+\tan\theta = \frac{\sin\theta}{\cos\theta} \quad \mbox{and} \quad \cos^2\theta + \sin^2\theta = 1, 
+\end{align*}  
+we find that 
+\begin{align*}
+\cos\theta = \frac{1}{\sqrt{1+t^2}} \quad \mbox{and} \quad \sin\theta = \cos\theta\tan\theta, 
+\end{align*}  
+which we then apply to our matrix.   
+  
+For every transformation we do we want to reduce the off-diagonal norm, defined as  
+\begin{align*}
+\mbox{off}(A) = \sqrt{\sum_i \sum_j |a_{ij}|^2},\quad i\neq j, 
+\end{align*}    
+such that 
+\begin{align*}
+\mbox{off}(B) < \mbox{off}(A), 
+\end{align*}  
+and that this norm in the end should be approximately zero. To reduce the off-diagonal norm as much as 
+possible we start each iteration by picking out the largest off-diagonal element, and hence determine 
+the indices $k$ and $l$.       
+  
+\section{Programs and implementation of the Jacobi algorithm}
+
+All code written for the project can be found in the following git-repository:  \vspace{0.5cm} \\ 
+\fbox{
+\href{https://github.com/evensha/FYS4150/tree/master/Project2/Programs}
+{https://github.com/evensha/FYS4150/tree/master/Project2/Programs} 
+} \vspace{0.5cm} \\ 
 
 
-
-\subsection{Implementation of the Jacobi algorithm}
 
 \section{Results}
 
 \section{Summary and conclusions}
+
+\begin{thebibliography}{40}
+
+\bibitem{Matrix Comp} G. Golub, C. Van Loan (1996), \textit{Matrix Computations}, John Hopkins University 
+Press. 
+
+\bibitem{Lecture Notes} M. Hjort-Jensen (2015), \textit{Computational Physics - Lecture Notes Fall 2015}, 
+Department of Physics, University of Oslo. 
+
+
+
+\end{thebibliography}
 
 \end{document}
