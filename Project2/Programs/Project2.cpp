@@ -12,21 +12,15 @@
 using namespace std;
 using namespace arma; 
 
-ofstream ofile; 
+ofstream ofile;  
 
+void Jacobi_tests(); 
 
 int main(int argc, char *argv[]){ 
 
-	// First test matrix (eigenvalues should be 1 and 6)
+	// Call test function to check thing works as they should 
 
-	mat T1(2,2); 
-	T1(0,0) = 5.0; T1(0,1) = -2.0; T1(1,0) = -2.0; T1(1,1) = 2.0; 
-	Jacobi_tests(T1,2); // Check that the algorithm works as it should  
-
-	// Second test matrix 
-
-	mat T2 = ones<mat>(5,5); T2(1,2) = 5.0; 
-	Jacobi_tests(T2,5);
+	Jacobi_tests(); 
 
 	// Which problem should be considered? (1pHO, 2pNoInt, 2pCoulomb)
 
@@ -150,6 +144,49 @@ int main(int argc, char *argv[]){
 } 
 
 
+void Jacobi_tests(){   // To be called if you want to test the algorithm before running it!    
+
+	// Test eigenvalues 
+
+	mat T1(2,2); mat R1 = zeros<mat>(2,2); vec lambda1 = zeros<vec>(2); 
+	T1(0,0) = 5.0; T1(0,1) = -2.0; T1(1,0) = -2.0; T1(1,1) = 2.0;    // matrix with eigenvalues 1 and 6
+
+	do_Jacobi(T1, R1, lambda1, 2); 
+
+	lambda1 = sort(lambda1); 	
+	if(!(lambda1(0) == 1 && lambda1(1) == 6)){ cout << "EIGENVALUE TEST NOT PASSED!" << endl; exit(1);}  
+
+
+	// Test max off-diagonal element 
+
+	mat T2 = ones<mat>(5,5); T2(1,2) = 5.0; T2(4,3) = 4.0; 
+ 	int p, q; 
+	double test_max = offdiag(T2, &p, &q, 5); 
+
+	if(test_max != 5.0){cout << "MAX OFF-DIAG ELEMENT TEST NOT PASSED!" << endl; exit(1);} 
+
+
+	// Test dot product 
+
+	mat R2 = zeros<mat>(5,5); vec lambda2 = zeros<vec>(5);  
+	do_Jacobi(T2,R2,lambda2,5); // using the same matrix as above    	
+
+	vec V1(5); vec V2(5); 
+	double c = 0;
+
+	for(int i = 0; i<5; i++){  // pick out two first eigenvectors 
+		V1(i) = R2(i,0);  
+		V2(i) = R2(i,1); 
+		c += V1(i)*V2(i); // dot product
+	} 
+
+	if( c > 1E-10 ){cout << "DOT PRODUCT TEST NOT PASSED!" << endl; exit(1);}  
+
+	cout << "ALL UNIT TESTS PASSED! :-)" << endl; 
+	cout << "--------------------------" << endl; 
+ 
+	return; 
+} 
 
 
 

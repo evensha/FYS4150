@@ -34,18 +34,24 @@ double offdiag( mat A, int *p, int *q, int n ){
 //------------------
 
 void Jacobi_rotation( mat& A, mat& R, int k, int l, int n ){  
+
 	double s,c;
 
 	if( A(k,l) != 0){ 	
+
 		double tau, t; 
-		tau = (A(l,l) - A(k,k))/(2*A(k,l)); 
+		tau = (A(l,l) - A(k,k))/(2*A(k,l));  // define tau
+
+		// Calculate t, c and s 
 		
-		if(tau > 0){ t = - tau + sqrt(1.0 + tau*tau ); } // ????
-		else{ t =  - tau - sqrt(1.0 + tau*tau ); } 
+		if(tau > 0){ t = 1.0/(tau + sqrt(1.0 + tau*tau )); }  
+		else{ t =  -1.0/(- tau + sqrt(1.0 + tau*tau )); } 
 		c = 1.0/sqrt(1.0 + t*t);
 		s = c*t; 
 	}
 	else{ c = 1.0; s = 0.0; } 
+
+	// Update elements of A 
 
 	double a_kk, a_ll, a_ik, a_il, r_ik, r_il; 
 	a_kk = A(k,k); 
@@ -65,6 +71,8 @@ void Jacobi_rotation( mat& A, mat& R, int k, int l, int n ){
 			A(l,i) = A(i,l); 
 		}
 
+		// Update the eigenvector matrix R 
+
 		r_ik = R(i,k); 
 		r_il = R(i,l); 
 
@@ -81,9 +89,8 @@ void Jacobi_rotation( mat& A, mat& R, int k, int l, int n ){
 
 void do_Jacobi(mat& A, mat& R, vec& lambda, int n){
 
-	// Define the eigenvector matrix
+	// Initialize R (i.e. the basis vectors) 
  
-	//mat R = zeros<mat>(n, n); 
 	for(int i = 0; i < n; i++ ){
 		R(i,i) = 1.0; 
 	} 
@@ -115,50 +122,6 @@ void do_Jacobi(mat& A, mat& R, vec& lambda, int n){
 	
 	return;  
 }
-
-
-void Jacobi_tests(mat A, int n){   // To be called if you want to test the algorithm before running it!    
-
-	cout << "-------------------------------------" << endl; 
-	cout << "OUTPUT FROM TEST FUNCTION:" << endl; 
-
-	// Max off-diagonal element  
-
- 	int p, q; 
-	double test_max = offdiag(A, &p, &q, n); 
-
-	cout << "Max off-diagonal element: " << A(p,q) << "   k,l=" << p << "," << q  << endl; 
-
-	// Eigenvalues 
-
-	mat R = zeros<mat>(n,n);
-	vec l = zeros<vec>(n); 
-	do_Jacobi(A,R,l,n);  
-
-	l = sort(l); 
-
-	cout << "Eigenvalues: "; 
-	for(int i = 0; i<n; i++){
-		cout << l(i) << " "; 
-	}
-	cout << endl; 	
-
-	// Dot product of eigenvectors 
-
-	vec R1(n); vec R2(n); 
-	double c = 0;
-	for(int i = 0; i<n; i++){  // pick out two first eigenvectors 
-		R1(i) = R(i,0);  
-		R2(i) = R(i,1); 
-		c += R1(i)*R2(i); // dot product
-		//cout << R1(i) << " , " << R2(i) << endl; 
-	} 
- 
-	cout << "Dot product: " << c << endl; 
-	cout << "-------------------------------------" << endl; 
-
-	return; 
-} 
 
 
 
