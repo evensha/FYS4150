@@ -26,7 +26,7 @@ R2 = array(R2)
 
 infile.close()
 
-h = 10.0/n 
+h = 5.0/n 
 rho = [(i+1)*h for i in range(0,n)]
 rho = array(rho)
 
@@ -34,9 +34,9 @@ rho = array(rho)
 plot(rho, R0**2, 'b')
 plot(rho, R1**2, 'r')
 plot(rho, R2**2, 'g')
-legend(['3','7','11'])
+legend([r'$\lambda =3$',r'$\lambda =7$',r'$\lambda =11$'])
 xlabel(r'$\rho$')
-ylabel(r'$u(\rho)^2$')
+ylabel(r'$|u(\rho)|^2$')
 xlim([0,5])
 savefig('Output/Eigenvectors_1pHO.png')
 #show()

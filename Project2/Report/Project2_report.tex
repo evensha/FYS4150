@@ -334,7 +334,7 @@ output from the programs are stored.
 The first program, called \texttt{Jacobi\_algorithm.cpp}, contains the implementation of the 
 Jacobi algorithm. (The implementation follows quite closely the examples given in refs.  
 \cite{Lecture Notes, Lectures Eigenvalue Problems}.) The program itself consists of the three following
- functions: 
+functions which are declared in the header file \texttt{Jacobi\_algorithm.h}: 
 \begin{itemize}
 \item \texttt{offdiag}
 \item \texttt{Jacobi\_rotation}
@@ -364,11 +364,101 @@ off-diagonal element, and start a "while"-loop that goes on until all off-diagon
 the tolerance (or we have reached the maximum number of iterations). When the iterations are finished 
 the eigenvalues should be on the diagonal of $\mathbf{A}$. 
 
-\subsection{Solving the Schrödinger equation}
+\subsection{Testing the algorithm and solving the Schrödinger equation}
 
+The program \texttt{Project2.cpp} contains the \texttt{main} program, as well as a function called 
+\texttt{Jacobi\_tests}. The latter function runs some simple tests on our implementation of the 
+Jacobi algorithm, and is called without any input arguments. Three different tests are implemented: 
+\begin{itemize}
+\item \textbf{Eigenvalues:} The algorithm is tested on a $2\times 2$-matrix with eigenvalues $1$ and $6$, 
+and we check that the algorithm actually gives these eigenvalues.  
+\item \textbf{Maximum off-diagonal element:} We define a $5\times 5$-matrix, and check that the 
+\texttt{offdiag}-function gives the correct matrix element. 
+\item \textbf{Dot product:} We check that the dot product is preserved, using the same $5\times 5$-matrix 
+as in the previous bullet test. 
+\end{itemize}
+By calling the \texttt{Jacobi\_tests}-function the program is aborted if one of the tests fails. 
 
+After having tested the algorithm we are ready to attack the problem that is subject of this project, 
+namely the Schrödinger equation. This is implemented in the main program, which must be run with either 
+three three or four input arguments. The first argument specifies the problem we want to consider; 
+either one particle (1pHO), two particles with no interaction (2pNoInt) or two particles with Coulomb 
+repulsion (2pCoulomb). The second argument is the number of mesh points (i.e. dimension of the space), 
+$n$, we want to consider, and the third argument is our choice for $\rho_{max}$. If we run the program 
+for two particles we should also give a fourth argument, which is $\omega_r$.  
+
+When the necessary quantities are defined we specify the potential, $V_i$, according to which problem 
+we consider, set up the matrix $\mathbf{A}$, and run the algorithm. The resulting eigenvalues and
+eigenvectors are then paired up in a "map", and eigenvalues are sorted in increasing order. 
+Finally the eigenvectors corresponding to the three lowest eigenvalues are written to file. 
+
+The eigenvectors are plotted using python in the scripts \texttt{Project2\_plotting\_1p.py} 
+(one-particle case) and \texttt{Project2\_plotting\_2p.py} (two-particle case). For the one particle case 
+the eigenvectors corresponding to the three lowest eigenstates are plotted, while for the two-particle 
+the eigenvectors with and without Coulomb interaction are plotted together for the lowest eigenstate only.
+
+Finally there is also a very small python script called \texttt{RunProject.py}. As we are supposed to 
+solve the two-particle problem for several different values of $\omega_r$, it is nice with a script that 
+runs the program for all the cases we want to consider, which is what this script does. 
 
 \section{Results}
+
+\subsection{One-particle case}
+
+Knowing that the three lowest eigenvalues should be $3$, $7$ and $11$, the first task is to find 
+appropriate values for $\rho_{max}$ and $n$. We start by choosing $n=100$ (because the algorithm is 
+fast for this value), and look at how the eigenvalues behave for some values of $\rho_{max}$. 
+The results of this study is given in Table \ref{tab:rho_max}, and we see that amongst the four 
+test values the best result is obtained by using $\rho_{max} = 5.0$. 
+
+\begin{table}[ht!]
+\begin{center}
+\caption{The three lowest eigenvalues calculated for different choices of $\rho_{max}$ using 
+$100$ mesh points.}
+\label{tab:rho_max}
+\begin{tabular}{cc} \\ \hline\hline  
+$\rho_{max}$ & Eigenvalues \\ \hline 
+$1.0$ & $\lambda_0 = 9.96153$  \\
+	  & $\lambda_1 = 39.0155$  \\
+	  & $\lambda_2 = 87.3475$  \\  \hline 
+$5.0$ & $\lambda_0 = 2.99922$  \\
+	  & $\lambda_1 = 6.99609$  \\
+	  & $\lambda_2 = 10.9906$  \\  \hline 
+$10.0$ & $\lambda_0 = 2.99687$  \\
+	  & $\lambda_1 = 6.98434$  \\
+	  & $\lambda_2 = 10.9617$  \\  \hline 
+$20.0$ & $\lambda_0 = 2.98744$  \\
+	  & $\lambda_1 = 6.93692$  \\
+	  & $\lambda_2 = 10.8453$  \\  \hline \hline 	  
+\end{tabular}
+\end{center}
+\end{table} 
+
+The precision can be increased further by increasing the number of mesh points, and with $n = 400$ we get 
+the following for the three lowest eigenvalues: 
+\begin{align*}
+\lambda_0 = 2.99995
+\lambda_1 = 6.99976
+\lambda_2 = 10.9996
+\end{align*}
+In Figure \ref{fig:eigenvectors_1p} the eigenvectors for the three lowest eigenstates are shown. In this 
+figure we can clearly see why $\rho_{max} = 5$ gives good precision, as the wave functions have almost 
+just reached zero, and we don't "waist" many of our mesh points in areas where the wave function is 
+zero anyway. Correspondingly we can see why $\rho_{max} = 1$ is a horrible choice, as we then would 
+force the wave functions to zero before they naturally fade out. (Remember that the boundary condition 
+in $\rho_{max}$ is $u(\rho_{max}) = 0$.) Notice however that it is possible that $\rho_{max} = 5$ is not 
+a good choice if we also want to consider higher states, i.e $\lambda_3$, $\lambda_4$ etc. 
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.7]{../Programs/Output/Eigenvectors_1pHO.png}
+\caption{The eigenvectors corresponding to the three lowest eigenstates.}
+\label{fig:eigenvectors_1p}
+\end{center}
+\end{figure}
+
+
+
+\subsection{Two-particle case}
 
 \section{Summary and conclusions}
 

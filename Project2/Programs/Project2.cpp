@@ -159,7 +159,7 @@ void Jacobi_tests(){   // To be called if you want to test the algorithm before 
 
 	// Test max off-diagonal element 
 
-	mat T2 = ones<mat>(5,5); T2(1,2) = 5.0; T2(4,3) = 4.0; 
+	mat T2 = ones<mat>(5,5); T2(1,2) = 5.0; T2(4,3) = 3.0; 
  	int p, q; 
 	double test_max = offdiag(T2, &p, &q, 5); 
 
@@ -172,15 +172,20 @@ void Jacobi_tests(){   // To be called if you want to test the algorithm before 
 	do_Jacobi(T2,R2,lambda2,5); // using the same matrix as above    	
 
 	vec V1(5); vec V2(5); 
-	double c = 0;
+	double c1 = 0;
+	double c2 = 0; 
 
 	for(int i = 0; i<5; i++){  // pick out two first eigenvectors 
 		V1(i) = R2(i,0);  
 		V2(i) = R2(i,1); 
-		c += V1(i)*V2(i); // dot product
+		c1 += V1(i)*V2(i); // dot product
+		c2 += V1(i)*V1(i); 
 	} 
 
-	if( c > 1E-10 ){cout << "DOT PRODUCT TEST NOT PASSED!" << endl; exit(1);}  
+	cout << c1 << endl; 
+	cout << c2 << endl; 
+
+	if( c1 > 1E-10 && c2 != 1.0 ){cout << "DOT PRODUCT TEST NOT PASSED!" << endl; exit(1);}  
 
 	cout << "ALL UNIT TESTS PASSED! :-)" << endl; 
 	cout << "--------------------------" << endl; 
