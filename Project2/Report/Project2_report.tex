@@ -36,6 +36,12 @@ Even S. Håland
 \normalsize
 \section*{Abstract}
 
+In this project we see how the Schrödinger equation can be set up on discrete form as an eigenvalue
+problem. This is done for both one and two electrons, and we find that by scaling the equations
+appropriately the two problems look quite similar, except from a modification of the potential. The 
+Jacobi algorithm is implemented and used to solve the eigenvalue problem. This algorithms is found to 
+require $> N^2$ iterations, where $N$ is the number of mesh points we consider, meaning that it take 
+quite some time to solve the eigenvalue problem, at least if we want somewhat precise answers. 
 
 \end{center}
 \end{titlepage}
@@ -388,11 +394,16 @@ $n$, we want to consider, and the third argument is our choice for $\rho_{max}$.
 for two particles we should also give a fourth argument, which is $\omega_r$.  
 
 When the necessary quantities are defined we specify the potential, $V_i$, according to which problem 
-we consider, set up the matrix $\mathbf{A}$, and run the algorithm. The resulting eigenvalues and
+we consider, set up the matrix $\mathbf{A}$ and run the algorithm. The resulting eigenvalues and
 eigenvectors are then paired up in a "map", and eigenvalues are sorted in increasing order. 
-Finally the eigenvectors corresponding to the three lowest eigenvalues are written to file. 
+Finally the eigenvectors corresponding to the three lowest eigenvalues are written to file.  
 
-The eigenvectors are plotted using python in the scripts \texttt{Project2\_plotting\_1p.py} 
+Alternatively, if we don't want to use the Jacobi algorithm, the problem can also be solved with Armadillo 
+\cite{Armadillo} by using the \texttt{eig\_sym} function. This is also implemented in the main program, 
+and comparing results from Armadillo and Jacobi could serve as a nice test that our algorithm works as 
+it should. Later we will also compare the CPU time of these two methods. 
+
+The eigenvectors are plotted with the python scripts \texttt{Project2\_plotting\_1p.py} 
 (one-particle case) and \texttt{Project2\_plotting\_2p.py} (two-particle case). For the one particle case 
 the eigenvectors corresponding to the three lowest eigenstates are plotted, while for the two-particle 
 the eigenvectors with and without Coulomb interaction are plotted together for the lowest eigenstate only.
@@ -434,31 +445,96 @@ $20.0$ & $\lambda_0 = 2.98744$  \\
 \end{center}
 \end{table} 
 
-The precision can be increased further by increasing the number of mesh points, and with $n = 400$ we get 
-the following for the three lowest eigenvalues: 
+The precision can be increased further by increasing the number of mesh points (i.e. the dimensions 
+of $\mathbf{A}$), and with $n = 400$ we get the following for the three lowest eigenvalues: 
 \begin{align*}
-\lambda_0 = 2.99995
-\lambda_1 = 6.99976
-\lambda_2 = 10.9996
+\lambda_0 = 2.99995 \\
+\lambda_1 = 6.99976 \\
+\lambda_2 = 10.9996 
 \end{align*}
-In Figure \ref{fig:eigenvectors_1p} the eigenvectors for the three lowest eigenstates are shown. In this 
-figure we can clearly see why $\rho_{max} = 5$ gives good precision, as the wave functions have almost 
-just reached zero, and we don't "waist" many of our mesh points in areas where the wave function is 
+However, when increasing the dimensions of the matrix we also increase quite drastically the number of 
+transformations that are needed, and hence the CPU time of the program. In Table \ref{tab:It_and_CPU} 
+the number of iterations and CPU time required for some values of $N$ is listed, together with the 
+CPU time required to solve the problem with Armadillo. The first thing to notice is that the Jacobi 
+algorithm requires \textit{a lot} of iterations. For the specific case we are looking at here 
+($\rho_{max} = 5$ and tolerance $10^{-10}$) the number of iterations required is about $1.8N^2$. 
+We also notice that the Armadillo solves the problem \textit{much} faster, meaning that the Jacobi 
+algorithm is not the most efficient algorithm for dealing with this particular problem.   
+
+\begin{table}
+\begin{center}
+\caption{Number of iterations and CPU time required for different values of $N$ (using $\rho_{max} = 5$),
+compared to CPU time using Armadillo.}
+\label{tab:It_and_CPU}
+\begin{tabular}{cccc} \hline \hline 
+$N$ & Iterations & CPU time & CPU time (Armadillo) \\ \hline 
+$100$ & $17627$  & $2.18$ s  & $0.01$ s \\
+$200$ & $71168$  & $26.9$ s  & $0.04$ s \\
+$400$ & $287520$ & $7.7$ min & $0.12$ s \\ \hline \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+In Figure \ref{fig:eigenvectors_1p} the squared eigenvectors for the three lowest eigenstates are shown. 
+In this figure we can clearly see why $\rho_{max} = 5$ gives good precision, as the wave functions have 
+almost just reached zero, and we don't "waist" many of our mesh points in areas where the wave function is 
 zero anyway. Correspondingly we can see why $\rho_{max} = 1$ is a horrible choice, as we then would 
 force the wave functions to zero before they naturally fade out. (Remember that the boundary condition 
-in $\rho_{max}$ is $u(\rho_{max}) = 0$.) Notice however that it is possible that $\rho_{max} = 5$ is not 
+in $\rho_{max}$ is $u(\rho_{max}) = 0$.) Notice however that it is not certain that $\rho_{max} = 5$ is
 a good choice if we also want to consider higher states, i.e $\lambda_3$, $\lambda_4$ etc. 
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[scale=0.7]{../Programs/Output/Eigenvectors_1pHO.png}
-\caption{The eigenvectors corresponding to the three lowest eigenstates.}
+\caption{The eigenvectors corresponding to the three lowest eigenstates, calculated with $n=400$ and 
+$\rho_{max} = 5$.}
 \label{fig:eigenvectors_1p}
 \end{center}
 \end{figure}
 
-
-
 \subsection{Two-particle case}
+
+When considering only one electron we found that $\rho_{max}=5$ was a good choice. When moving to the 
+two-electron problem we need to reconsider this choice. The reason for this is that while the 
+one-electron Schrödinger equation (after scaling) was independent of the harmonic oscillator frequency, 
+the two-electron potential depends on $\omega_r$ (see eq. \ref{eq:SE_2p_scaled}). This means that by 
+varying $\omega_r$ we must also vary $\rho_{max}$. And by varying $\rho_{max}$ we must also change 
+$N$ in order to obtain the same level of precision in our results. The choices made for these quantities 
+(which are based on some "trying and failing") are listed in Table \ref{tab:rho_and_N}. 
+
+\begin{table}
+\begin{center}
+\caption{Choice of $\rho_{max}$ and $N$ for the different values of $\omega_r$.}
+\label{tab:rho_and_N}
+\begin{tabular}{ccc} \hline \hline  
+$\omega_r$ & $\rho_{max}$ & $N$ \\ \hline
+$0.01$ & $50$ & $500$ \\
+$0.5$  & $6$  & $400$ \\
+$1$    & $5$  & $400$ \\
+$5$    & $2$  & $200$ \\ \hline\hline
+\end{tabular}
+\end{center}
+\end{table} 
+
+When running the program using the values from Table \ref{tab:rho_and_N} we get the eigenvalues listed 
+in Table \ref{tab:eigenvalues_2p}. The first thing to notice is that for $\omega_r=1$ and no interaction 
+we get the same eigenvalue as for the one-electron case, which is to be expected, as the (scaled) 
+equations look exactly the same. Further we see that eigenvalues for the interacting case are always 
+larger than those for the non-interacting case.  
+
+\begin{table}
+\begin{center}
+\caption{Eigenvalues for different values of $\omega_r$ for the ground state, both with and 
+without Coulomb repulsion.}
+\label{tab:eigenvalues_2p}
+\begin{tabular}{ccc} \hline \hline
+$\omega_r$ & $\lambda_0$ (No interaction) & $\lambda_0$ (Coulomb interaction) \\ \hline
+$0.01$ & $0.0299997$ & $0.105775$ \\
+$0.5$  & $1.49998$   & $2.23011$  \\
+$1$    & $2.99995$   & $4.05783$  \\
+$5$    & $14.9992$   & $17.4479$  \\ \hline \hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \section{Summary and conclusions}
 
@@ -476,6 +552,12 @@ Department of Physics, University of Oslo. \\
 Eigenvalue Problems}. 
 \href{http://compphysics.github.io/ComputationalPhysics/doc/pub/eigvalues/pdf/eigvalues-beamer.pdf}
 {http://compphysics.github.io/ComputationalPhysics/doc/pub/eigvalues\\/pdf/eigvalues-beamer.pdf}
+
+\bibitem{Armadillo} C. Sanderson, R. Curtin (2016), Armadillo: a template-based C++ library for linear 
+algebra, \textit{Journal of Open Source Software}, Vol. 1, p. 26.  
+
+\bibitem{Taut} M. Taut (1993), Two electrons in an external oscillator potential: Particular analytical 
+solutions of a Coulomb correlation problem, \textit{Physical review A}, Vol. 48, p. 3561. 
 
 \end{thebibliography}
 
