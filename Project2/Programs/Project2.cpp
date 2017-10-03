@@ -40,20 +40,19 @@ int main(int argc, char *argv[]){
 	double h = (rho_N - rho_0)/( (double) n );
 	double omega_r; 
 
-	if( Prob == "1pHO" ){ omega_r = 1.0; } 
+	if( Prob == "1pHO" ){ omega_r = 1.0; }  // omega_r set to 1 when considering one-particle case
 	else{ omega_r = atof(argv[4]); }   
 
-	double diag = 2.0/(h*h); 
-	double non_diag = -1.0/(h*h); 
+	double diag = 2.0/(h*h); // pre-define the constant part of the diagonal elements 
+	double non_diag = -1.0/(h*h); // pre-define the off-diagonal elements 
 
 
 	// Define necessary matrices and vectors 
 
-
 	vec V = zeros<vec>(n); // The potential 
 
 	for(int i = 0; i < n; i++ ){
-		double rho_i = rho_0 + (i+1.0)*h;	
+		double rho_i = rho_0 + (i+1.0)*h;	 // rho_0 is known so the first element of rho should be rho_1, hence the (i+1)*h
 		if( Prob == "1pHO" or Prob == "2pNoInt" ){	V(i) = omega_r*omega_r*rho_i*rho_i; }  
 		if( Prob == "2pCoulomb" ){ V(i) = omega_r*omega_r*rho_i*rho_i + 1.0/rho_i; }
 	}
@@ -76,15 +75,20 @@ int main(int argc, char *argv[]){
 	vec lambda = zeros<vec>(n);  // Vector that will contain the eigenvalues 
 
 
-	// Eigenvalues from Armadillo 
-/*
+	// Solving with Armadillo 
+
+	clock_t arma_start, arma_finish; 
+	arma_start = clock(); 
 	vec eigval = eig_sym(A);      
+	arma_finish = clock(); 
+	double arma_time = (arma_finish - arma_start)/((double) CLOCKS_PER_SEC); 
+	cout << "Time with Armadillo: " << arma_time << " s" << endl; 
+	/*
 	cout << "Eigenvalues from Armadillo:" << endl; 
-	for(int i = 0; i < n; i++){
+	for(int i = 0; i < 3; i++){
 		cout << eigval(i) << endl;
 	}
-*/
-
+	*/
 
 	// Run the Jacobi algorithm
 

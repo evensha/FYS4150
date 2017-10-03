@@ -2,10 +2,13 @@ from math import *
 from matplotlib.pyplot import * 
 from numpy import * 
 
+font = {'size':14}
+matplotlib.rc('font', **font) 
+
 #omega_r = ['0.01', '0.5', '1', '5']
 #omega_r = ['5']
-value_combs = {'0.01':50.0, '0.5':10.0, '1':10.0, '5':2.0}
-
+value_combs = {'0.01':50.0, '0.5':6.0, '1':5.0, '5':2.0}
+yloc = {'0.01':0.006, '0.5':0.006, '1':0.008, '5':0.013}
 
 NoInt = {}
 Coulomb = {}
@@ -46,8 +49,10 @@ for i in value_combs.keys():
 	plot(rho, Coulomb[i]**2, 'b') 
 	legend(['No interaction', 'Coulomb repulsion'])
 	xlabel(r'$\rho$')
-	ylabel(r'$u(\rho)^2$')
+	ylabel(r'$|u(\rho)|^2$')
 	xlim([0, rho_N ])
+	#title(r'$\omega_r=$%s' %i)
+	text(0.7*rho_N, yloc[i], r'$\omega_r=$%s' %i, fontsize=18)
 	savefig('Output/TwoParticle_Eigenvectors_omega'+i+'.png')
 
 
