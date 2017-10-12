@@ -31,11 +31,13 @@ public:
 	planet(double M, double x, double y, double vx, double vy); 
 
 	// Functions 	
-	double distance(planet otherPlanet); 
+	double Distance(planet otherPlanet); 
 	double GravitationalForce(planet otherPlanet, double Gconst);
-	double acceleration(planet otherPlanet, double Gconst); 
+	double Acceleration(planet otherPlanet, double Gconst); 
 	double KineticEnergy(); 
-	double PotentialEnergy(planet &otherPlanet, double Gconst); 
+	double PotentialEnergy(double Gconst); 
+	double AngularMomentum(); 
+
 
 };
 

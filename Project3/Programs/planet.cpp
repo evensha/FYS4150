@@ -38,7 +38,7 @@ planet::planet(double M, double x, double y, double vx, double vy){
 }
 
 
-double planet::distance(planet otherPlanet){
+double planet::Distance(planet otherPlanet){
 
 	double x1,y1,x2,y2,Dx,Dy; 
 	
@@ -58,7 +58,7 @@ double planet::distance(planet otherPlanet){
 
 double planet::GravitationalForce(planet otherPlanet, double Gconst){
 	
-	double r = this->distance(otherPlanet); 
+	double r = this->Distance(otherPlanet); 
 
 	if(r!=0) return Gconst*this->mass*otherPlanet.mass/(r*r); 
 
@@ -67,10 +67,9 @@ double planet::GravitationalForce(planet otherPlanet, double Gconst){
 }
 
 
+double planet::Acceleration(planet otherPlanet, double Gconst){
 
-double planet::acceleration(planet otherPlanet, double Gconst){
-
-	double r = this->distance(otherPlanet); 
+	double r = this->Distance(otherPlanet); 
 
 	if(r!=0) return this->GravitationalForce(otherPlanet, Gconst)/(this->mass*r); 
 
@@ -89,6 +88,30 @@ double planet::KineticEnergy(){
 
 }
 
+
+double planet::PotentialEnergy(double Gconst){
+
+	double m = this->mass; double x = this->position[0]; double y = this->position[1]; 
+	double r = sqrt(x*x + y*y); 
+
+	double E_p = - Gconst*m/r; 
+	 	
+	return E_p; 
+
+}
+
+
+double planet::AngularMomentum(){
+
+	double x = this->position[0]; double y = this->position[1]; 
+	double v_x = this->position[0]; double v_y = this->position[1]; 
+
+	double L_z = x*v_y - y*v_x; 
+	double L_tot = sqrt(L_z*L_z); 
+
+	return L_tot;  
+
+}
 
 
 

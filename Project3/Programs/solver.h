@@ -25,6 +25,7 @@ public:
 	void addPlanet(planet newplanet); 
 	void ForwardEuler(int integration_points, double time); 
 	void VelocityVerlet(int integration_points, double time); 
+	void GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y); 
 	//void print_position(string outname, vec x, vec y); 
 
 }; 

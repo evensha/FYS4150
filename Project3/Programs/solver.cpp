@@ -6,7 +6,7 @@
 #include <cstdlib> 
 #include <fstream>
 #include <iomanip>
-
+#include <string>
 
 using namespace std; 
 
@@ -45,12 +45,12 @@ void solver::ForwardEuler(int integration_points, double time){
 
 		planet &Planet = all_planets[i]; 
 
-		double a_x; double a_y; 
+		double a_x; double a_y; double r; 
 
 		// Solve with Forward-Euler algo 
 
 		for(int i = 0; i<n-1; i++){
-			double r = sqrt(Planet.position[0]*Planet.position[0] + Planet.position[1]*Planet.position[1]); 
+			r = sqrt(Planet.position[0]*Planet.position[0] + Planet.position[1]*Planet.position[1]); 
 			a_x = - 4.0*M_PI*M_PI*Planet.position[0]/(r*r*r); 
 			a_y = - 4.0*M_PI*M_PI*Planet.position[1]/(r*r*r);						
 
@@ -62,19 +62,23 @@ void solver::ForwardEuler(int integration_points, double time){
 
 			ofile << Planet.position[0] << setw(20) << Planet.position[1] << endl;
 		}
-	
+
+		cout << "----------------------" << endl; 
+		cout << "After Euler: " << endl; 
+		cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
+		cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
+		cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
+
 		//ostringstream os; 
 		//os << "Output/EarthSun_"<< method  <<".txt"; 
 
 		//string outfile = os.str(); 
 		//ofile.open(outfile.c_str()); 
 
-		// Write to file 
 		ofile.close();
 
 	}
 	//print_position("Output_EarthSun_FE.txt",x,y); 
-
 
 }  
 
@@ -86,17 +90,27 @@ void solver::VelocityVerlet(int integration_points, double time){
 	int n = integration_points; 	
 	double h = time/((double) n);
 
-	for(int i = 0; i<total_planets; i++){	 
+	for(int i = 0; i<total_planets-1; i++){	 
 
 		ofile.open("Output/EarthSun_VV.txt"); 
+		//ostringstream os; 
+		//os << "Output/EarthSun_VV.txt"; 
+
+		//string outfile = os.str(); 
+		//ofile.open(outfile.c_str()); 
+
+		//ofile.open(outname); 
+
 		planet &Planet = all_planets[i]; 
 
 		// Initial conditions 
 
-		double a_x; double a_y; double a_x_new; double a_y_new;  		 
-		double r_0 = sqrt(Planet.position[0]*Planet.position[0]  + Planet.position[1]*Planet.position[1]); 
-		a_x = - 4.0*M_PI*M_PI*Planet.position[0]/(r_0*r_0*r_0); 
-		a_y = - 4.0*M_PI*M_PI*Planet.position[1]/(r_0*r_0*r_0); 
+		double F_x=0; double F_y=0; double F_x_new=0; double F_y_new=0;  	
+		double a_x=0; double a_y=0; double a_x_new=0; double a_y_new=0;  		 
+
+		GravitationalForce(Planet, all_planets[1], F_x, F_y); 
+		double m = Planet.mass;  
+		a_x = F_x/m; a_y = F_y/m; 
 
 		// Solve with Velocity Verlet algo
 
@@ -105,23 +119,42 @@ void solver::VelocityVerlet(int integration_points, double time){
 			Planet.position[0] += h*Planet.velocity[0] + h*h/2.0*a_x; 
 			Planet.position[1] += h*Planet.velocity[1] + h*h/2.0*a_y; 
 
-			r_0 = sqrt(Planet.position[0]*Planet.position[0]  + Planet.position[1]*Planet.position[1]); 
-			a_x_new = - 4.0*M_PI*M_PI*Planet.position[0]/(r_0*r_0*r_0); 
-			a_y_new = - 4.0*M_PI*M_PI*Planet.position[1]/(r_0*r_0*r_0); 
+			GravitationalForce(Planet, all_planets[1], F_x_new, F_y_new); 	
+			a_x_new = F_x_new/m; a_y_new = F_y_new/m; 		
 		
 			Planet.velocity[0] += h/2.0*(a_x_new + a_x); 
 			Planet.velocity[1] += h/2.0*(a_y_new + a_y); 
 
 			a_x = a_x_new; a_y = a_y_new; 
+			F_x = 0; F_y = 0; F_x_new = 0; F_y_new = 0; 	
 
 			ofile << Planet.position[0] << setw(20) << Planet.position[1] << endl;
+	
 
 		}
+
+		cout << "----------------------" << endl; 
+		cout << "After Verlet: " << endl; 
+		cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
+		cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
+		cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
 
 		ofile.close(); 
 
 	}
 	
+}
+
+
+void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y){
+
+	double dist_x = Planet.position[0]; double dist_y=Planet.position[1];  
+	double r = Planet.Distance(other); 
+	double m = Planet.mass; double M = other.mass; 
+
+	F_x -= G*m*M*dist_x/(r*r*r); 
+	F_y -= G*m*M*dist_y/(r*r*r);   
+
 }
 
 /*
