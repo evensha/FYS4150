@@ -23,6 +23,8 @@ planet::planet(){
 	kinetic = 0.0; 
 	potential = 0.0; 
 
+	name = "some_planet"; 	
+
 }
 
 planet::planet(double M, double x, double y, double vx, double vy){ 
@@ -34,6 +36,23 @@ planet::planet(double M, double x, double y, double vx, double vy){
 	velocity[1] = vy; 
 	kinetic = 0; 
 	potential = 0; 
+
+	name = "some_planet"; 
+
+}
+
+
+planet::planet(double M, double x, double y, double vx, double vy, string planet){ 
+
+	mass = M; 
+	position[0] = x; 
+	position[1] = y;  
+	velocity[0] = vx; 
+	velocity[1] = vy; 
+	kinetic = 0; 
+	potential = 0; 
+
+	name = planet; 
 
 }
 

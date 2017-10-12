@@ -7,6 +7,7 @@
 #include <fstream>
 #include <iomanip>
 #include <string>
+#include <sstream>
 
 using namespace std; 
 
@@ -88,67 +89,81 @@ void solver::VelocityVerlet(int integration_points, double time){
 	// Constants & vectors 
 
 	int n = integration_points; 	
-	double h = time/((double) n);
+	double h = time/((double) n);	
 
-	for(int i = 0; i<total_planets-1; i++){	 
+	// Make outfile 
 
-		ofile.open("Output/EarthSun_VV.txt"); 
-		//ostringstream os; 
-		//os << "Output/EarthSun_VV.txt"; 
+	ostringstream os; 
+	os << "Output/Planets_VV_" << total_planets-1 << ".txt"; 
 
-		//string outfile = os.str(); 
-		//ofile.open(outfile.c_str()); 
+	string outfile = os.str(); 
+	ofile.open(outfile.c_str()); 
 
-		//ofile.open(outname); 
+	PrintNames(); 
+	PrintPositions();  // print initial positions 
 
-		planet &Planet = all_planets[i]; 
+	// Initialize forces and acceleration
 
-		// Initial conditions 
+	double F_x=0; double F_y=0; double F_x_new=0; double F_y_new=0;  	
+	double a_x=0; double a_y=0; double a_x_new=0; double a_y_new=0;  		
+ 
+	for(int i = 0; i<n; i++){    // Start loop over time steps
+	
+		for(int j = 0; j<total_planets; j++){	 
+			planet &Planet = all_planets[j]; 
+			if(Planet.name == "Sun") continue;  // sun fixed -> don't bother with the calculations
 
-		double F_x=0; double F_y=0; double F_x_new=0; double F_y_new=0;  	
-		double a_x=0; double a_y=0; double a_x_new=0; double a_y_new=0;  		 
+			for(int k = 0; k<total_planets; k++){  // calculate gravitational forces on the planet 
+				if(k != j){
+					planet &other = all_planets[k]; 
+					GravitationalForce(Planet, other, F_x, F_y); 
+				}
+			}
 
-		GravitationalForce(Planet, all_planets[1], F_x, F_y); 
-		double m = Planet.mass;  
-		a_x = F_x/m; a_y = F_y/m; 
+			double m = Planet.mass;  
+			a_x = F_x/m; a_y = F_y/m;  // acceleration 
 
-		// Solve with Velocity Verlet algo
+			// Solve with Velocity Verlet algo
 
-		for(int i = 0; i<n-1; i++){
-
-			Planet.position[0] += h*Planet.velocity[0] + h*h/2.0*a_x; 
+			Planet.position[0] += h*Planet.velocity[0] + h*h/2.0*a_x;  // new positions 
 			Planet.position[1] += h*Planet.velocity[1] + h*h/2.0*a_y; 
 
-			GravitationalForce(Planet, all_planets[1], F_x_new, F_y_new); 	
+			for(int k = 0; k<total_planets; k++){
+				if( k != j ){
+					planet &other = all_planets[k]; 
+					GravitationalForce(Planet, other, F_x_new, F_y_new); 	// new forces
+				}
+			}	
 			a_x_new = F_x_new/m; a_y_new = F_y_new/m; 		
 		
-			Planet.velocity[0] += h/2.0*(a_x_new + a_x); 
+			Planet.velocity[0] += h/2.0*(a_x_new + a_x);  // velocities 
 			Planet.velocity[1] += h/2.0*(a_y_new + a_y); 
 
-			a_x = a_x_new; a_y = a_y_new; 
-			F_x = 0; F_y = 0; F_x_new = 0; F_y_new = 0; 	
-
-			ofile << Planet.position[0] << setw(20) << Planet.position[1] << endl;
-	
+			a_x = a_x_new; a_y = a_y_new;   // update acceleration 
+			F_x = 0; F_y = 0; F_x_new = 0; F_y_new = 0;  // reset forces 	
 
 		}
 
-		cout << "----------------------" << endl; 
-		cout << "After Verlet: " << endl; 
-		cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
-		cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
-		cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
-
-		ofile.close(); 
+		PrintPositions();  // print updated positions
 
 	}
+		// Print some "after-algo" information
+
+		//cout << "----------------------" << endl; 
+		//cout << "After Verlet: " << endl; 
+		//cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
+		//cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
+		//cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
+
+		ofile.close(); 
 	
 }
 
 
 void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y){
 
-	double dist_x = Planet.position[0]; double dist_y=Planet.position[1];  
+	double dist_x =  Planet.position[0] - other.position[0]; 
+	double dist_y =  Planet.position[1] - other.position[1];  
 	double r = Planet.Distance(other); 
 	double m = Planet.mass; double M = other.mass; 
 
@@ -157,23 +172,25 @@ void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, doub
 
 }
 
-/*
-void solver::print_position(string outname, vec x, vec y){
-	ofstream ofile; 
-	//ostringstream os; 
-	//os << "Output/EarthSun_"<< method  <<".txt"; 
 
-	//string outfile = os.str(); 
-	//ofile.open(outfile.c_str()); 
+void solver::PrintPositions(){
+	for(int i = 0; i<total_planets; i++){
+		if( i == total_planets-1)	ofile << setprecision(5) << all_planets[i].position[0] << setw(20) << all_planets[i].position[1];
+		else ofile << setprecision(5) << all_planets[i].position[0] << setw(20) << all_planets[i].position[1] << setw(20); 
+	}
+	ofile << endl; 
 
-	ofile.open(outname); 
-
-	for(int i = 0; i < n; i++){
-		ofile << x[i] << setw[20] << y[i] << endl; // << setw(20) << v_x(i) << setw(20) << v_y(i) << endl; 						
-	}	
-
-	ofile.close();
 }
-*/
+
+
+void solver::PrintNames(){
+	for(int i = 0; i<total_planets; i++){
+		if( i == total_planets-1) ofile << all_planets[i].name; 
+		else ofile << all_planets[i].name << setw(40);
+	}
+	ofile << endl; 
+}
+
+
 
  

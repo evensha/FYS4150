@@ -2,7 +2,7 @@
 from numpy import array 
 from matplotlib.pyplot import * 
 
-infile1 = open("Output/EarthSun_VV.txt", 'r')
+infile1 = open("Output/Planets_VV_Earth_1.txt", 'r')
 infile2 = open("Output/EarthSun_FE.txt", 'r')
 
 x1 = []
