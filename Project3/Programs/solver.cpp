@@ -13,6 +13,15 @@ using namespace std;
 
 ofstream ofile; 
 
+solver::solver(){
+
+	total_planets = 0; 
+	mass = 0; 
+	radius = 0; 
+	G = 4*M_PI*M_PI; 
+
+}
+
 solver::solver(double r){
 
 	total_planets = 0; 
@@ -21,6 +30,7 @@ solver::solver(double r){
 	G = 4*M_PI*M_PI; 
 
 }
+
 	
 
 void solver::addPlanet(planet newplanet){ 
@@ -39,21 +49,45 @@ void solver::ForwardEuler(int integration_points, double time){
 	int n = integration_points; 	
 	double h = time/((double) n);
 
-	//double x[n]; double y[n]; double v_x[n]; double v_y[n]; double a_x[n]; double a_y[n]; 
+	// Make outfile 
 
-	for(int i = 0; i<total_planets; i++){	 
-		ofile.open("Output/EarthSun_FE.txt"); 
+	ostringstream os; 
+	string problem; 
+	if(total_planets == 2) problem = "Binary"; 
+	else if(total_planets == 3) problem = "ThreeBody"; 
+	else if(total_planets == 10) problem = "SolarSystem"; 
+	else problem = "Planets"; 
+	os << "Output/" << problem << "_FE" << ".txt"; 
 
-		planet &Planet = all_planets[i]; 
+	string outfile = os.str(); 
+	ofile.open(outfile.c_str()); 
 
-		double a_x; double a_y; double r; 
+	PrintNames(); 
+	PrintPositions();  // print initial positions 
 
-		// Solve with Forward-Euler algo 
+	// Initialize forces and acceleration
 
-		for(int i = 0; i<n-1; i++){
-			r = sqrt(Planet.position[0]*Planet.position[0] + Planet.position[1]*Planet.position[1]); 
-			a_x = - 4.0*M_PI*M_PI*Planet.position[0]/(r*r*r); 
-			a_y = - 4.0*M_PI*M_PI*Planet.position[1]/(r*r*r);						
+	double F_x=0; double F_y=0;   	
+	double a_x=0; double a_y=0;
+
+	for(int i = 0; i<n; i++){
+
+		for(int j = 0; j<total_planets; j++){	 
+
+			planet &Planet = all_planets[j]; 
+			if(Planet.name == "Sun") continue; 
+
+			for(int k = 0; k<total_planets; k++){  // calculate gravitational forces on the planet 
+				if(k != j){
+					planet &other = all_planets[k]; 
+					GravitationalForce(Planet, other, F_x, F_y); 
+				}
+			}
+
+			double m = Planet.mass;  
+			a_x = F_x/m; a_y = F_y/m;  // acceleration 	
+
+			// Update positions and velocities 	
 
 			Planet.position[0] += h*Planet.velocity[0]; 
 			Planet.velocity[0] += h*a_x; 
@@ -61,25 +95,15 @@ void solver::ForwardEuler(int integration_points, double time){
 			Planet.position[1] += h*Planet.velocity[1]; 
 			Planet.velocity[1] += h*a_y; 
 
-			ofile << Planet.position[0] << setw(20) << Planet.position[1] << endl;
+			F_x = 0; F_y = 0; // reset forces 
+
 		}
 
-		cout << "----------------------" << endl; 
-		cout << "After Euler: " << endl; 
-		cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
-		cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
-		cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
-
-		//ostringstream os; 
-		//os << "Output/EarthSun_"<< method  <<".txt"; 
-
-		//string outfile = os.str(); 
-		//ofile.open(outfile.c_str()); 
-
-		ofile.close();
+		PrintPositions(); 		
 
 	}
-	//print_position("Output_EarthSun_FE.txt",x,y); 
+
+	ofile.close();
 
 }  
 
@@ -94,7 +118,12 @@ void solver::VelocityVerlet(int integration_points, double time){
 	// Make outfile 
 
 	ostringstream os; 
-	os << "Output/Planets_VV_" << total_planets-1 << ".txt"; 
+	string problem; 
+	if(total_planets == 2) problem = "Binary"; 
+	else if(total_planets == 3) problem = "ThreeBody"; 
+	else if(total_planets == 10) problem = "SolarSystem"; 
+	else problem = "Planets"; 
+	os << "Output/" << problem << "_VV" << ".txt";  
 
 	string outfile = os.str(); 
 	ofile.open(outfile.c_str()); 
@@ -147,15 +176,8 @@ void solver::VelocityVerlet(int integration_points, double time){
 		PrintPositions();  // print updated positions
 
 	}
-		// Print some "after-algo" information
 
-		//cout << "----------------------" << endl; 
-		//cout << "After Verlet: " << endl; 
-		//cout << "Kinetic energy: " << Planet.KineticEnergy() << endl; 
-		//cout << "Potential energy: " << Planet.PotentialEnergy(G) << endl; 
-		//cout << "Angular momentum: " << Planet.AngularMomentum() << endl; 
-
-		ofile.close(); 
+	ofile.close(); 
 	
 }
 

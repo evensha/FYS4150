@@ -13,7 +13,8 @@ public:
 	friend class planet; 
 
 	// Properties 
-	double radius, mass, G; 
+	double mass, G;
+	double radius; 
 	int total_planets; 
 	vector<planet> all_planets; 
 
