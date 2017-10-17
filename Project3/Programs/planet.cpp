@@ -18,12 +18,14 @@ planet::planet(){
 	mass = 0.0; 
 	position[0] = 0.0; 
 	position[1] = 0.0; 
+	position[2] = 0.0; 
 	velocity[0] = 0.0; 
 	velocity[1] = 0.0; 
+	velocity[2] = 0.0; 
 	kinetic = 0.0; 
 	potential = 0.0; 
 
-	name = "some_planet"; 	
+	name = "Planet"; 	
 
 }
 
@@ -32,12 +34,14 @@ planet::planet(double M, double x, double y, double vx, double vy){
 	mass = M; 
 	position[0] = x; 
 	position[1] = y;  
+	position[2] = 0.0; 
 	velocity[0] = vx; 
 	velocity[1] = vy; 
+	velocity[2] = 0.0; 
 	kinetic = 0; 
 	potential = 0; 
 
-	name = "some_planet"; 
+	name = "Planet"; 
 
 }
 
@@ -47,8 +51,27 @@ planet::planet(double M, double x, double y, double vx, double vy, string planet
 	mass = M; 
 	position[0] = x; 
 	position[1] = y;  
+	position[2] = 0.0; 
 	velocity[0] = vx; 
 	velocity[1] = vy; 
+	velocity[2] = 0.0; 
+	kinetic = 0; 
+	potential = 0; 
+
+	name = planet; 
+
+}
+
+
+planet::planet(double M, double x, double y, double z, double vx, double vy, double vz, string planet){ 
+
+	mass = M; 
+	position[0] = x; 
+	position[1] = y;  
+	position[2] = z; 
+	velocity[0] = vx; 
+	velocity[1] = vy; 
+	velocity[2] = vz; 
 	kinetic = 0; 
 	potential = 0; 
 
@@ -119,11 +142,24 @@ double planet::PotentialEnergy(double Gconst){
 
 }
 
+double planet::xMomentum(){
+	double v_x = this->velocity[0]; 
+	double m = this->mass; 
+
+	return v_x*m; 
+}
+
+double planet::yMomentum(){
+	double v_y = this->velocity[1]; 
+	double m = this->mass; 
+
+	return v_y*m; 
+}
 
 double planet::AngularMomentum(){
 
 	double x = this->position[0]; double y = this->position[1]; 
-	double v_x = this->position[0]; double v_y = this->position[1]; 
+	double v_x = this->velocity[0]; double v_y = this->velocity[1]; 
 
 	double L_z = x*v_y - y*v_x; 
 	double L_tot = sqrt(L_z*L_z); 

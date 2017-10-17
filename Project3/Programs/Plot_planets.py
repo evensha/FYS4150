@@ -1,64 +1,75 @@
 #from math import *
 from numpy import array 
-from matplotlib.pyplot import * 
+from matplotlib.pyplot import *
+import sys 
 
-infile1 = open("Output/Planets_VV_3.txt", 'r')
-infile2 = open("Output/Planets_VV_1.txt", 'r') 
+problem = sys.argv[1]  
 
-infile1.readline()
-infile2.readline()
+planets = []
 
-x = {'earth':[], 'mars':[], 'jupiter':[]}
-y =  {'earth':[], 'mars':[], 'jupiter':[]}
+if problem == "SolarSystem": 
+	infile = open("Output/SolarSystem_VV.txt", 'r')
+	planets = ['sun','mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptun', 'pluto']
+if problem == "ThreeBody": 
+	infile = open("Output/ThreeBody_VV.txt", 'r') 
+	planets = ['sun','earth', 'jupiter']
+if problem == "Binary": 
+	infile = open("Output/Binary_VV.txt", 'r')
+	planets = ['sun','earth']
 
-x_place =  {'earth':2, 'mars':4, 'jupiter':6}
-y_place =  {'earth':3, 'mars':5, 'jupiter':7}
+
+infile.readline()
+
+x = {}
+y =  {}
+
+x_place =  {}
+y_place =  {}
+
+i = 0
+for planet in planets: 
+	#print planet
+	x[planet] = []
+	y[planet] = []
+	x_place[planet] = i 
+	y_place[planet] = i+1
+	i+= 2	
+	
+
+#print x_place 
+#print y_place
+
 
 #print x.keys()
 
-for line in infile1: 
+for line in infile: 
 	words = line.split()
 	for planet in x.keys(): 
 		x[planet].append(float(words[x_place[planet]]))
 		y[planet].append(float(words[y_place[planet]]))
 
+infile.close()
 	
-#print x1[0]
-
-x3 = []
-y3 = []
-
-for line in infile2:
-	words = line.split()
-	x3.append(float(words[2]))
-	y3.append(float(words[3]))
-
-
-infile1.close()
-infile2.close()
-
-#print x
-#print y
-
-for planet in x.keys(): 
+for planet in planets: 
 	x[planet] = array(x[planet])
 	y[planet] = array(y[planet])
 
 x_s = array([0.0])
-y_s = array([0.0]) 
+y_s = array([0.0])
+
 
 figure() 
-plot(x['earth'],y['earth'],'g', label='Earth')
-plot(x['mars'],y['mars'],'b', label='Mars')
-plot(x['jupiter'], y['jupiter'], 'm', label = 'Jupiter')
-#plot(x3,y3, 'm', label = 'Earth (binary)')
-plot(x_s,y_s,'ro')
+for planet in planets: 
+	plot(x[planet], y[planet], label=planet)
+#plot(x_s,y_s,'ro')
 legend()
 xlabel(r'$x$')
 ylabel(r'$y$')
-#axis('equal')
+#if problem == "Binary": 
+#axis([-1.5, 1.5, -1.5, 1.5])
+axis('equal')
 show()
-savefig('Output/EarthJupiter.png')
+savefig('Output/'+problem+'.png')
 
  
 	

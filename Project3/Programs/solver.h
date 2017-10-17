@@ -13,20 +13,21 @@ public:
 	friend class planet; 
 
 	// Properties 
-	double mass, G;
+	double mass, G, beta;
 	double radius; 
 	int total_planets; 
 	vector<planet> all_planets; 
 
 	// Initializers 
 	solver(); 
-	solver(double r); 
+	solver(double b); 
+	//solver(double r); 
 
 	// Functions 
 	void addPlanet(planet newplanet); 
 	void ForwardEuler(int integration_points, double time); 
 	void VelocityVerlet(int integration_points, double time); 
-	void GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y); 
+	void GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y, double beta); 
 	void PrintPositions(); 
 	void PrintNames(); 
 

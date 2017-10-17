@@ -19,18 +19,32 @@ solver::solver(){
 	mass = 0; 
 	radius = 0; 
 	G = 4*M_PI*M_PI; 
+	beta = 2.0; 
 
 }
 
+
+solver::solver(double b){
+
+	total_planets = 0; 
+	mass = 0; 
+	radius = 0; 
+	G = 4*M_PI*M_PI; 
+	beta = b; 
+
+}
+
+/*
 solver::solver(double r){
 
 	total_planets = 0; 
 	mass = 0; 
 	radius = r; 
 	G = 4*M_PI*M_PI; 
+	beta = 2.0; 
 
 }
-
+*/
 	
 
 void solver::addPlanet(planet newplanet){ 
@@ -80,7 +94,7 @@ void solver::ForwardEuler(int integration_points, double time){
 			for(int k = 0; k<total_planets; k++){  // calculate gravitational forces on the planet 
 				if(k != j){
 					planet &other = all_planets[k]; 
-					GravitationalForce(Planet, other, F_x, F_y); 
+					GravitationalForce(Planet, other, F_x, F_y, beta); 
 				}
 			}
 
@@ -140,12 +154,12 @@ void solver::VelocityVerlet(int integration_points, double time){
 	
 		for(int j = 0; j<total_planets; j++){	 
 			planet &Planet = all_planets[j]; 
-			if(Planet.name == "Sun") continue;  // sun fixed -> don't bother with the calculations
+			//if(Planet.name == "Sun") continue;  // sun fixed -> don't bother with the calculations
 
 			for(int k = 0; k<total_planets; k++){  // calculate gravitational forces on the planet 
 				if(k != j){
 					planet &other = all_planets[k]; 
-					GravitationalForce(Planet, other, F_x, F_y); 
+					GravitationalForce(Planet, other, F_x, F_y, beta); 
 				}
 			}
 
@@ -160,7 +174,7 @@ void solver::VelocityVerlet(int integration_points, double time){
 			for(int k = 0; k<total_planets; k++){
 				if( k != j ){
 					planet &other = all_planets[k]; 
-					GravitationalForce(Planet, other, F_x_new, F_y_new); 	// new forces
+					GravitationalForce(Planet, other, F_x_new, F_y_new, beta); 	// new forces
 				}
 			}	
 			a_x_new = F_x_new/m; a_y_new = F_y_new/m; 		
@@ -182,15 +196,15 @@ void solver::VelocityVerlet(int integration_points, double time){
 }
 
 
-void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y){
+void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y, double beta){
 
 	double dist_x =  Planet.position[0] - other.position[0]; 
 	double dist_y =  Planet.position[1] - other.position[1];  
 	double r = Planet.Distance(other); 
 	double m = Planet.mass; double M = other.mass; 
 
-	F_x -= G*m*M*dist_x/(r*r*r); 
-	F_y -= G*m*M*dist_y/(r*r*r);   
+	F_x -= G*m*M*dist_x/(r*pow(r,beta)); 
+	F_y -= G*m*M*dist_y/(r*pow(r,beta));   
 
 }
 

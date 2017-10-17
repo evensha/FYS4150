@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <map>
 //#include <armadillo>
 #include "time.h"
 #include "planet.h"
@@ -18,33 +19,47 @@ int main(int argc, char *argv[]){
 
 	int n = atoi(argv[1]);
 	double t = atof(argv[2]); 
+	double yr = 365.25; // one year (in days)     
+	double M_sun = 2.0E30; 
 
-	//double v_start = atof(argv[3]);   
+	// Make maps for planet data 
 
-	double year = 365.25; 
-	double M_sun = 2.0E30;   
-	double M_mercury = 3.3E23/M_sun; // masses relative to the sun mass
-	double M_venus = 4.9E24/M_sun;
-	double M_earth = 6.0E24/M_sun;
-	double M_mars = 6.6E23/M_sun;  
-	double M_jupiter = 1.9E27/M_sun;
-	double M_saturn = 5.5E26/M_sun; 
-	double M_uranus = 8.8E25/M_sun;
-	double M_neptun = 1.03E26/M_sun; 
-	double M_pluto = 1.31E22/M_sun;     
+	map<int, string> names;
+	map<string, double> mass; 
+	map<string, double> x;
+	map<string, double> y; 
+	map<string, double> z; 
+	map<string, double> v_x;
+	map<string, double> v_y;
+	map<string, double> v_z;  
 
-	// Intialize planets 	
+	// Extract planet data from file and store in the maps
 
-	planet sun(1.0, 0, 0, 0, 0, "Sun"); 
-	planet mercury(M_mercury,-3.921538113765745E-01,-5.487782323669228E-02,-1.585262467570905E-03*year,-2.659352789459454E-02*year,"Mercury");
-	planet venus(M_venus,-5.262376668671904E-01, 4.909161410927460E-01, -1.375950023480965E-02*year, -1.499877247340715E-02*year, "Venus"); 
-	planet earth(M_earth, 9.734E-01, 2.4198E-01, -4.349E-03*year, 1.665E-02*year, "Earth"); 
-	planet mars(M_mars, -1.5158E+00, 6.9015E-01, -5.2319E-03*year, -1.1556E-02*year, "Mars"); 
-	planet jupiter(M_jupiter, -4.623E+00, -2.860E+00, 3.881E-03*year, -6.058E-03*year, "Jupiter"); 
-	planet saturn(M_saturn,-4.054191284158095E-01,-1.004694419069413E+01,5.268688859602635E-03*year,-2.426734651712632E-04*year,"Saturn"); 
-	planet uranus(M_uranus,1.787729807481248E+01,8.776369655211150E+00,-1.762081973967272E-03*year,3.347240820361182E-03*year,"Uranus"); 
-	planet neptun(M_neptun,2.860478537542545E+01,-8.851521431448582E+00,9.066379590607452E-04*year,3.017237536736915E-03*year,"Neptun"); 
-	planet pluto(M_pluto,1.051657650590531E+01,-3.171589804117349E+01,3.055852032837181E-03*year,3.423298915677500E-04*year,"Pluto"); 
+	ifstream infile("Planet_data.txt"); 
+
+	string Planet; double M; double X; double Y; double Z; double V_X; double V_Y; double V_Z; 
+
+	int i = 0; 
+	while (infile >> Planet >> M >> X >> Y >> Z >> V_X >> V_Y >> V_Z  ){
+		names[i] = Planet; 
+		mass[Planet] = M/M_sun; x[Planet] = X; y[Planet] = Y; z[Planet] = Z; v_x[Planet] = V_X*yr; v_y[Planet] = V_Y*yr; v_z[Planet] = V_Z*yr;  
+		i += 1; 
+	} 
+ 
+	infile.close(); 
+
+	// Intialize planets (for now only in 2D) 
+
+	planet sun(mass["Sun"], x["Sun"], y["Sun"], v_x["Sun"], v_y["Sun"], "Sun"); 
+	planet mercury(mass["Mercury"], x["Mercury"], y["Mercury"], v_x["Mercury"], v_y["Mercury"], "Mercury");
+	planet venus(mass["Venus"], x["Venus"], y["Venus"], v_x["Venus"], v_y["Venus"], "Venus"); 
+	planet earth(mass["Earth"], x["Earth"], y["Earth"], v_x["Earth"], v_y["Earth"], "Earth"); 
+	planet mars(mass["Mars"], x["Mars"], y["Mars"], v_x["Mars"], v_y["Mars"], "Mars");  
+	planet jupiter(mass["Jupiter"], x["Jupiter"], y["Jupiter"], v_x["Jupiter"], v_y["Jupiter"], "Jupiter"); 
+	planet saturn(mass["Saturn"], x["Saturn"], y["Saturn"], v_x["Saturn"], v_y["Saturn"], "Saturn"); 
+	planet uranus(mass["Uranus"], x["Uranus"], y["Uranus"], v_x["Uranus"], v_y["Uranus"], "Uranus"); 
+	planet neptun(mass["Neptun"], x["Neptun"], y["Neptun"], v_x["Neptun"], v_y["Neptun"], "Neptun"); 
+	planet pluto(mass["Pluto"], x["Pluto"], y["Pluto"], v_x["Pluto"], v_y["Pluto"], "Pluto"); 
 	//planet earth(0.000003, 1.0, 0.0, 0.0, v_start*2*M_PI, "Earth"); 	
 
 	// Print some initial properties of earth
@@ -60,21 +75,28 @@ int main(int argc, char *argv[]){
 
 	// Binary system (earth and sun) 
 
-	solver Binary; 
-	Binary.addPlanet(sun); 
-	Binary.addPlanet(earth);
+	solver Binary_FE; 
+	Binary_FE.addPlanet(sun); 
+	Binary_FE.addPlanet(earth);
 
 	clock_t FE_start, FE_finish; 
 	FE_start = clock();  
-	Binary.ForwardEuler(n, t);  
+	Binary_FE.ForwardEuler(n, t);  
 	FE_finish = clock(); 
+
+	solver Binary_VV; 
+	Binary_VV.addPlanet(sun); 
+	Binary_VV.addPlanet(earth);	
 
 	clock_t VV_start, VV_finish; 
 	VV_start = clock(); 
-	Binary.VelocityVerlet(n, t); 
+	Binary_VV.VelocityVerlet(n, t); 
 	VV_finish = clock(); 
 
 	// Three-body system (earth, sun and jupiter) 
+
+	sun.velocity[0] = -( v_x["Earth"]*mass["Earth"] + v_x["Jupiter"]*mass["Jupiter"] );  
+	sun.velocity[1] = -( v_y["Earth"]*mass["Earth"] + v_y["Jupiter"]*mass["Jupiter"] );  
 
 	solver ThreeBody; 
 	ThreeBody.addPlanet(sun);
@@ -83,6 +105,13 @@ int main(int argc, char *argv[]){
 	ThreeBody.VelocityVerlet(n, t); 
 
 	// Solar system (all planets) 
+
+	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; string planet; 
+	for(int i = 1; i<10; i++){
+		planet = names[i]; 
+		sun.velocity[0] -= v_x[planet]*mass[planet]; 
+		sun.velocity[1] -= v_y[planet]*mass[planet]; 
+	}
 
 	solver SolarSystem; 
 	SolarSystem.addPlanet(sun); 	
@@ -97,6 +126,7 @@ int main(int argc, char *argv[]){
 	SolarSystem.addPlanet(pluto);
 	SolarSystem.VelocityVerlet(n, t); 
 
+	// Perihelion precession (sun and mercury)	
 
 	cout << "----------------------" << endl; 
 
