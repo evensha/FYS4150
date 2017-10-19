@@ -82,18 +82,21 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
 
 double planet::Distance(planet otherPlanet){
 
-	double x1,y1,x2,y2,Dx,Dy; 
+	double x1,y1,z1,x2,y2,z2,Dx,Dy,Dz; 
 	
 	x1 = this->position[0]; 
 	y1 = this->position[1]; 		
+	z1 = this->position[2]; 
 
 	x2 = otherPlanet.position[0]; 
 	y2 = otherPlanet.position[1]; 
-	
+	z2 = otherPlanet.position[2]; 	
+
 	Dx = x1 - x2; 
 	Dy = y1 - y2; 
+	Dz = z1 - z2; 
 
-	return sqrt(Dx*Dx + Dy*Dy); 
+	return sqrt(Dx*Dx + Dy*Dy + Dz*Dz); 
 
 }
 
@@ -122,9 +125,9 @@ double planet::Acceleration(planet otherPlanet, double Gconst){
 
 double planet::KineticEnergy(){ 
 
-	double v_x = this->velocity[0]; double v_y = this->velocity[1]; 
+	double v_x = this->velocity[0]; double v_y = this->velocity[1]; double v_z = this->velocity[2]; 
 	double m = this->mass; 		
-	double E_k = 0.5*m*(v_x*v_x + v_y*v_y); 
+	double E_k = 0.5*m*(v_x*v_x + v_y*v_y + v_z*v_z); 
 
 	return E_k; 
 
@@ -133,8 +136,8 @@ double planet::KineticEnergy(){
 
 double planet::PotentialEnergy(double Gconst){
 
-	double m = this->mass; double x = this->position[0]; double y = this->position[1]; 
-	double r = sqrt(x*x + y*y); 
+	double m = this->mass; double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
+	double r = sqrt(x*x + y*y + z*z); 
 
 	double E_p = - Gconst*m/r; 
 	 	
@@ -143,6 +146,7 @@ double planet::PotentialEnergy(double Gconst){
 }
 
 double planet::xMomentum(){
+
 	double v_x = this->velocity[0]; 
 	double m = this->mass; 
 
@@ -150,6 +154,7 @@ double planet::xMomentum(){
 }
 
 double planet::yMomentum(){
+
 	double v_y = this->velocity[1]; 
 	double m = this->mass; 
 
@@ -158,11 +163,13 @@ double planet::yMomentum(){
 
 double planet::AngularMomentum(){
 
-	double x = this->position[0]; double y = this->position[1]; 
-	double v_x = this->velocity[0]; double v_y = this->velocity[1]; 
+	double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
+	double v_x = this->velocity[0]; double v_y = this->velocity[1]; double v_z = this->velocity[2]; 
 
+	double L_x = y*v_z - z*v_y; 
+	double L_y = -(x*v_z - z*v_x);  
 	double L_z = x*v_y - y*v_x; 
-	double L_tot = sqrt(L_z*L_z); 
+	double L_tot = sqrt(L_x*L_x + L_y*L_y + L_z*L_z); 
 
 	return L_tot;  
 

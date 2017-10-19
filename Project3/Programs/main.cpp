@@ -18,6 +18,7 @@ int main(int argc, char *argv[]){
 	// Define some constants 
 
 	int n = atoi(argv[1]);
+	int withGR = atoi(argv[3]); 
 	double t = atof(argv[2]); 
 	double yr = 365.25; // one year (in days)     
 	double M_sun = 2.0E30; 
@@ -50,16 +51,16 @@ int main(int argc, char *argv[]){
 
 	// Intialize planets (for now only in 2D) 
 
-	planet sun(mass["Sun"], x["Sun"], y["Sun"], v_x["Sun"], v_y["Sun"], "Sun"); 
-	planet mercury(mass["Mercury"], x["Mercury"], y["Mercury"], v_x["Mercury"], v_y["Mercury"], "Mercury");
-	planet venus(mass["Venus"], x["Venus"], y["Venus"], v_x["Venus"], v_y["Venus"], "Venus"); 
-	planet earth(mass["Earth"], x["Earth"], y["Earth"], v_x["Earth"], v_y["Earth"], "Earth"); 
-	planet mars(mass["Mars"], x["Mars"], y["Mars"], v_x["Mars"], v_y["Mars"], "Mars");  
-	planet jupiter(mass["Jupiter"], x["Jupiter"], y["Jupiter"], v_x["Jupiter"], v_y["Jupiter"], "Jupiter"); 
-	planet saturn(mass["Saturn"], x["Saturn"], y["Saturn"], v_x["Saturn"], v_y["Saturn"], "Saturn"); 
-	planet uranus(mass["Uranus"], x["Uranus"], y["Uranus"], v_x["Uranus"], v_y["Uranus"], "Uranus"); 
-	planet neptun(mass["Neptun"], x["Neptun"], y["Neptun"], v_x["Neptun"], v_y["Neptun"], "Neptun"); 
-	planet pluto(mass["Pluto"], x["Pluto"], y["Pluto"], v_x["Pluto"], v_y["Pluto"], "Pluto"); 
+	planet sun(mass["Sun"], x["Sun"], y["Sun"], z["Sun"], v_x["Sun"], v_y["Sun"], v_z["Sun"], "Sun"); 
+	planet mercury(mass["Mercury"], x["Mercury"], y["Mercury"], z["Mercury"], v_x["Mercury"], v_y["Mercury"], v_z["Mercury"], "Mercury");
+	planet venus(mass["Venus"], x["Venus"], y["Venus"], z["Venus"], v_x["Venus"], v_y["Venus"], v_z["Venus"], "Venus"); 
+	planet earth(mass["Earth"], x["Earth"], y["Earth"], z["Earth"], v_x["Earth"], v_y["Earth"], v_z["Earth"], "Earth"); 
+	planet mars(mass["Mars"], x["Mars"], y["Mars"], z["Mars"], v_x["Mars"], v_y["Mars"], v_z["Mars"], "Mars");  
+	planet jupiter(mass["Jupiter"], x["Jupiter"], y["Jupiter"], z["Jupiter"], v_x["Jupiter"], v_y["Jupiter"], v_z["Jupiter"], "Jupiter"); 
+	planet saturn(mass["Saturn"], x["Saturn"], y["Saturn"], z["Saturn"], v_x["Saturn"], v_y["Saturn"], v_z["Saturn"], "Saturn"); 
+	planet uranus(mass["Uranus"], x["Uranus"], y["Uranus"], z["Uranus"], v_x["Uranus"], v_y["Uranus"], v_z["Uranus"], "Uranus"); 
+	planet neptun(mass["Neptun"], x["Neptun"], y["Neptun"], z["Neptun"], v_x["Neptun"], v_y["Neptun"], v_z["Neptun"], "Neptun"); 
+	planet pluto(mass["Pluto"], x["Pluto"], y["Pluto"], z["Pluto"], v_x["Pluto"], v_y["Pluto"], v_z["Pluto"], "Pluto"); 
 	//planet earth(0.000003, 1.0, 0.0, 0.0, v_start*2*M_PI, "Earth"); 	
 
 	// Print some initial properties of earth
@@ -74,8 +75,8 @@ int main(int argc, char *argv[]){
 	// Initialize solver class, add planets and solve the problem 
 
 	// Binary system (earth and sun) 
-
-	solver Binary_FE; 
+/*
+	solver Binary_FE;
 	Binary_FE.addPlanet(sun); 
 	Binary_FE.addPlanet(earth);
 
@@ -106,7 +107,8 @@ int main(int argc, char *argv[]){
 
 	// Solar system (all planets) 
 
-	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; string planet; 
+	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; string planet;  // reset position and velocity of sun  
+	sun.position[0] = x["Sun"]; sun.position[1] = y["Sun"]; 
 	for(int i = 1; i<10; i++){
 		planet = names[i]; 
 		sun.velocity[0] -= v_x[planet]*mass[planet]; 
@@ -125,9 +127,20 @@ int main(int argc, char *argv[]){
 	SolarSystem.addPlanet(neptun);
 	SolarSystem.addPlanet(pluto);
 	SolarSystem.VelocityVerlet(n, t); 
+*/
+	// Perihelion precession (sun and mercury)
 
-	// Perihelion precession (sun and mercury)	
+	mercury.position[0] = 0.3075; mercury.position[1] = 0.0; mercury.position[2] = 0.0; 
+	mercury.velocity[0] = 0.0; mercury.velocity[1] = 12.44; mercury.velocity[2] = 0.0; 
+	 // reset position and velocity of sun  
+	sun.position[0] = 0.0; sun.position[1] = 0.0; sun.position[2] = 0.0; 
+	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; sun.velocity[2] = 0.0; 
 
+	solver Mercury(withGR); 
+	Mercury.addPlanet(sun); 
+	Mercury.addPlanet(mercury); 
+	Mercury.VelocityVerlet(n, t); 	
+/*
 	cout << "----------------------" << endl; 
 
 	double FE_time = (FE_finish - FE_start)/((double) CLOCKS_PER_SEC); 
@@ -135,5 +148,5 @@ int main(int argc, char *argv[]){
 
 	cout << "Time with FE: " << FE_time << endl; 
 	cout << "Time with VV: " << VV_time << endl; 
-
+*/
 }
