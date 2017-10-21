@@ -1,0 +1,137 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[print,sort]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx,float}
+\usepackage{amssymb}
+\usepackage{amsmath,cancel}
+\usepackage{mathrsfs}
+\usepackage{epstopdf}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{hhline}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{wrapfig}
+
+
+\hfuzz=5pt
+
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\vspace*{3cm}
+\Huge
+\textbf{Project 3} \\
+\Large  
+FYS4150 Computational Physics 
+\vspace*{3cm} \\ 
+
+Even S. Håland 
+\vspace*{5cm} \\
+
+\normalsize
+\section*{Abstract}
+
+The motion of the planets in the solar system is governed by gravitational forces between the planets 
+and the sun, and between the planets themselves. This can be expressed mathematically as a set of coupled 
+differential equation. In this project we solve these equations, mainly by using the velocity Verlet 
+algorithm. When doing so we use an object oriented approach, and two classes are developed; a 
+\textit{planet} class and a \textit{solver} class. We find that the problem can be solved in a quite nice 
+and compact way, and we get quite good estimates of the planetary orbits.  
+
+\end{center}
+\end{titlepage}
+
+\section{Introduction}
+
+
+
+\section{Modelling planetary motion}
+
+Newtons law of gravitation states that the gravitational force between two objects, with mass $M$ and $m$
+respectively, is given by 
+\begin{align}
+F_G = \frac{GMm}{r^2}, 
+\end{align}
+where $G$ is the gravitational constant and $r$ is the distance between the two objects. 
+
+We start by considering a system with only two objects, namely the Sun (with mass $M_{\odot}$) and the 
+Earth (with mass $M_{\text{ Earth}}$), and we assume that the Sun is fixed, so the only motion we have to
+care about is that of the Earth. We also assume that the motion of the Earth is co-planar, and take this 
+to be the $xy$-plane, with the Sun in the origin. When writing the programs and implementing the 
+algorithm we actually work in $3D$, but extending from two to three dimensions is quite trivial.  
+
+The forces acting on the Earth in the $x$- and $y$-direction are then given by 
+\begin{align*}
+F_{G,x} = - F_G \cos\theta  = - \frac{GM_{\odot} M_{\text{Earth}}}{r^2}\cos\theta 
+							= - \frac{GM_{\odot} M_{\text{Earth}}}{r^3}x 
+\end{align*} 
+and 
+\begin{align*}
+F_{G,y} = - F_G \sin\theta  = - \frac{GM_{\odot} M_{\text{Earth}}}{r^2}\sin\theta 
+							= - \frac{GM_{\odot} M_{\text{Earth}}}{r^3}y,  
+\end{align*}
+where we have used the relations $x = r\cos\theta$ and $y = r\sin\theta$. From Newtons second law we know 
+that the accelerations, $a_x$ and $a_y$, are given as 
+\begin{align*}
+a_x = \frac{d^2x}{dt^2} = \frac{F_{G,x}}{M_{\text{Earth}}} \quad \text{and} \quad 
+a_y = \frac{d^2y}{dt^2} = \frac{F_{G,y}}{M_{\text{Earth}}}. 
+\end{align*} 
+We also know that the acceleration is the time derivative of the velocity, $v$, which again is 
+the time derivative of the position, meaning that we can express the equations of motion as two 
+coupled first order differential equations in each dimension:  
+\begin{align*}
+v_x = \frac{dx}{dt}, \quad v_y = \frac{dy}{dt}, \quad 
+a_x = \frac{dv_x}{dt} = -\frac{GM_{\odot}x}{r^3}, \quad a_y = \frac{dv_y}{dt} = -\frac{GM_{\odot}y}{r^3}.   
+\end{align*}
+When extending to three dimensions we simply add two more equations like those above, simply 
+replacing $x$ or $y$ by $z$. 
+
+The next thing we want to do is to scale the equations appropriately. When working on an astronomical 
+scale we prefer to work with years (yr) as the time unit and AU\footnote{Astronomical units; $1$ AU is
+defined as the mean distance between the Earth and the Sun.} as the length unit. If we assume the orbit 
+to be circular (which is very close to the truth), the acceleration is given as 
+\begin{align*}
+a = \frac{v^2}{r} = \frac{F_G}{M_{\text{Earth}}} = \frac{GM_{\odot}}{r^2} \quad \Rightarrow \quad 
+v^2 r = GM_{\odot}. 
+\end{align*}  
+where $r = 1$ AU, while the velocity is 
+\begin{align*}
+v = \frac{2\pi r}{t} = 2\pi \:\: \text{AU/yr},   
+\end{align*}
+which means that 
+\begin{align*}
+GM_{\odot} = 4\pi^2 \:\: \text{AU}^3/\text{yr}^2. 
+\end{align*}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{ccc} \hline\hline
+Planet & Mass (kg) & Distance to Sun (AU) \\ \hline 
+Earth & $6\times10^{24}$ &  \\
+Jupiter & $1.9\times10^{27}$ &  \\
+Mars & $6.6\times10^{23}$ &  \\
+Venus & $4.9\times10^{24}$ &  \\
+Saturn & $5.5\times10^{26}$ & \\ 
+Mercury & $3.3\times10^{23}$ & \\ 
+Uranus & $8.8\times10^{25}$ & \\ 
+Neptune & $1.03\times10^{26}$ &  \\ 
+Pluto & $1.31\times10^{22}$ & \\ \hline 
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Algorithms}
+
+\section{Code}
+
+\section{Results}
+
+\section{Summary and conclusions}
+
+\end{document}
+
