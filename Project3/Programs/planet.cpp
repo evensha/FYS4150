@@ -1,19 +1,7 @@
-/*
-#include <iostream>
-#include <cmath>
-#include <cstdlib> 
-#include <fstream>
-#include <string>
-#include <iomanip>
-#include <armadillo>
-#include "time.h"
-*/
 #include "planet.h"
 
-//using namespace std;
-//using namespace arma; 
-
-planet::planet(){
+planet::planet(){  
+	// Initialize planet with no specifications 
 
 	mass = 0.0; 
 	position[0] = 0.0; 
@@ -30,6 +18,7 @@ planet::planet(){
 }
 
 planet::planet(double M, double x, double y, double vx, double vy){ 
+	// Initialize planet with mass and two dimensions   
 
 	mass = M; 
 	position[0] = x; 
@@ -46,7 +35,8 @@ planet::planet(double M, double x, double y, double vx, double vy){
 }
 
 
-planet::planet(double M, double x, double y, double vx, double vy, string planet){ 
+planet::planet(double M, double x, double y, double vx, double vy, string planet){  
+	// Initialize planet with mass, two dimensions and name of the planet    
 
 	mass = M; 
 	position[0] = x; 
@@ -64,6 +54,7 @@ planet::planet(double M, double x, double y, double vx, double vy, string planet
 
 
 planet::planet(double M, double x, double y, double z, double vx, double vy, double vz, string planet){ 
+	// Initialize planet with mass, three dimensions and name of the planet    
 
 	mass = M; 
 	position[0] = x; 
@@ -81,6 +72,7 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
 
 
 double planet::Distance(planet otherPlanet){
+	// Calculate the distance between this planet and another planet 
 
 	double x1,y1,z1,x2,y2,z2,Dx,Dy,Dz; 
 	
@@ -100,8 +92,9 @@ double planet::Distance(planet otherPlanet){
 
 }
 
-
+/*
 double planet::GravitationalForce(planet otherPlanet, double Gconst){
+	// Calculate the gravitational force acting on this planet from another planet 
 	
 	double r = this->Distance(otherPlanet); 
 
@@ -113,6 +106,7 @@ double planet::GravitationalForce(planet otherPlanet, double Gconst){
 
 
 double planet::Acceleration(planet otherPlanet, double Gconst){
+	// Calculate the acceleration of this planet 
 
 	double r = this->Distance(otherPlanet); 
 
@@ -121,9 +115,10 @@ double planet::Acceleration(planet otherPlanet, double Gconst){
 	else return 0; 
 
 }
-
+*/
 
 double planet::KineticEnergy(){ 
+	// Calculate the planets kinetic energy 
 
 	double v_x = this->velocity[0]; double v_y = this->velocity[1]; double v_z = this->velocity[2]; 
 	double m = this->mass; 		
@@ -135,6 +130,7 @@ double planet::KineticEnergy(){
 
 
 double planet::PotentialEnergy(double Gconst){
+	// Calculate the planets kinetic energy 
 
 	double m = this->mass; double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
 	double r = sqrt(x*x + y*y + z*z); 
@@ -146,6 +142,7 @@ double planet::PotentialEnergy(double Gconst){
 }
 
 double planet::xMomentum(){
+	// Calculate the planets momentum in x-direction 
 
 	double v_x = this->velocity[0]; 
 	double m = this->mass; 
@@ -154,6 +151,7 @@ double planet::xMomentum(){
 }
 
 double planet::yMomentum(){
+	// Calculate the planets momentum in y-direction 
 
 	double v_y = this->velocity[1]; 
 	double m = this->mass; 
@@ -162,6 +160,7 @@ double planet::yMomentum(){
 }
 
 double planet::AngularMomentum(){
+	// Calculate the planets angular momentum 
 
 	double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
 	double v_x = this->velocity[0]; double v_y = this->velocity[1]; double v_z = this->velocity[2]; 

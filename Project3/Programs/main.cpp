@@ -104,10 +104,32 @@ int main(int argc, char *argv[]){
 	ThreeBody.addPlanet(earth); 
 	ThreeBody.addPlanet(jupiter);  
 	ThreeBody.VelocityVerlet(n, t); 
-
+*/
 	// Solar system (all planets) 
 
-	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; string planet;  // reset position and velocity of sun  
+	// Centre of mass: 
+
+	string planet;
+	double M_tot = 0.0; 
+	double cm_x = 0.0; 
+	double cm_y = 0.0; 
+	double cm_z = 0.0; 
+
+	for(int i = 0; i<10; i++){
+		planet = names[i]; 
+		M_tot += mass[planet];
+		cm_x += mass[planet]*x[planet]; 
+		cm_y += mass[planet]*y[planet]; 
+		cm_z += mass[planet]*z[planet]; 		
+	}
+
+	cm_x = cm_x/M_tot; cm_y = cm_y/M_tot; cm_z = cm_z/M_tot; 
+
+	double r_cm = sqrt(cm_x*cm_x + cm_y*cm_y + cm_z*cm_z); 
+
+	cout << "Centre of mass: " << r_cm << endl; 
+
+	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0;   // reset position and velocity of sun  
 	sun.position[0] = x["Sun"]; sun.position[1] = y["Sun"]; 
 	for(int i = 1; i<10; i++){
 		planet = names[i]; 
@@ -126,10 +148,10 @@ int main(int argc, char *argv[]){
 	SolarSystem.addPlanet(uranus);
 	SolarSystem.addPlanet(neptun);
 	SolarSystem.addPlanet(pluto);
-	SolarSystem.VelocityVerlet(n, t); 
-*/
-	// Perihelion precession (sun and mercury)
+	SolarSystem.VelocityVerlet(n, t, 1); 
 
+	// Perihelion precession (sun and mercury)
+/*
 	mercury.position[0] = 0.3075; mercury.position[1] = 0.0; mercury.position[2] = 0.0; 
 	mercury.velocity[0] = 0.0; mercury.velocity[1] = 12.44; mercury.velocity[2] = 0.0; 
 	 // reset position and velocity of sun  
@@ -139,8 +161,8 @@ int main(int argc, char *argv[]){
 	solver Mercury(withGR); 
 	Mercury.addPlanet(sun); 
 	Mercury.addPlanet(mercury); 
-	Mercury.VelocityVerlet(n, t); 	
-/*
+	Mercury.VelocityVerlet(n, t, 0); 	
+
 	cout << "----------------------" << endl; 
 
 	double FE_time = (FE_finish - FE_start)/((double) CLOCKS_PER_SEC); 

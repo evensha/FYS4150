@@ -6,16 +6,6 @@
 #include <string>
 using std::vector; 
 using std::string; 
-/*
-#include <iostream>
-#include <cmath>
-#include <cstdlib> 
-#include <fstream>
-#include <string>
-#include <iomanip>
-*/
-//#include <armadillo>
-//#include "time.h"
 
 class planet{ 
 
@@ -38,8 +28,8 @@ public:
 
 	// Functions 	
 	double Distance(planet otherPlanet); 
-	double GravitationalForce(planet otherPlanet, double Gconst);
-	double Acceleration(planet otherPlanet, double Gconst); 
+	//double GravitationalForce(planet otherPlanet, double Gconst);
+	//double Acceleration(planet otherPlanet, double Gconst); 
 	double KineticEnergy(); 
 	double PotentialEnergy(double Gconst); 
 	double xMomentum();
