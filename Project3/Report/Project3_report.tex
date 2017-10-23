@@ -48,8 +48,6 @@ and compact way, and we get quite good estimates of the planetary orbits.
 
 \section{Introduction}
 
-
-
 \section{Modelling planetary motion}
 
 Newtons law of gravitation states that the gravitational force between two objects, with mass $M$ and $m$
@@ -58,6 +56,8 @@ respectively, is given by
 F_G = \frac{GMm}{r^2}, 
 \end{align}
 where $G$ is the gravitational constant and $r$ is the distance between the two objects. 
+
+\subsection*{Earth-Sun system}
 
 We start by considering a system with only two objects, namely the Sun (with mass $M_{\odot}$) and the 
 Earth (with mass $M_{\text{ Earth}}$), and we assume that the Sun is fixed, so the only motion we have to
@@ -84,50 +84,166 @@ a_y = \frac{d^2y}{dt^2} = \frac{F_{G,y}}{M_{\text{Earth}}}.
 We also know that the acceleration is the time derivative of the velocity, $v$, which again is 
 the time derivative of the position, meaning that we can express the equations of motion as two 
 coupled first order differential equations in each dimension:  
-\begin{align*}
+\begin{align}
 v_x = \frac{dx}{dt}, \quad v_y = \frac{dy}{dt}, \quad 
 a_x = \frac{dv_x}{dt} = -\frac{GM_{\odot}x}{r^3}, \quad a_y = \frac{dv_y}{dt} = -\frac{GM_{\odot}y}{r^3}.   
-\end{align*}
+\label{eq:diff_eqs}
+\end{align}
 When extending to three dimensions we simply add two more equations like those above, simply 
 replacing $x$ or $y$ by $z$. 
 
+\subsection*{Scaling of equations}
+
 The next thing we want to do is to scale the equations appropriately. When working on an astronomical 
 scale we prefer to work with years (yr) as the time unit and AU\footnote{Astronomical units; $1$ AU is
-defined as the mean distance between the Earth and the Sun.} as the length unit. If we assume the orbit 
-to be circular (which is very close to the truth), the acceleration is given as 
+defined as the mean distance between the Earth and the Sun.} as the length unit. This means that we 
+need to find some way of scaling the gravitational constant, $G$, to these units. 
+
+If we assume the orbit 
+of the Earth to be circular (which is very close to the truth), the acceleration is given as 
 \begin{align*}
 a = \frac{v^2}{r} = \frac{F_G}{M_{\text{Earth}}} = \frac{GM_{\odot}}{r^2} \quad \Rightarrow \quad 
 v^2 r = GM_{\odot}. 
 \end{align*}  
 where $r = 1$ AU, while the velocity is 
 \begin{align*}
-v = \frac{2\pi r}{t} = 2\pi \:\: \text{AU/yr},   
+v = 2\pi \:\: \text{AU/yr},   
 \end{align*}
 which means that 
 \begin{align*}
-GM_{\odot} = 4\pi^2 \:\: \text{AU}^3/\text{yr}^2. 
+GM_{\odot} = 4\pi^2 \:\: \text{AU}^3/\text{yr}^2,  
 \end{align*}
+which can be inserted in the equations of motion. In addition to this it is also 
+convenient to scale the mass of the earth (and other planets) to the solar mass, i.e. we put 
+$M_{\odot} = 1$, and scale other masses accordingly. We do this to decrease the chance of loosing 
+numerical precision through round-off errors, as the planetary masses are quite large (see Table  
+\ref{tab:planets}). 
+
+\subsection*{The solar system}
+
+Once we know the form of the gravitational interaction it is quite easy to extend our system to include 
+other planets, and eventually the full solar system. The general forces in the $xy$-planet  
+between two planets with mass $M_a$ and $M_b$ are given by 
+\begin{align*}
+F_{G,x} = \frac{GM_aM_b}{r^3}\Delta x \quad \text{and} \quad F_{G,y} = \frac{GM_aM_b}{r^3}\Delta y, 
+\end{align*}  
+where $\Delta x$ and $\Delta y$ are the distances between the planets in $x$- and $y$-direction, and 
+$r$ the absolute distance between them. When we want to model a system with several planets we simply 
+add up the forces acting on each planet, and calculate the acceleration of a specific planet as 
+the total force acting on it divided by its mass. The planets of the solar system are listed in Table 
+\ref{tab:planets}, along with their masses and distances to the Sun.   
 
 \begin{table}
+\caption{Mass and distance to the Sun for the planets in the solar system. (Numbers taken from the 
+project description.)}
+\label{tab:planets}
 \begin{center}
 \begin{tabular}{ccc} \hline\hline
 Planet & Mass (kg) & Distance to Sun (AU) \\ \hline 
-Earth & $6\times10^{24}$ &  \\
-Jupiter & $1.9\times10^{27}$ &  \\
-Mars & $6.6\times10^{23}$ &  \\
-Venus & $4.9\times10^{24}$ &  \\
-Saturn & $5.5\times10^{26}$ & \\ 
-Mercury & $3.3\times10^{23}$ & \\ 
-Uranus & $8.8\times10^{25}$ & \\ 
-Neptune & $1.03\times10^{26}$ &  \\ 
-Pluto & $1.31\times10^{22}$ & \\ \hline 
+Earth & $6\times10^{24}$ & $1$  \\
+Jupiter & $1.9\times10^{27}$ & $5.20$  \\
+Mars & $6.6\times10^{23}$ & $1.52$ \\
+Venus & $4.9\times10^{24}$ & $0.72$ \\
+Saturn & $5.5\times10^{26}$ & $9.54$ \\ 
+Mercury & $3.3\times10^{23}$ & $0.39$ \\ 
+Uranus & $8.8\times10^{25}$ & $19.19$ \\ 
+Neptune & $1.03\times10^{26}$ & $30.06$  \\ 
+Pluto & $1.31\times10^{22}$ & $39.53$ \\ \hline \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-\section{Algorithms}
+Before we start looking at how we should study this numerically there is one more thing that needs to 
+be mentioned in this somewhat theoretical introduction. Although Newtonian mechanics is able to describe 
+the planetary orbits quite well, it does not provide a perfect approximation. This is most evident when 
+observing the perihelion precession of Mercury, which is found to be off by $43''$ ($\sim 0.012^{\circ}$)
+per century (which is a very small deviation!) compared to the predictions from the Newtonian theory.
+However, in Einstein's general theory of relativity the gravitational force gets a small correction, 
+and can be written as 
+\begin{align*}
+F_G = \frac{GM_{\odot}M_{\text{Mercury}}}{r^2}\left[ 1+ \frac{3l^2}{r^2c^2} \right], 
+\end{align*} 
+where $l=|\mathbf{r}\times \mathbf{v}|$ is the magnitude of the orbital angular momentum of Mercury and 
+$c$ is the speed of light. Towards the end of the project we will see (spoiler alert!) that this 
+correction actually is able to explain the observed perihelion precession of Mercury!  
+
+\section{Discretization and algorithms}
+
+The main objective is to write a code that calculate updated positions for system of planets as time 
+passes. In order to do so we must, as usual, start by making a discrete approach to the problem. 
+The discretization will only be shown for one dimension ($x$), since the procedure is completely
+equivalent for the other dimensions. Time and position are discretized as 
+\begin{align*}
+&t  \rightarrow t_i = t_0 + ih \\
+&x(t)  \rightarrow x(t_i) = x_i, 
+\end{align*}   
+with the time step, $h$, given by 
+\begin{align*}
+h = \frac{t_f - t_0}{n}.  
+\end{align*}
+Here $t_0$ and $t_f$ is the initial and final time respectively, $n$ is total number of time steps and 
+$i$ runs from $1$ to $n$. 
+
+Position and velocity after some time $t_i+h$ is given by Taylor expansion as 
+\begin{align}
+x_{i+1} & = x_i + hx_i' + \frac{h^2}{2}x_i'' + O(h^3) \\ 
+	    & = x_i + hv_i + \frac{h^2}{2}a_i + O(h^3)
+\label{eq:Taylor_pos}	    
+\end{align}
+and 
+\begin{align}
+v_{i+1} & = v_i + hv_i' + \frac{h^2}{2}v_i'' + O(h^3) \\
+		& = v_i + ha_i + \frac{h^2}{2}v_i'' + O(h^3),  
+\label{eq:Taylor_vel}
+\end{align}
+where $a_i$ is the acceleration, which for the Earth-Sun system is given in discrete form as  
+\begin{align*}
+a_i = \frac{F(x_i,t_i)}{M_{\text{Earth}}} = - \frac{GM_{\odot}x_i}{r_i^3}. 
+\end{align*}
+Based on these equations we will consider two methods for approximating positions and velocities.
+
+The first one is the forward Euler method, which we get directly from the above equations, by only 
+including terms from eqs. (\ref{eq:Taylor_pos}) and (\ref{eq:Taylor_vel}) up to $O(h^2)$: 
+\begin{align*}
+x_{i+1} & \approx x_i + hv_i \\ 
+v_{i+1} & \approx v_i + ha_i 
+\end{align*}
+
+The second one is the velocity Verlet method, where we keep terms up to $O(h^3)$. This means that we are 
+stuck with a second derivative of the velocity, which we want to get rid of. This is done by 
+Eulers formula, so 
+\begin{align*}
+v_i'' \approx \frac{v_{i+1}'+v_i'}{h} = \frac{a_{i+1}'+a_i'}{h},  
+\end{align*}
+which leaves us with the following approximations for position and velocity: 
+\begin{align*}
+x_{i+1} & \approx x_i + hv_i + \frac{h^2}{2}a_i  \\
+v_{i+1} & \approx v_i + \frac{h}{2}\left[ a_{i+1} + a_i  \right] 
+\end{align*}
+
+Both of these methods will be implemented in our code. However, velocity Verlet will be 
+proven to work somewhat better than forward Euler, so throughout most of the project we 
+will stick to using the velocity Verlet method. 
 
 \section{Code}
+
+All code written for this project can be found in the following github repository: \vspace{0.5cm} \\ 
+\fbox{
+\href{https://github.com/evensha/FYS4150/tree/master/Project3/Programs}
+{https://github.com/evensha/FYS4150/tree/master/Project3/Programs} } \vspace{0.5cm} \\ 
+The most important files in this repository are 
+\begin{itemize}
+\item \texttt{planet.cpp}
+\item \texttt{solver.cpp}
+\item \texttt{main.cpp}
+\item \texttt{Plot\_planets.py}
+\end{itemize}
+
+\subsection{The planet class}
+
+\subsection{The solver class}
+
+\subsection{Testing the code}
 
 \section{Results}
 

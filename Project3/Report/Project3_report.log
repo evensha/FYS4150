@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  20 OCT 2017 11:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  23 OCT 2017 17:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -847,17 +847,17 @@ LaTeX Info: Redefining \nameref on input line 22.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for U+msa on input line 55.
+LaTeX Font Info:    Try loading font information for U+msa on input line 53.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 55.
+LaTeX Font Info:    Try loading font information for U+msb on input line 53.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 55.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 53.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
@@ -865,47 +865,64 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.109 \end{align*}
-                   [1]
+l.107 \end{align*}
+                   [1] [2] [3]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 236.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 236.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 236.
+
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
 
 Package 'standalone' INFO: See file 'Project3_report.stp' for list of sub-pream
 bles.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 136.
-[2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 136.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 252.
+[4] [5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 252.
  (./Project3_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 136.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 136.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 252.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 252.
 Package rerunfilecheck Info: File `Project3_report.out' has not changed.
-(rerunfilecheck)             Checksum: E4C45A17B3D2F07DCDB24CED49E52C03;292.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 136.
+(rerunfilecheck)             Checksum: 98D9902ECEE2386EEFA363BB198B3305;506.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 252.
  ) 
 Here is how much of TeX's memory you used:
- 9763 strings out of 494333
- 144660 string characters out of 6163939
- 247033 words of memory out of 5000000
- 12866 multiletter control sequences out of 15000+600000
- 18573 words of font info for 56 fonts, out of 8000000 for 9000
+ 9831 strings out of 494333
+ 145930 string characters out of 6163939
+ 248326 words of memory out of 5000000
+ 12908 multiletter control sequences out of 15000+600000
+ 21357 words of font info for 62 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
  67i,12n,100p,334b,348s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/ev
-en/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </home/even/.texmf-va
-r/fonts/pk/ljfour/jknappen/ec/ecrm0800.600pk> </home/even/.texmf-var/fonts/pk/l
-jfour/jknappen/ec/ecti1200.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknapp
-en/ec/ecrm1200.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx17
-28.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </
-home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmsy8.pfb>
-Output written on Project3_report.pdf (3 pages, 117535 bytes).
+ </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/ev
+en/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </home/even/.texmf-va
+r/fonts/pk/ljfour/jknappen/ec/ecrm0700.600pk> </home/even/.texmf-var/fonts/pk/l
+jfour/jknappen/ec/ecrm0800.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknapp
+en/ec/ecbx1440.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti12
+00.600pk> </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </
+home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1728.600pk> </home/even/.t
+exmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/even/.texmf-var/fon
+ts/pk/ljfour/jknappen/ec/ecbx2488.600pk></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
+exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on Project3_report.pdf (6 pages, 164551 bytes).
 PDF statistics:
- 271 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
- 49 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 392 PDF objects out of 1000 (max. 8388607)
+ 150 compressed objects within 2 object streams
+ 27 named destinations out of 1000 (max. 500000)
+ 73 words of extra memory for PDF output out of 10000 (max. 10000000)
 

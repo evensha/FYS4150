@@ -1,6 +1,9 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Modelling planetary motion}{}% 2
-\BOOKMARK [1][-]{section.3}{Algorithms}{}% 3
+\BOOKMARK [1][-]{section.3}{Discretization and algorithms}{}% 3
 \BOOKMARK [1][-]{section.4}{Code}{}% 4
-\BOOKMARK [1][-]{section.5}{Results}{}% 5
-\BOOKMARK [1][-]{section.6}{Summary and conclusions}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{The planet class}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{The solver class}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{Testing the code}{section.4}% 7
+\BOOKMARK [1][-]{section.5}{Results}{}% 8
+\BOOKMARK [1][-]{section.6}{Summary and conclusions}{}% 9
