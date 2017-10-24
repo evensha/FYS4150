@@ -225,23 +225,70 @@ Both of these methods will be implemented in our code. However, velocity Verlet 
 proven to work somewhat better than forward Euler, so throughout most of the project we 
 will stick to using the velocity Verlet method. 
 
+Notice that in order to get the algorithms started we need some initial values for position and velocity,
+i.e. $x_0$ and $v_0$, hence these kinds of problems are referred to as \textit{initial value problems}.   
+
 \section{Code}
 
-All code written for this project can be found in the following github repository: \vspace{0.5cm} \\ 
+All code written for this project can be found in the following git repository: \vspace{0.5cm} \\ 
 \fbox{
 \href{https://github.com/evensha/FYS4150/tree/master/Project3/Programs}
 {https://github.com/evensha/FYS4150/tree/master/Project3/Programs} } \vspace{0.5cm} \\ 
-The most important files in this repository are 
+The most important files in this repository are:  
 \begin{itemize}
-\item \texttt{planet.cpp}
-\item \texttt{solver.cpp}
+\item \texttt{planet.cpp/planet.h}
+\item \texttt{solver.cpp/solver.h}
 \item \texttt{main.cpp}
 \item \texttt{Plot\_planets.py}
 \end{itemize}
+Before going into the details of the code we should have a quick look at the main structure and purpose 
+of the different programs and classes. 
+
+Firstly we have two classes called \textbf{planet} (implemented in \texttt{planet.cpp} and 
+\texttt{planet.h}) and \textbf{solver} (implemented in \texttt{solver.cpp} and \texttt{solver.h}). 
+The main idea is that we let each planet we want to consider be an object of the planet class, 
+which has properties like position, velocity, mass, and functions that can calculate other quantities 
+for the planet. We then make an object of the solver class, and put our planets in to this object. 
+The solver class contain functions that will solve our problem, i.e. by using forward Euler or 
+velocity Verlet, in addition to other functions that could be useful. The main program (\texttt{main.cpp}) 
+is used to initialize the necessary objects, and run the solver functions, while the python script 
+\texttt{Plot\_planets.py} is used for plotting the results. The output from the programs is stored in 
+the "Output" repository. However, one might not find all produced output files in the mentioned git 
+repository, as some of the produced output files are quite big.  
+
+In addition to the above described programs it is also worth mentioning that the git repository contains 
+a \texttt{makefile}, used for compiling it all, and a file called \texttt{Planet\_data.txt}. The latter 
+file contains necessary information about all the planets, i.e. mass and the positions and velocities 
+we will use as initial values. 
 
 \subsection{The planet class}
 
+The planet class has four public variables: 
+\begin{itemize}
+\item \texttt{mass} (double)  
+\item \texttt{position} (double, 3D vector)
+\item \texttt{velocity} (double, 3D vector) 
+\item \texttt{name} (string) 
+\end{itemize}
+An object of this class can be initialized with a default initialization that sets all the variables to 
+zero, and the name to "Planet". Alternatively it can be initialized with mass, positions, velocities and 
+name. Positions and velocities can be given in either two or three dimension. 
+
+Further the class contains the following functions (which all return a double): 
+\begin{itemize}
+\item \texttt{Distance(planet otherPlanet):} Take an other object of the planet class as input argument, 
+and calculates the distance to this planet. 
+\item \texttt{PotentialEnergy(double Gconst):} Take an other object of the planet class as input, and 
+calculates the planets potential energy with respect to the other planet.   
+\item \texttt{xMomentum():} Calculates the planets momentum in the $x$-direction. 
+\item \texttt{yMomentum():} Calculates the planets momentum in the $y$-direction. 
+\item \texttt{AngularMomentum():} Calculates the magnitude of the orbital angular momentum per unit 
+mass of the planet. 
+\end{itemize}
+
 \subsection{The solver class}
+
+\subsection{The main program and plotting}
 
 \subsection{Testing the code}
 

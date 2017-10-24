@@ -68,7 +68,7 @@ int main(int argc, char *argv[]){
 	cout << "----------------------" << endl; 
 	cout << "Initial values: " << endl; 
 	cout << "Kinetic energy: " << earth.KineticEnergy() << endl; 
-	cout << "Potential energy: " << earth.PotentialEnergy(4*M_PI*M_PI) << endl; 
+	cout << "Potential energy: " << earth.PotentialEnergy(sun) << endl; 
 	cout << "Angular momentum: " << earth.AngularMomentum() << endl; 
 	cout << "----------------------" << endl; 
 

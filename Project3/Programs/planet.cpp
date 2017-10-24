@@ -10,8 +10,6 @@ planet::planet(){
 	velocity[0] = 0.0; 
 	velocity[1] = 0.0; 
 	velocity[2] = 0.0; 
-	kinetic = 0.0; 
-	potential = 0.0; 
 
 	name = "Planet"; 	
 
@@ -27,8 +25,6 @@ planet::planet(double M, double x, double y, double vx, double vy){
 	velocity[0] = vx; 
 	velocity[1] = vy; 
 	velocity[2] = 0.0; 
-	kinetic = 0; 
-	potential = 0; 
 
 	name = "Planet"; 
 
@@ -45,8 +41,6 @@ planet::planet(double M, double x, double y, double vx, double vy, string planet
 	velocity[0] = vx; 
 	velocity[1] = vy; 
 	velocity[2] = 0.0; 
-	kinetic = 0; 
-	potential = 0; 
 
 	name = planet; 
 
@@ -63,8 +57,6 @@ planet::planet(double M, double x, double y, double z, double vx, double vy, dou
 	velocity[0] = vx; 
 	velocity[1] = vy; 
 	velocity[2] = vz; 
-	kinetic = 0; 
-	potential = 0; 
 
 	name = planet; 
 
@@ -129,13 +121,15 @@ double planet::KineticEnergy(){
 }
 
 
-double planet::PotentialEnergy(double Gconst){
+double planet::PotentialEnergy(planet otherPlanet){
 	// Calculate the planets kinetic energy 
 
-	double m = this->mass; double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
-	double r = sqrt(x*x + y*y + z*z); 
+	double m = this->mass; 
+	double M = otherPlanet.mass; 
+//double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
+	double r = this->Distance(otherPlanet);  
 
-	double E_p = - Gconst*m/r; 
+	double E_p = - 4*M_PI*M_PI*M*m/r; 
 	 	
 	return E_p; 
 

@@ -15,8 +15,6 @@ public:
 	double mass; 
 	double position[3]; 
 	double velocity[3]; 
-	double kinetic; 
-	double potential; 
 	string name; 
 
 	// Initializers 
@@ -25,13 +23,12 @@ public:
 	planet(double M, double x, double y, double vx, double vy, string planet); 
 	planet(double M, double x, double y, double z, double vx, double vy, double vz, string planet); 
 	
-
 	// Functions 	
 	double Distance(planet otherPlanet); 
 	//double GravitationalForce(planet otherPlanet, double Gconst);
 	//double Acceleration(planet otherPlanet, double Gconst); 
 	double KineticEnergy(); 
-	double PotentialEnergy(double Gconst); 
+	double PotentialEnergy(planet otherPlanet); 
 	double xMomentum();
 	double yMomentum();  
 	double AngularMomentum(); 
