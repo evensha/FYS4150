@@ -5,7 +5,6 @@
 #include <string>
 #include <iomanip>
 #include <map>
-//#include <armadillo>
 #include "time.h"
 #include "planet.h"
 #include "solver.h"
@@ -17,11 +16,55 @@ int main(int argc, char *argv[]){
 
 	// Define some constants 
 
-	int n = atoi(argv[1]);
-	int withGR = atoi(argv[3]); 
-	double t = atof(argv[2]); 
+	string problem = argv[1]; // test, binary, three-body, solar system, mercury 
+	int n = atoi(argv[2]);
+	double t = atof(argv[3]);
+	double variable; 
+	if(problem == "Binary") variable = atof(argv[4]); 
+	if(problem == "Mercury") int withGR = atoi(argv[4]);  
 	double yr = 365.25; // one year (in days)     
 	double M_sun = 2.0E30; 
+
+	// Test of the algorithms and escape velocity (c and d)  
+	
+	if(problem == "Binary"){
+		planet test_earth(0.000003, 1.0, 0.0, 0.0, 2*M_PI, "Earth"); 	
+		planet test_sun(1.0, 0, 0, 0, 0, "Sun"); 
+
+		cout << "----------------------" << endl; 
+		cout << "Initial values: " << endl; 
+		cout << "Kinetic energy: " << test_earth.KineticEnergy() << endl; 
+		cout << "Potential energy: " << test_earth.PotentialEnergy(test_sun) << endl; 
+		cout << "Angular momentum: " << test_earth.AngularMomentum() << endl; 
+		cout << "----------------------" << endl; 
+
+		solver Test_FE;
+		Test_FE.addPlanet(test_sun); 
+		Test_FE.addPlanet(test_earth);
+
+		clock_t FE_start, FE_finish; 
+		FE_start = clock();  
+		Test_FE.ForwardEuler(n, t, 1);  
+		FE_finish = clock(); 
+
+		solver Test_VV(variable); 
+		Test_VV.addPlanet(test_sun); 
+		Test_VV.addPlanet(test_earth);	
+
+		clock_t VV_start, VV_finish; 
+		VV_start = clock(); 
+		Test_VV.VelocityVerlet(n, t, 1); 
+		VV_finish = clock(); 
+
+		cout << "----------------------" << endl; 
+
+		double FE_time = (FE_finish - FE_start)/((double) CLOCKS_PER_SEC); 
+		double VV_time = (VV_finish - VV_start)/((double) CLOCKS_PER_SEC); 	
+
+		cout << "Time with FE: " << FE_time << endl; 
+		cout << "Time with VV: " << VV_time << endl; 
+	}
+
 
 	// Make maps for planet data 
 
@@ -49,7 +92,7 @@ int main(int argc, char *argv[]){
  
 	infile.close(); 
 
-	// Intialize planets (for now only in 2D) 
+	// Intialize planets 
 
 	planet sun(mass["Sun"], x["Sun"], y["Sun"], z["Sun"], v_x["Sun"], v_y["Sun"], v_z["Sun"], "Sun"); 
 	planet mercury(mass["Mercury"], x["Mercury"], y["Mercury"], z["Mercury"], v_x["Mercury"], v_y["Mercury"], v_z["Mercury"], "Mercury");
@@ -61,39 +104,14 @@ int main(int argc, char *argv[]){
 	planet uranus(mass["Uranus"], x["Uranus"], y["Uranus"], z["Uranus"], v_x["Uranus"], v_y["Uranus"], v_z["Uranus"], "Uranus"); 
 	planet neptun(mass["Neptun"], x["Neptun"], y["Neptun"], z["Neptun"], v_x["Neptun"], v_y["Neptun"], v_z["Neptun"], "Neptun"); 
 	planet pluto(mass["Pluto"], x["Pluto"], y["Pluto"], z["Pluto"], v_x["Pluto"], v_y["Pluto"], v_z["Pluto"], "Pluto"); 
-	//planet earth(0.000003, 1.0, 0.0, 0.0, v_start*2*M_PI, "Earth"); 	
 
-	// Print some initial properties of earth
-
-	cout << "----------------------" << endl; 
-	cout << "Initial values: " << endl; 
-	cout << "Kinetic energy: " << earth.KineticEnergy() << endl; 
-	cout << "Potential energy: " << earth.PotentialEnergy(sun) << endl; 
-	cout << "Angular momentum: " << earth.AngularMomentum() << endl; 
-	cout << "----------------------" << endl; 
 
 	// Initialize solver class, add planets and solve the problem 
 
 	// Binary system (earth and sun) 
+
+
 /*
-	solver Binary_FE;
-	Binary_FE.addPlanet(sun); 
-	Binary_FE.addPlanet(earth);
-
-	clock_t FE_start, FE_finish; 
-	FE_start = clock();  
-	Binary_FE.ForwardEuler(n, t);  
-	FE_finish = clock(); 
-
-	solver Binary_VV; 
-	Binary_VV.addPlanet(sun); 
-	Binary_VV.addPlanet(earth);	
-
-	clock_t VV_start, VV_finish; 
-	VV_start = clock(); 
-	Binary_VV.VelocityVerlet(n, t); 
-	VV_finish = clock(); 
-
 	// Three-body system (earth, sun and jupiter) 
 
 	sun.velocity[0] = -( v_x["Earth"]*mass["Earth"] + v_x["Jupiter"]*mass["Jupiter"] );  
@@ -104,7 +122,7 @@ int main(int argc, char *argv[]){
 	ThreeBody.addPlanet(earth); 
 	ThreeBody.addPlanet(jupiter);  
 	ThreeBody.VelocityVerlet(n, t); 
-*/
+
 	// Solar system (all planets) 
 
 	// Centre of mass: 
@@ -151,7 +169,7 @@ int main(int argc, char *argv[]){
 	SolarSystem.VelocityVerlet(n, t, 1); 
 
 	// Perihelion precession (sun and mercury)
-/*
+
 	mercury.position[0] = 0.3075; mercury.position[1] = 0.0; mercury.position[2] = 0.0; 
 	mercury.velocity[0] = 0.0; mercury.velocity[1] = 12.44; mercury.velocity[2] = 0.0; 
 	 // reset position and velocity of sun  
@@ -163,12 +181,5 @@ int main(int argc, char *argv[]){
 	Mercury.addPlanet(mercury); 
 	Mercury.VelocityVerlet(n, t, 0); 	
 
-	cout << "----------------------" << endl; 
-
-	double FE_time = (FE_finish - FE_start)/((double) CLOCKS_PER_SEC); 
-	double VV_time = (VV_finish - VV_start)/((double) CLOCKS_PER_SEC); 	
-
-	cout << "Time with FE: " << FE_time << endl; 
-	cout << "Time with VV: " << VV_time << endl; 
 */
 }

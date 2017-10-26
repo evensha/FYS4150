@@ -133,6 +133,7 @@ double planet::PotentialEnergy(planet otherPlanet){
 	 	
 	return E_p; 
 
+
 }
 
 double planet::xMomentum(){

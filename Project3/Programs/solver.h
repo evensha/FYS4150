@@ -14,7 +14,6 @@ public:
 
 	// Properties 
 	double mass, G, beta;
-	double radius; 
 	int RelCorr; 
 	int total_planets; 
 	vector<planet> all_planets; 
@@ -26,7 +25,7 @@ public:
 
 	// Functions 
 	void addPlanet(planet newplanet); 
-	void ForwardEuler(int integration_points, double time); 
+	void ForwardEuler(int integration_points, double time, int withOutput); 
 	void VelocityVerlet(int integration_points, double final_time, int withOutput); 
 	void GravitationalForce(planet &Planet, planet &other, double &F_x, double &F_y, double &F_z, double beta, int RelCorr); 
 	void PrintPositions(); 

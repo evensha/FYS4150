@@ -18,7 +18,6 @@ solver::solver(){
 
 	total_planets = 0; 
 	mass = 0; 
-	radius = 0; 
 	G = 4*M_PI*M_PI; 
 	beta = 2.0; 
 	RelCorr = 0; 
@@ -31,7 +30,6 @@ solver::solver(double b){
 
 	total_planets = 0; 
 	mass = 0; 
-	radius = 0; 
 	G = 4*M_PI*M_PI; 
 	beta = b; 
 	RelCorr = 0; 
@@ -43,7 +41,6 @@ solver::solver(int withGR){
 
 	total_planets = 0; 
 	mass = 0; 
-	radius = 0; 
 	G = 4*M_PI*M_PI; 
 	beta = 2.0; 
 	RelCorr = withGR; 
@@ -61,7 +58,7 @@ void solver::addPlanet(planet newplanet){
 } 
 
 
-void solver::ForwardEuler(int integration_points, double time){
+void solver::ForwardEuler(int integration_points, double time, int withOutput){
 	// Solve the equations of motion for the added planets using the forward Euler algorithm for given time period and number of 
 	// integration points  
 
@@ -70,28 +67,40 @@ void solver::ForwardEuler(int integration_points, double time){
 
 	// Make outfile 
 
-	ostringstream os; 
 	string problem; 
-	if(total_planets == 2) problem = "Binary"; 
-	else if(total_planets == 3) problem = "ThreeBody"; 
-	else if(total_planets == 10) problem = "SolarSystem"; 
-	else problem = "Planets"; 
-	os << "Output/" << problem << "_FE" << ".txt"; 
+	if(withOutput == 1){
+		ostringstream os; 
+		if(total_planets == 2) problem = "Binary"; 
+		else if(total_planets == 3) problem = "ThreeBody"; 
+		else if(total_planets == 10) problem = "SolarSystem"; 
+		else problem = "Planets"; 
 
-	string outfile = os.str(); 
-	ofile.open(outfile.c_str()); 
+		if(total_planets == 2 && all_planets[1].name == "Mercury") problem = "Mercury_perihelion"; 
 
-	PrintNames(); 
-	PrintPositions();  // print initial positions 
+		if(RelCorr == 1) os << "Output/" << problem << "_FE_withGR" << ".txt";
+		else if( beta != 2 ) os << "Output/" << problem << "_FE_beta=" << beta << ".txt";
+		else os << "Output/" << problem << "_FE" << ".txt";  
+
+		string outfile = os.str(); 
+		ofile.open(outfile.c_str()); 
+
+		PrintNames(); 
+		PrintPositions();  // print initial positions 
+	}
+
 
 	// Initialize forces and acceleration
 
 	double F_x=0; double F_y=0; double F_z=0;  	
 	double a_x=0; double a_y=0; double a_z=0; 
 
-	for(int i = 0; i<n; i++){  // Loop over time 
+ 	// Loop over time
 
-		for(int j = 0; j<total_planets; j++){	 // Loop over planets 
+	for(int i = 0; i<n; i++){  
+
+		// Loop over planets
+
+		for(int j = 0; j<total_planets; j++){	  
 
 			planet &Planet = all_planets[j]; 
 			if(Planet.name == "Sun") continue; 
@@ -127,6 +136,15 @@ void solver::ForwardEuler(int integration_points, double time){
 
 	ofile.close();
 
+	if(problem == "Binary"){
+		cout << "----------------------" << endl; 
+		cout << "After forward Euler:" << endl; 
+		cout << "Kinetic energy: " << all_planets[1].KineticEnergy() << endl; 
+		cout << "Potential energy: " << all_planets[1].PotentialEnergy(all_planets[0]) << endl; 
+		cout << "Angular momentum: " << all_planets[1].AngularMomentum() << endl; 
+		cout << "----------------------" << endl; 
+	}
+
 }  
 
 
@@ -137,6 +155,9 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 	int n = integration_points; 	
 	double h = final_time/((double) n);	
 
+	double h_half = 0.5*h; 
+	double h2_half = 0.5*h*h; 
+
 	// Make outfile (if we want output) 
 
 	string problem; 
@@ -146,7 +167,11 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 		else if(total_planets == 3) problem = "ThreeBody"; 
 		else if(total_planets == 10) problem = "SolarSystem"; 
 		else problem = "Planets"; 
+
+		if(total_planets == 2 && all_planets[1].name == "Mercury") problem = "Mercury_perihelion"; 
+
 		if(RelCorr == 1) os << "Output/" << problem << "_VV_withGR" << ".txt";
+		else if( beta != 2 ) os << "Output/" << problem << "_VV_beta=" << beta << ".txt";
 		else os << "Output/" << problem << "_VV" << ".txt";  
 
 		string outfile = os.str(); 
@@ -163,11 +188,14 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 	
 	double smallest_r; double x_peri; double y_peri; int smallest_r_time;  // quantities related to perihelion   
 
-	for(int i = 1; i<n; i++){    // Loop over tiem 
+	// Loop over time   
+
+	for(int i = 1; i<n; i++){   
 	
-		for(int j = 0; j<total_planets; j++){	 // Loop over planets 
+		// Loop over planets 
+
+		for(int j = 0; j<total_planets; j++){	 
 			planet &Planet = all_planets[j]; 
-			if(i==1) cout << Planet.name << endl; 
 			//if(Planet.name == "Sun") continue;  // Sun fixed -> don't bother with the calculations
 
 			for(int k = 0; k<total_planets; k++){  // Calculate gravitational forces on the planet 
@@ -184,11 +212,11 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 
 			// Solve with Velocity Verlet algo
 
-			Planet.position[0] += h*Planet.velocity[0] + 0.5*h*h*a_x;  // new positions 
-			Planet.position[1] += h*Planet.velocity[1] + 0.5*h*h*a_y; 
-			Planet.position[2] += h*Planet.velocity[2] + 0.5*h*h*a_z; 
+			Planet.position[0] += h*Planet.velocity[0] + h2_half*a_x;  // new positions 
+			Planet.position[1] += h*Planet.velocity[1] + h2_half*a_y; 
+			Planet.position[2] += h*Planet.velocity[2] + h2_half*a_z; 
 
-			if(problem == "Binary"){  // study perihelion precession for the binary system 
+			if(withOutput == 0){  // study perihelion precession for the binary system 
 				if( Planet.Distance(all_planets[0]) <= r ){   // update perihelion position 
 					smallest_r = Planet.Distance(all_planets[0]); 
 					smallest_r_time = i;
@@ -206,12 +234,13 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 
 			a_x_new = F_x_new/m; a_y_new = F_y_new/m; a_z_new = F_z_new/m;  		
 		
-			Planet.velocity[0] += 0.5*h*(a_x_new + a_x);  // New velocities 
-			Planet.velocity[1] += 0.5*h*(a_y_new + a_y); 
-			Planet.velocity[2] += 0.5*h*(a_z_new + a_z); 
+			Planet.velocity[0] += h_half*(a_x_new + a_x);  // New velocities 
+			Planet.velocity[1] += h_half*(a_y_new + a_y); 
+			Planet.velocity[2] += h_half*(a_z_new + a_z); 
 
-			a_x = a_x_new; a_y = a_y_new; a_z = a_z_new;   // Update acceleration 
-			F_x = 0; F_y = 0; F_z = 0; F_x_new = 0; F_y_new = 0; F_z_new = 0;   // Reset forces 	
+			a_x = a_x_new = a_y = a_y_new = a_z = a_z_new = 0; 
+			//a_x = a_x_new; a_y = a_y_new; a_z = a_z_new;   // Update acceleration 
+			F_x = F_y = F_z = F_x_new = F_y_new = F_z_new = 0;   // Reset forces 	
 
 		}
 
@@ -219,7 +248,7 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 
 	}
 
-	if(problem == "Binary"){  // Print out perhelion info for the binary system 
+	if(withOutput == 0){  // Print out perhelion info for the binary system 
 		cout << "Smallest r and time: " << endl; 
 		cout << smallest_r << endl; 
 		cout << x_peri << endl; 
@@ -229,6 +258,15 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 	}
 
 	ofile.close(); 
+
+	if(problem == "Binary"){
+		cout << "----------------------" << endl; 
+		cout << "After velocity Verlet:" << endl; 
+		cout << "Kinetic energy: " << all_planets[1].KineticEnergy() << endl; 
+		cout << "Potential energy: " << all_planets[1].PotentialEnergy(all_planets[0]) << endl; 
+		cout << "Angular momentum: " << all_planets[1].AngularMomentum() << endl; 
+		cout << "----------------------" << endl; 
+	}
 	
 }
 
@@ -250,11 +288,12 @@ void solver::GravitationalForce(planet &Planet, planet &other, double &F_x, doub
 		GR = 3.0*l*l/(r*r*c*c); 
 	}
 
-	F_x += G*m*M*dist_x/(r*r*r)*(1.0 + GR); 
-	F_y += G*m*M*dist_y/(r*r*r)*(1.0 + GR); 
-	F_z += G*m*M*dist_z/(r*r*r)*(1.0 + GR); 		  
+	F_x += G*m*M*dist_x/(pow(r,beta)*r)*(1.0 + GR); 
+	F_y += G*m*M*dist_y/(pow(r,beta)*r)*(1.0 + GR); 
+	F_z += G*m*M*dist_z/(pow(r,beta)*r)*(1.0 + GR); 		  
 
 }
+
 
 
 void solver::PrintPositions(){
@@ -284,7 +323,6 @@ void solver::PrintNames(){
 	}
 	ofile << endl; 
 }
-
 
 
  
