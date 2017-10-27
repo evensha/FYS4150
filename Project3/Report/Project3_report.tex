@@ -48,6 +48,25 @@ and compact way, and we get quite good estimates of the planetary orbits.
 
 \section{Introduction}
 
+The concept of object oriented programming was invented in the mid 1960s at the Norwegian Computing 
+Centre in Oslo, and can be a very powerful way of programming. This applies especially is 
+you have e.g. an algorithm that you want to apply to a variety of similar systems. Instead of writing 
+new code tailored to each system, you write the algorithm in a more general way that allows you to 
+apply it to a variety of systems. The systems we will study in this project consists of planets 
+orbiting the Sun. We will simulate both a binary system (e.g. the Earth and the Sun), a three-body system 
+(Earth, Sun and Jupiter), and eventually the full solar system. The magic of object orientation is that 
+once you have written the algorithm it is very easy to jump between each of these systems. 
+
+Two key concepts of object oriented programming is \textit{classes} and \textit{objects}. A class can be 
+thought of as a set of variables and functions, while an object is an instance of the class. We 
+say that the object inherits the functions and variables defined in the class. Two classes are written in 
+this project, namely a planet class and a solver class, which will be discussed in more detail later. 
+
+The first part of the report is a short theoretical introduction to how we model planetary motion using 
+Newtons law of gravitation, follow by the procedure for discretizing the equations and a discussion of 
+the algorithms. Then the main aspects and ideas of the programs are discussed, before the results are 
+presented towards the end.  
+
 \section{Modelling planetary motion}
 
 Newtons law of gravitation states that the gravitational force between two objects, with mass $M$ and $m$
@@ -247,7 +266,7 @@ The most important files in this repository are:
 \item \texttt{planet.cpp/planet.h}
 \item \texttt{solver.cpp/solver.h}
 \item \texttt{main.cpp}
-\item \texttt{Plot\_planets.py}
+\item Various (python) plotting scripts. 
 \end{itemize}
 Before going into the details of the code we should have a quick look at the main structure and purpose 
 of the different programs and classes. 
@@ -259,10 +278,10 @@ which has properties like position, velocity, mass, and functions that can calcu
 for the planet. We then make an object of the solver class, and put our planets in to this object. 
 The solver class contain functions that will solve our problem, i.e. by using forward Euler or 
 velocity Verlet, in addition to other functions that could be useful. The main program (\texttt{main.cpp}) 
-is used to initialize the necessary objects, and run the solver functions, while the python script 
-\texttt{Plot\_planets.py} is used for plotting the results. The output from the programs is stored in 
+is used to initialize the necessary objects, and run the solver functions, several different python 
+scripts are used for plotting the results. The output from the programs is stored in 
 the "Output" repository. However, one might not find all produced output files in the mentioned git 
-repository, as some of the produced output files are quite big.  
+repository, as some of the produced output files are quite large.  
 
 In addition to the above described programs it is also worth mentioning that the git repository contains 
 a \texttt{makefile}, used for compiling it all, and a file called \texttt{Planet\_data.txt}. The latter 
@@ -339,14 +358,18 @@ planets in three dimensions.
 
 \subsection{The main program and plotting}
 
-The purpose of the main program is to initialize the need planet objects and the solver, put the planets 
-into the solver, and then run the relevant functions. In order to initialize the planets we read 
-in the relevant planet data from the \texttt{Planet\_data.txt}-file, and store them in maps related to 
-each planet, which are then used in the initialization. Different solver objects are initialized for 
-different parts of the project, depending on what kind of problem we are studying.  
+The purpose of the main program is to initialize the needed planet objects and the solver, put the planets 
+into the solver, and then run the relevant functions. The program takes number of time steps, 
+final time of the simulation and name of the problem as input. 
 
-The python script \texttt{Plot\_planets.py} are then used to read the output files produced by the solver 
-functions and make the required plots. 
+Different solver objects are initialized, depending on which problem we want to consider. If we want to 
+consider the full solar system the planets are initialized with data from the \texttt{Planet\_data.txt} 
+file, which are stored in maps relating a planet to a specific variable.  
+
+As mentioned, several different python scripts are used for plotting, depending on the situation and 
+system we study. These scripts read the output files produced by the solver. (I realized towards 
+the end of the project that it might also could be handy to write some sort of class for the plotting, 
+but unfortunately there was no time to do this.) 
 
 \section{Results}
 
@@ -465,7 +488,7 @@ v_c = \sqrt{\frac{2GM_{\odot}}{r}} = \sqrt{2}2\pi \approx 2.83\pi,
 \end{align*}
 where we have used $GM_{\odot} = 4\pi^2$ and $r=1$. 
 
-\begin{figure}
+\begin{figure}[ht!]
 \centering 
   	\begin{subfigure}[b]{0.49\textwidth}
 	\includegraphics[width=\textwidth]{{../Programs/Output/Escape_v=1.2}.png}
@@ -488,20 +511,204 @@ where we have used $GM_{\odot} = 4\pi^2$ and $r=1$.
 \label{fig:escape}	
 \end{figure} 
 
+The next thing we look at is a model where we let the gravitational force be given by 
+\begin{align*}
+F_G = \frac{GM_{\odot}m}{r^{\beta}}, 
+\end{align*}
+where $\beta \in [2,3]$. Results for $\beta$ equal to $2.5$, $2.9$, $2.99$ and $3$ are shown in 
+Figure \ref{fig:modified}. We can see that for $\beta=2.5$ the system still looks nice and stable, 
+but as $\beta$ creeps towards three the system starts to loose the stability, and when $\beta=3$ the Sun is 
+no longer able to keep the planet in orbit, and it starts spiralling out into space. 
 
+\begin{figure}[ht!]
+\centering 
+  	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/Modified_gravity_beta=2.5}.png}
+	\caption{}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/Modified_gravity_beta=2.9}.png}
+	\caption{}
+	\end{subfigure} 	
+  	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/Modified_gravity_beta=2.99}.png}
+	\caption{}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/Modified_gravity_beta=3}.png}
+	\caption{}
+	\end{subfigure} 
+\caption{Planet trajectories with various modifications of the gravitational force, simulated over 
+$100$ years with $10,000$ time steps.}	
+\label{fig:modified}	
+\end{figure} 
 
 \subsection{Three-body problem}
 
+We have now tested and played with our programs by studying one planet (i.e. the Earth) orbiting the 
+Sun. Now we would like to add other planets, starting with the heaviest, namely Jupiter. Since we have 
+written an object oriented code it is quite trivial to do this. We assume the motion to be co-planar, 
+so we stick to studying the system in only two dimensions, and we start by considering initial velocities 
+leading to circular motion, as previously. The results of this is shown in Figure \ref{fig:threebody}, 
+where the simulation runs over $20$ years, using $1,000$ and $100,000$ time steps. The Earth orbit seems 
+to be very similar to the one obtained with the binary system. There is however a slight difference 
+shown in Table \ref{tab:earth_positions}. Note that using only $1,000$ time 
+steps over $20$ years mean only $50$ time steps per year, showing that the VV algorithm is impressively 
+stable. However, if we increase the mass of Jupiter, which is done in Figure \ref{fig:massive_jupiter}, 
+the system becomes unstable. 
+
+\begin{figure}[ht!]
+\centering 
+  	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/ThreeBody_n=1000}.png}
+	\caption{$1,000$ time steps.}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/ThreeBody_n=100000}.png}
+	\caption{$100,000$ time steps.}
+	\end{subfigure} 	
+\caption{The three body system with the Sun, the Earth and Jupiter simulated over $20$ years with 
+different number of time steps, showing that the VV algorithm is impressively stable.}	
+\label{fig:threebody}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering 
+  	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/ThreeBody_mJ=10_n=100000}.png}
+	\caption{}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/ThreeBody_mJ=1000_n=100000}.png}
+	\caption{}
+	\end{subfigure} 			
+\caption{Trajectories of Earth and Jupiter when the mass of Jupiter is increased by a factor of $10$ in 
+(a) and a factor of $1,000$ in (b). The simulation runs over $100$ years in (a) and $20$ years in (b).}	
+\label{fig:massive_jupiter}
+\end{figure}
+
+Our next step is to also set the Sun in motion, and choose the origin to be the center-of-mass, rather 
+than the position of the Sun. We give the also give the Sun an initial velocity such that the total 
+momentum of the system is zero, which ensures that the center-of-mass remains fixed. The resulting plots 
+are shown in Figure \ref{fig:threebody_CM}, where we have zoomed in on the Sun in Figure 
+\ref{fig:sun_motion}. Comparing these orbits of the Earth and Jupiter with Figure \ref{fig:threebody} 
+there is no visible difference, meaning that keeping the Sun fixed in the origin is a good approximation.
+However, in Table \ref{tab:earth_positions} we can see that there actually is a small difference, which 
+we also would expect.  
+Notice also that the radius of the orbit of the Sun is $\sim0.005$, which is about the same as the 
+radius of the Sun \cite{Solar Radius}.   
+
+\begin{figure}[ht!]
+\centering 
+ 	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/ThreeBody_CM_100000}.png}
+	\caption{}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.49\textwidth}
+	\includegraphics[width=\textwidth]{{../Programs/Output/sun_motion}.png}
+	\caption{}
+	\label{fig:sun_motion}	
+	\end{subfigure} 
+\caption{Motion of the Earth and Jupiter in (a), now also with the Sun moving. The motion of the 
+Sun is shown in Figure (b). The simulation runs over $100$ years with $100,000$ time steps.}
+\label{fig:threebody_CM}
+\end{figure}
+
+\begin{table}[ht!]
+\caption{The maximal and minimal $x$- and $y$-positions of the Earth in different systems, found using 
+simulations over $20$ years with $100,000$ time steps.}
+\label{tab:earth_positions}
+\begin{center}
+\begin{tabular}{rcccc}   \hline\hline
+ & $x_{min}$ & $y_{min}$ & $x_{max}$ & $y_{max}$ \\ \hline  
+Binary (fixed Sun) & $-1.000001$ & $ -1.000000$  & $1.000000$ & $1.000000$ \\
+Three-body (fixed Sun) & $-1.001280$ & $-1.000642$ & $1.000000$ & $1.000636$ \\
+Three-body (moving Sun) & $-1.006822$ & $-1.006036$ & $1.005162$ & $1.005943$ \\ \hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
 \subsection{The solar system}
+
+Now we move on to simulation the full solar system, with all the planets given previously in Table 
+\ref{tab:planets}. The planets are initialize using NASA data taken from ref. \cite{NASA}.  
+The resulting plot in three dimensions is shown in Figure \ref{fig:solarsystem}.
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[width=\textwidth]{../Programs/Output/SolarSystem_3D.png}
+\caption{The solar system with nine planets and the Sun simulated over $300$ years with $600,000$ time 
+steps.}
+\label{fig:solarsystem}
+\end{center}
+\end{figure}
 
 \subsection{Perihelion precession of Mercury}
 
+Finally, as mentioned in the previously, we study the perihelion precession of Mercury. When doing this
+we keep the Sun fix in the origin and remove all the other planets. This means that by using the 
+Newtonian force we should (theoretically) get no precession at all, while with the relativistic 
+correction we hope to see the a precession of $\theta_p=43''\approx 0.012^{\circ}$ over one century.
+
+The perihelion of Mercury's orbit is $0.3075$ AU, and the velocity at perihelion is $12.44$ AU/year. 
+We initialize the system by putting the perihelion along the $x$-axis, so that the perihelion 
+coordinates initially are given by $x_p=0.3075$ AU and $y_p=0$ AU. The perihelion angle is then given by 
+\begin{align*}
+\tan\theta_p = \frac{y_p}{x_p},  
+\end{align*}
+and this quantity is calculated and updated in the code as the years passes by, and printed out in the 
+end. If the correction from General Relativity is correct we should get a final value 
+$\tan\theta_p \approx 2.085\cdot 10^{-4}$. 
+
+Since the expected perihelion angle is very small we need extremely good time resolution in order to 
+see any difference between the two cases, so the simulation is done using $1$ billion time steps. 
+The results are shown in Table \ref{tab:perihelion}, and they agree quite well with the observed 
+perihelion precession! 
+
+\begin{table}[ht!]
+\caption{Comparison of Newtonian and relativistic calculation of the perihelion angle $\tan\theta_p$.}
+\label{tab:perihelion}
+\begin{center}
+\begin{tabular}{cc} \\ \hline\hline 
+& $\tan\theta_p$ \\ \hline
+Newtonian & $1.062\cdot 10^{-6}$ \\
+Relativistic & $2.080\cdot 10^{-4}$ \\ \hline\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
 \section{Summary and conclusions}
+
+In this project we have simulated planetary motion by using two different methods; the forward Euler 
+algorithm and the velocity Verlet algorithm. When testing and comparing these methods we found that 
+velocity Verlet was a better algorithm, e.g. due to better stability and conservation of kinematic 
+quantities like energy and angular momentum. 
+
+Since we have studied several different systems we have also seen the usefulness of making an object 
+oriented program. This introduced a great deal of flexibility to our programs, and made it easy to switch 
+between studying the different systems, like a binary system, a three-body system and a full solar system. 
+We have also experimented with for example the form of the gravitational force and the mass of Jupiter, 
+and seen that the solar system becomes unstable if these are sufficiently altered. 
+
+Finally, we also saw that, by adding a relativistic correction to the Newtonian force, we are able to 
+explain the observed perihelion precession of Mercury, even though this quantity is very small.  
+
 
 \begin{thebibliography}{40}
 
+\bibitem{OOP} Dahl, Ole-Johan (2004). \textit{The Birth of Object Orientation:  the Simula
+Languages} \\
+\href{http://www.mn.uio.no/ifi/english/about/ole-johan-dahl/bibliography/the-birth-of-object-orientation-the-simula-languages.pdf}{http://www.mn.uio.no/ifi/english/about/ole-johan-dahl/bibliography/the-\\birth-of-object-orientation-the-simula-languages.pdf}
+
+\bibitem{Solar Radius} Solar Radius, Wikipedia. \\ 
+\href{https://en.wikipedia.org/wiki/Solar\_radius}{https://en.wikipedia.org/wiki/Solar\_radius} 
+(26/10-2017)
+
 \bibitem{NASA} Solar System Dynamics (HORIZONS Web-Interface), NASA. \\
 \href{https://ssd.jpl.nasa.gov/horizons.cgi}{https://ssd.jpl.nasa.gov/horizons.cgi} (16/10-2017)
+
 
 \end{thebibliography}
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  26 OCT 2017 11:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  27 OCT 2017 15:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -847,17 +847,17 @@ LaTeX Info: Redefining \nameref on input line 22.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for U+msa on input line 53.
+LaTeX Font Info:    Try loading font information for U+msa on input line 72.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 53.
+LaTeX Font Info:    Try loading font information for U+msb on input line 72.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 53.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 72.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
@@ -865,17 +865,17 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
  been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.105 \begin{align*}
-                     [1] [2] [3] [4]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 247.
+l.97 \end{align*}
+                  [1] [2] [3] [4]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 266.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 247.
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 247.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 266.
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 266.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
@@ -886,7 +886,7 @@ File: ../Programs/Output/FE_vs_VV_n=10000.png Graphic file (type png)
 
 <use ../Programs/Output/FE_vs_VV_n=10000.png>
 Package pdftex.def Info: ../Programs/Output/FE_vs_VV_n=10000.png used on input 
-line 373.
+line 396.
 (pdftex.def)             Requested size: 375.79955pt x 281.84966pt.
 
 <../Programs/Output/FE_vs_VV_n=100000.png, id=146, 578.16pt x 433.62pt>
@@ -894,65 +894,162 @@ File: ../Programs/Output/FE_vs_VV_n=100000.png Graphic file (type png)
 
 <use ../Programs/Output/FE_vs_VV_n=100000.png>
 Package pdftex.def Info: ../Programs/Output/FE_vs_VV_n=100000.png used on input
- line 377.
+ line 400.
 (pdftex.def)             Requested size: 375.79955pt x 281.84966pt.
  [8] [9 <../Programs/Output/FE_vs_VV_n=10000.png> <../Programs/Output/FE_vs_VV_
-n=100000.png>]
-<../Programs/Output/Escape_v=1.2.png, id=165, 578.16pt x 433.62pt>
+n=100000.png>] [10]
+<../Programs/Output/Escape_v=1.2.png, id=170, 578.16pt x 433.62pt>
 File: ../Programs/Output/Escape_v=1.2.png Graphic file (type png)
 
 <use ../Programs/Output/Escape_v=1.2.png>
 Package pdftex.def Info: ../Programs/Output/Escape_v=1.2.png used on input line
- 471.
+ 494.
 (pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
 
-<../Programs/Output/Escape_v=1.3.png, id=166, 578.16pt x 433.62pt>
+<../Programs/Output/Escape_v=1.3.png, id=171, 578.16pt x 433.62pt>
 File: ../Programs/Output/Escape_v=1.3.png Graphic file (type png)
 
 <use ../Programs/Output/Escape_v=1.3.png>
 Package pdftex.def Info: ../Programs/Output/Escape_v=1.3.png used on input line
- 475.
+ 498.
 (pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
 
-<../Programs/Output/Escape_v=1.4.png, id=167, 578.16pt x 433.62pt>
+<../Programs/Output/Escape_v=1.4.png, id=172, 578.16pt x 433.62pt>
 File: ../Programs/Output/Escape_v=1.4.png Graphic file (type png)
 
 <use ../Programs/Output/Escape_v=1.4.png>
 Package pdftex.def Info: ../Programs/Output/Escape_v=1.4.png used on input line
- 479.
+ 502.
 (pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
 
-<../Programs/Output/Escape_v=1.5.png, id=168, 578.16pt x 433.62pt>
+<../Programs/Output/Escape_v=1.5.png, id=173, 578.16pt x 433.62pt>
 File: ../Programs/Output/Escape_v=1.5.png Graphic file (type png)
 
 <use ../Programs/Output/Escape_v=1.5.png>
 Package pdftex.def Info: ../Programs/Output/Escape_v=1.5.png used on input line
- 483.
+ 506.
 (pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
- [10] [11 <../Programs/Output/Escape_v=1.2.png> <../Programs/Output/Escape_v=1.
-3.png> <../Programs/Output/Escape_v=1.4.png> <../Programs/Output/Escape_v=1.5.p
-ng>]
+
+<../Programs/Output/Modified_gravity_beta=2.5.png, id=175, 578.16pt x 433.62pt>
+File: ../Programs/Output/Modified_gravity_beta=2.5.png Graphic file (type png)
+<use ../Programs/Output/Modified_gravity_beta=2.5.png>
+Package pdftex.def Info: ../Programs/Output/Modified_gravity_beta=2.5.png used 
+on input line 526.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/Modified_gravity_beta=2.9.png, id=176, 578.16pt x 433.62pt>
+File: ../Programs/Output/Modified_gravity_beta=2.9.png Graphic file (type png)
+<use ../Programs/Output/Modified_gravity_beta=2.9.png>
+Package pdftex.def Info: ../Programs/Output/Modified_gravity_beta=2.9.png used 
+on input line 530.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/Modified_gravity_beta=2.99.png, id=177, 578.16pt x 433.62pt
+>
+File: ../Programs/Output/Modified_gravity_beta=2.99.png Graphic file (type png)
+
+ <use ../Programs/Output/Modified_gravity_beta=2.99.png>
+Package pdftex.def Info: ../Programs/Output/Modified_gravity_beta=2.99.png used
+ on input line 534.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/Modified_gravity_beta=3.png, id=178, 578.16pt x 433.62pt>
+File: ../Programs/Output/Modified_gravity_beta=3.png Graphic file (type png)
+
+<use ../Programs/Output/Modified_gravity_beta=3.png>
+Package pdftex.def Info: ../Programs/Output/Modified_gravity_beta=3.png used on
+ input line 538.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/ThreeBody_n=1000.png, id=182, 578.16pt x 433.62pt>
+File: ../Programs/Output/ThreeBody_n=1000.png Graphic file (type png)
+
+<use ../Programs/Output/ThreeBody_n=1000.png>
+Package pdftex.def Info: ../Programs/Output/ThreeBody_n=1000.png used on input 
+line 563.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/ThreeBody_n=100000.png, id=183, 578.16pt x 433.62pt>
+File: ../Programs/Output/ThreeBody_n=100000.png Graphic file (type png)
+
+<use ../Programs/Output/ThreeBody_n=100000.png>
+Package pdftex.def Info: ../Programs/Output/ThreeBody_n=100000.png used on inpu
+t line 567.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/ThreeBody_mJ=10_n=100000.png, id=184, 578.16pt x 433.62pt>
+File: ../Programs/Output/ThreeBody_mJ=10_n=100000.png Graphic file (type png)
+
+<use ../Programs/Output/ThreeBody_mJ=10_n=100000.png>
+Package pdftex.def Info: ../Programs/Output/ThreeBody_mJ=10_n=100000.png used o
+n input line 578.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/ThreeBody_mJ=1000_n=100000.png, id=185, 578.16pt x 433.62pt
+>
+File: ../Programs/Output/ThreeBody_mJ=1000_n=100000.png Graphic file (type png)
+
+ <use ../Programs/Output/ThreeBody_mJ=1000_n=100000.png>
+Package pdftex.def Info: ../Programs/Output/ThreeBody_mJ=1000_n=100000.png used
+ on input line 582.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+ [11]
+<../Programs/Output/ThreeBody_CM_100000.png, id=200, 578.16pt x 433.62pt>
+File: ../Programs/Output/ThreeBody_CM_100000.png Graphic file (type png)
+
+<use ../Programs/Output/ThreeBody_CM_100000.png>
+Package pdftex.def Info: ../Programs/Output/ThreeBody_CM_100000.png used on inp
+ut line 604.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/sun_motion.png, id=201, 578.16pt x 433.62pt>
+File: ../Programs/Output/sun_motion.png Graphic file (type png)
+
+<use ../Programs/Output/sun_motion.png>
+Package pdftex.def Info: ../Programs/Output/sun_motion.png used on input line 6
+08.
+(pdftex.def)             Requested size: 207.79189pt x 155.83841pt.
+
+<../Programs/Output/SolarSystem_3D.png, id=205, 578.16pt x 433.62pt>
+File: ../Programs/Output/SolarSystem_3D.png Graphic file (type png)
+
+<use ../Programs/Output/SolarSystem_3D.png>
+Package pdftex.def Info: ../Programs/Output/SolarSystem_3D.png used on input li
+ne 640.
+(pdftex.def)             Requested size: 424.06033pt x 318.04192pt.
+ [12 <../Programs/Output/Escape_v=1.2.png> <../Programs/Output/Escape_v=1.3.png
+> <../Programs/Output/Escape_v=1.4.png> <../Programs/Output/Escape_v=1.5.png>]
+
+LaTeX Warning: Text page 13 contains only floats.
+
+[13 <../Programs/Output/Modified_gravity_beta=2.5.png> <../Programs/Output/Modi
+fied_gravity_beta=2.9.png> <../Programs/Output/Modified_gravity_beta=2.99.png> 
+<../Programs/Output/Modified_gravity_beta=3.png> <../Programs/Output/ThreeBody_
+n=1000.png> <../Programs/Output/ThreeBody_n=100000.png>] [14 <../Programs/Outpu
+t/ThreeBody_mJ=10_n=100000.png> <../Programs/Output/ThreeBody_mJ=1000_n=100000.
+png> <../Programs/Output/ThreeBody_CM_100000.png> <../Programs/Output/sun_motio
+n.png>] [15 <../Programs/Output/SolarSystem_3D.png>]
 
 Package 'standalone' INFO: See file 'Project3_report.stp' for list of sub-pream
 bles.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 506.
-[12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 506.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 715.
+[16]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 715.
  (./Project3_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 506.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 506.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 715.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 715.
 Package rerunfilecheck Info: File `Project3_report.out' has not changed.
 (rerunfilecheck)             Checksum: 5D613B461EA0333A0EE7468C15690669;1135.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 506.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 715.
  ) 
 Here is how much of TeX's memory you used:
- 9918 strings out of 494333
- 147811 string characters out of 6163939
- 249081 words of memory out of 5000000
- 12965 multiletter control sequences out of 15000+600000
+ 9997 strings out of 494333
+ 150554 string characters out of 6163939
+ 253443 words of memory out of 5000000
+ 13020 multiletter control sequences out of 15000+600000
  25850 words of font info for 75 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
- 67i,12n,100p,398b,566s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 67i,12n,100p,399b,566s stack positions out of 5000i,500n,10000p,200000b,80000s
  </home/even/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1095.600pk> </home/ev
 en/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/even/.texmf-va
 r/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk> </home/even/.texmf-var/fonts/pk/l
@@ -974,10 +1071,10 @@ t/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmsy8.pfb>
-Output written on Project3_report.pdf (13 pages, 455658 bytes).
+Output written on Project3_report.pdf (17 pages, 892704 bytes).
 PDF statistics:
- 583 PDF objects out of 1000 (max. 8388607)
- 235 compressed objects within 3 object streams
- 44 named destinations out of 1000 (max. 500000)
- 167 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 662 PDF objects out of 1000 (max. 8388607)
+ 274 compressed objects within 3 object streams
+ 57 named destinations out of 1000 (max. 500000)
+ 222 words of extra memory for PDF output out of 10000 (max. 10000000)
 
