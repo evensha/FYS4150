@@ -169,7 +169,6 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 		else problem = "Planets"; 
 
 		if(total_planets == 2 && all_planets[1].name == "Mercury") problem = "Mercury_perihelion"; 
-		//cout << problem << endl; 
 
 		if(RelCorr == 1) os << "Output/" << problem << "_VV_withGR" << ".txt";
 		else if( beta != 2 ) os << "Output/" << problem << "_VV_beta=" << beta << ".txt";

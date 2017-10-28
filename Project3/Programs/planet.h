@@ -25,8 +25,6 @@ public:
 	
 	// Functions 	
 	double Distance(planet otherPlanet); 
-	//double GravitationalForce(planet otherPlanet, double Gconst);
-	//double Acceleration(planet otherPlanet, double Gconst); 
 	double KineticEnergy(); 
 	double PotentialEnergy(planet otherPlanet); 
 	double xMomentum();

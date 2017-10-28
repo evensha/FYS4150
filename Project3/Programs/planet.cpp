@@ -84,30 +84,6 @@ double planet::Distance(planet otherPlanet){
 
 }
 
-/*
-double planet::GravitationalForce(planet otherPlanet, double Gconst){
-	// Calculate the gravitational force acting on this planet from another planet 
-	
-	double r = this->Distance(otherPlanet); 
-
-	if(r!=0) return Gconst*this->mass*otherPlanet.mass/(r*r); 
-
-	else return 0; 
-
-}
-
-
-double planet::Acceleration(planet otherPlanet, double Gconst){
-	// Calculate the acceleration of this planet 
-
-	double r = this->Distance(otherPlanet); 
-
-	if(r!=0) return this->GravitationalForce(otherPlanet, Gconst)/(this->mass*r); 
-
-	else return 0; 
-
-}
-*/
 
 double planet::KineticEnergy(){ 
 	// Calculate the planets kinetic energy 
@@ -126,7 +102,6 @@ double planet::PotentialEnergy(planet otherPlanet){
 
 	double m = this->mass; 
 	double M = otherPlanet.mass; 
-//double x = this->position[0]; double y = this->position[1]; double z = this->position[2]; 
 	double r = this->Distance(otherPlanet);  
 
 	double E_p = - 4*M_PI*M_PI*M*m/r; 
