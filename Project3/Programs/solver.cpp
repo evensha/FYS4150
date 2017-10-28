@@ -103,7 +103,7 @@ void solver::ForwardEuler(int integration_points, double time, int withOutput){
 		for(int j = 0; j<total_planets; j++){	  
 
 			planet &Planet = all_planets[j]; 
-			if(Planet.name == "Sun") continue; 
+			if(Planet.name == "Sun") continue; // Include this statement if we want the Sun to be fixed 
 
 			for(int k = 0; k<total_planets; k++){  // calculate gravitational forces on the planet 
 				if(k != j){
@@ -169,6 +169,7 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 		else problem = "Planets"; 
 
 		if(total_planets == 2 && all_planets[1].name == "Mercury") problem = "Mercury_perihelion"; 
+		//cout << problem << endl; 
 
 		if(RelCorr == 1) os << "Output/" << problem << "_VV_withGR" << ".txt";
 		else if( beta != 2 ) os << "Output/" << problem << "_VV_beta=" << beta << ".txt";
@@ -196,7 +197,7 @@ void solver::VelocityVerlet(int integration_points, double final_time, int withO
 
 		for(int j = 0; j<total_planets; j++){	 
 			planet &Planet = all_planets[j]; 
-			//if(Planet.name == "Sun") continue;  // Sun fixed -> don't bother with the calculations
+			if(Planet.name == "Sun") continue;  // Include this statement if we want the Sun to be fixed 
 
 			for(int k = 0; k<total_planets; k++){  // Calculate gravitational forces on the planet 
 				if(k != j){

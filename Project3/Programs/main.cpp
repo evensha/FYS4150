@@ -20,8 +20,7 @@ int main(int argc, char *argv[]){
 	int n = atoi(argv[2]);
 	double t = atof(argv[3]);
 	double variable; 
-	if(problem == "Binary") variable = atof(argv[4]); 
-	if(problem == "Mercury") int withGR = atoi(argv[4]);  
+	if(problem == "Binary" or problem == "ThreeBody") variable = atof(argv[4]); 
 	double yr = 365.25; // one year (in days)     
 	double M_sun = 2.0E30; 
 
@@ -47,7 +46,7 @@ int main(int argc, char *argv[]){
 		Test_FE.ForwardEuler(n, t, 1);  
 		FE_finish = clock(); 
 
-		solver Test_VV(variable); 
+		solver Test_VV; 
 		Test_VV.addPlanet(test_sun); 
 		Test_VV.addPlanet(test_earth);	
 
@@ -65,6 +64,47 @@ int main(int argc, char *argv[]){
 		cout << "Time with VV: " << VV_time << endl; 
 	}
 
+
+	if(problem == "ThreeBody"){
+
+		double v_e = 2*M_PI; double v_j = 2*M_PI*5.2/11.86; 
+		double m_s = 1.0; double m_e = 0.000003; double m_j = variable*0.001; 
+
+		planet sun(m_s, 0, 0, 0, 0, "Sun"); 
+		planet earth(m_e, 1.0, 0.0, 0.0, v_e, "Earth"); 
+		planet jupiter(m_j, 5.2, 0.0, 0.0,  v_j, "Jupiter"); 
+			
+		solver ThreeBody; 
+		ThreeBody.addPlanet(sun);
+		ThreeBody.addPlanet(earth); 
+		ThreeBody.addPlanet(jupiter);  
+		//ThreeBody.VelocityVerlet(n, t, 1);
+
+		
+		// Calculate center-of-mass (only necessary for x-dir with the given initial conditions) 
+		double M_tot = m_s + m_e + m_j; 
+		double cm_x = 1/M_tot*(m_e*1.0 + m_j*5.2); 
+		//cout << cm_x << endl; 
+		//double cm_y = 1/M_tot*(0.0 + 0.0); 		
+
+		// Updating 
+
+		sun.position[0] = sun.position[0] - cm_x; 
+		earth.position[0] = earth.position[0] - cm_x; 
+		jupiter.position[0] = jupiter.position[0] - cm_x; 
+
+		sun.velocity[1] = -(earth.mass*earth.velocity[1] + jupiter.mass*jupiter.velocity[1]);		
+
+		solver ThreeBody_CM; 
+		ThreeBody_CM.addPlanet(sun); 
+		ThreeBody_CM.addPlanet(earth); 
+		ThreeBody_CM.addPlanet(jupiter);
+		ThreeBody_CM.VelocityVerlet(n,t,1); 
+
+ 
+	}
+
+	if(problem == "SolarSystem"){
 
 	// Make maps for planet data 
 
@@ -106,55 +146,6 @@ int main(int argc, char *argv[]){
 	planet pluto(mass["Pluto"], x["Pluto"], y["Pluto"], z["Pluto"], v_x["Pluto"], v_y["Pluto"], v_z["Pluto"], "Pluto"); 
 
 
-	// Initialize solver class, add planets and solve the problem 
-
-	// Binary system (earth and sun) 
-
-
-/*
-	// Three-body system (earth, sun and jupiter) 
-
-	sun.velocity[0] = -( v_x["Earth"]*mass["Earth"] + v_x["Jupiter"]*mass["Jupiter"] );  
-	sun.velocity[1] = -( v_y["Earth"]*mass["Earth"] + v_y["Jupiter"]*mass["Jupiter"] );  
-
-	solver ThreeBody; 
-	ThreeBody.addPlanet(sun);
-	ThreeBody.addPlanet(earth); 
-	ThreeBody.addPlanet(jupiter);  
-	ThreeBody.VelocityVerlet(n, t); 
-
-	// Solar system (all planets) 
-
-	// Centre of mass: 
-
-	string planet;
-	double M_tot = 0.0; 
-	double cm_x = 0.0; 
-	double cm_y = 0.0; 
-	double cm_z = 0.0; 
-
-	for(int i = 0; i<10; i++){
-		planet = names[i]; 
-		M_tot += mass[planet];
-		cm_x += mass[planet]*x[planet]; 
-		cm_y += mass[planet]*y[planet]; 
-		cm_z += mass[planet]*z[planet]; 		
-	}
-
-	cm_x = cm_x/M_tot; cm_y = cm_y/M_tot; cm_z = cm_z/M_tot; 
-
-	double r_cm = sqrt(cm_x*cm_x + cm_y*cm_y + cm_z*cm_z); 
-
-	cout << "Centre of mass: " << r_cm << endl; 
-
-	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0;   // reset position and velocity of sun  
-	sun.position[0] = x["Sun"]; sun.position[1] = y["Sun"]; 
-	for(int i = 1; i<10; i++){
-		planet = names[i]; 
-		sun.velocity[0] -= v_x[planet]*mass[planet]; 
-		sun.velocity[1] -= v_y[planet]*mass[planet]; 
-	}
-
 	solver SolarSystem; 
 	SolarSystem.addPlanet(sun); 	
 	SolarSystem.addPlanet(mercury); 	
@@ -168,18 +159,26 @@ int main(int argc, char *argv[]){
 	SolarSystem.addPlanet(pluto);
 	SolarSystem.VelocityVerlet(n, t, 1); 
 
+}
+
+if(problem == "Mercury"){
+
 	// Perihelion precession (sun and mercury)
 
-	mercury.position[0] = 0.3075; mercury.position[1] = 0.0; mercury.position[2] = 0.0; 
-	mercury.velocity[0] = 0.0; mercury.velocity[1] = 12.44; mercury.velocity[2] = 0.0; 
-	 // reset position and velocity of sun  
-	sun.position[0] = 0.0; sun.position[1] = 0.0; sun.position[2] = 0.0; 
-	sun.velocity[0] = 0.0; sun.velocity[1] = 0.0; sun.velocity[2] = 0.0; 
+	planet sun(1.0, 0, 0, 0, 0, "Sun"); 
+	planet mercury(1.65E-7, 0.3075, 0.0, 0.0, 12.44, "Mercury"); 	
 
-	solver Mercury(withGR); 
-	Mercury.addPlanet(sun); 
-	Mercury.addPlanet(mercury); 
-	Mercury.VelocityVerlet(n, t, 0); 	
+	solver Mercury_GR(1); 
+	Mercury_GR.addPlanet(sun); 
+	Mercury_GR.addPlanet(mercury); 
+	Mercury_GR.VelocityVerlet(n, t, 0); 	
 
-*/
+	solver Mercury_Newton; 
+	Mercury_Newton.addPlanet(sun); 
+	Mercury_Newton.addPlanet(mercury); 
+	Mercury_Newton.VelocityVerlet(n, t, 0); 	
+	
+
+}
+
 }
