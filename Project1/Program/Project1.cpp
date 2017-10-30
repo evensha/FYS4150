@@ -3,6 +3,7 @@
 #include <cstdlib> 
 #include <fstream>
 #include <iomanip>
+#include <armadillo>
 
 using namespace std;
 
@@ -16,14 +17,18 @@ int main(int argc, char* argv[]){
 
 	int n = atof(argv[2]); 
 
-	double h = 1.0/((double n)+1); 
+	//double h = 1.0/((double n)+1); 
+	/*
+	double A[n][n]; 
+	for(int i=0; i<n; i++){
+		for(int j=0; j<n; j++){
+			if(i==j){A[i][j] = 2;} 
+			else{A[i][j] = 0;} 
+		}
+	}
 
-	a = double matr[n]; 	
-
-	for(int i=0; i<n; i++){ 
-		a[i] = 2;  
-	} 
-	cout << a << endl; 
+	cout << A[1][1] << "," << A[n-1][n-1] << "," << A[3][4] << endl;  
+	*/
 	ofile.close(); 
 	return 0; 
 }  
