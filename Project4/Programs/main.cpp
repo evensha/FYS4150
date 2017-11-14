@@ -12,11 +12,11 @@ using namespace std;
 using namespace arma; 
 
 inline int periodic(int i, int limit, int add){
-	return (i+limit+add)%limit; 
+	return (i+limit+add) % (limit); 
 }
 
 void initialize(int, double, mat, double&, double&);
-void Metropolis(int, long&, mat&, double&, double&, vec&); 
+void Metropolis(int, long&, mat&, double&, double&, vec); 
 
 int main(int argc, char *argv[]){ 
 
@@ -25,18 +25,21 @@ int main(int argc, char *argv[]){
 	int mcs = atoi(argv[2]);
 	mat spin_matrix = ones<mat>(n_spins, n_spins);  
 	double initial_temp, final_temp, temp_step, E, M;
-	vec w = zeros<vec>(17); 
+	vec w = zeros<vec>(33); 
 	vec average = zeros<vec>(5); 
 
-	initial_temp = final_temp = temp_step = 1.0; 
+	initial_temp = final_temp = 1.0; temp_step = 1.0; 
 	idum = -1; 
 	for(double temp = initial_temp; temp <= final_temp; temp+=temp_step){
 		E = M = 0; 	
-		for( int de = -8; de <= 8; de++) w(de+8) = 0; 
-		for( int de = -8; de <= 8; de+=4) w(de+8) = exp(-de/temp); 
-
-		initialize(n_spins, temp, spin_matrix, E, M);		
-
+		for( int de = -16; de <= 16; de++) w(de+16) = 0; 
+		for( int de = -16; de <= 16; de+=8) w(de+16) = exp(-de/temp); 
+		for( int i = 0; i<5; i++) average(i) = 0; 
+		initialize(n_spins, temp, spin_matrix, E, M);	
+		cout << "--------------------" << endl; 	
+		cout << "Initial values:" << endl; 
+		cout << "Energy: " << E << endl; 
+		cout << "Magnetization: " << M << endl; 
 		for( int cycles = 1; cycles <= mcs; cycles++){
 			Metropolis(n_spins, idum, spin_matrix, E, M, w); 
 			average(0) += E; average(1) += E*E; average(2) += M; average(3) += M*M; average(4) += fabs(M); 
@@ -47,12 +50,13 @@ int main(int argc, char *argv[]){
 	for( int i = 0; i<5; i++) average(i) = average(i)/((double) mcs); 
 
 	double C_v = average(1) - average(0)*average(0); 
-	double chi = average(2) - average(3)*average(3); 
+	double chi = average(3) - average(2)*average(2); 
 
-	cout << "--------------" << endl; 
-	cout << "Output: " << endl;   
+	cout << "--------------------" << endl; 
+	cout << "Final values (averages): " << endl;   
 	cout << "Energy: " << average(0) << endl; 
-	cout << "Magnetization: " << average(4) << endl; 
+	//cout << "Magnetization (mean): " << average(3) << endl; 
+	cout << "Magnetization (abs): " << average(4) << endl; 
 	cout << "Specific heat: " << C_v << endl; 
 	cout << "Suceptibility: " << chi << endl; 
 
@@ -74,17 +78,15 @@ void initialize(int n_spins, double temperature, mat spin_matrix, double &E, dou
 }
 
 
-void Metropolis(int n_spins, long& idum, mat& spin_matrix, double& E, double& M, vec& w){
+void Metropolis(int n_spins, long& idum, mat& spin_matrix, double& E, double& M, vec w){
 
 	for(int y = 0; y<n_spins; y++){
 		for(int x = 0; x<n_spins; x++){
 			int ix = (int) (ran1(&idum)*(double)n_spins); 
 			int iy = (int) (ran1(&idum)*(double)n_spins); 
-
 			int deltaE = 2*spin_matrix(iy,ix)*(  spin_matrix(iy, periodic(ix,n_spins,-1)) + spin_matrix(periodic(iy,n_spins,-1),ix)	
 										 										+	 spin_matrix(iy, periodic(ix,n_spins, 1)) + spin_matrix(periodic(iy,n_spins, 1),ix) );
-
-			if( ran1(&idum) <= w(deltaE + 8) ){
+			if( ran1(&idum) <= w(deltaE + 16) ){
 				spin_matrix(iy,ix) *= -1; 
 				M += (double) 2*spin_matrix(iy, ix); 
 				E += (double) deltaE; 
