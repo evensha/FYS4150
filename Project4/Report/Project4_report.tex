@@ -1,0 +1,91 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage[print,sort]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx,float}
+\usepackage{amssymb}
+\usepackage{amsmath,cancel}
+\usepackage{mathrsfs}
+\usepackage{epstopdf}
+\usepackage{subcaption}
+\usepackage{slashed}
+\usepackage{hhline}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{wrapfig}
+
+
+\hfuzz=5pt
+
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\vspace*{3cm}
+\Huge
+\textbf{Project 4} \\
+\Large  
+FYS4150 Computational Physics 
+\vspace*{3cm} \\ 
+
+Even S. Håland 
+\vspace*{5cm} \\
+
+\normalsize
+\section*{Abstract}
+
+\end{center}
+\end{titlepage}
+
+\section{Introduction}
+
+The aim of this project is to do Monte Carlo simulations of magnetic systems described by the 
+two-dimensional Ising model. The Ising model describes binary systems, that is a collection of objects 
+with only two possible states each. Here we will take these two states to be spin-up and spin-down. In
+particular we will study phase transitions in such systems. 
+
+We will start by studying some analytical solutions to the Ising model by considering a $2\times 2$ 
+lattice. Then we will make a code that simulates the evolution of such systems for larger lattices. We 
+will see how the system evolves depending on temperature and the initial state of the system, and we 
+will finally study phase transitions, and extract the critical temperature.  
+
+In our simulations we will use the Metropolis algorithm for accepting or rejecting the Monte Carlo 
+trials. We will also, as these simulations are quite time consuming, parallelize the code, so that 
+we can distribute our simulation to multiple processors. 
+
+\section{Theoretical framework}
+
+\subsection{The Ising model}
+
+As mentioned in the introduction the Ising model describes a collection of objects, where each object 
+can take two values, i.e. spin-up and spin-down, parametrized by $s=\pm 1$. We will consider a 
+two-dimensional model with the spins organized in a square lattice with dimension $L$, so the total 
+number of spins is given by $N = L\times L$. The two key quantities for describing our system 
+will be energy and magnetization. The total energy of this system (with no external magnetic field) 
+is given by 
+\begin{align}
+E = -J\sum_{<kl>}^{N} s_k s_l, 
+\end{align}
+where $J$ is a coupling constant and $<kl>$ indicates that we sum over neighbouring spins only, i.e. 
+one object is only "talking" to its closest neighbours. The total magnetization of the system is simply 
+given by the sum over all spins: 
+\begin{align} 
+M = \sum_k^N s_k. 
+\end{align}
+In order to further evaluate this model we need to introduce some concepts from statistical physics. 
+
+\subsection{Elements from statistical physics}
+
+
+
+\subsection{Analytical solutions}
+
+\section{Code}
+
+\section{Results}
+
+\section{Summary and conclusions}
+
+\end{document}
