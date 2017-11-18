@@ -40,6 +40,13 @@ int main(int argc, char *argv[]){
 	vec average = zeros<vec>(5); 
 	vec total_average = zeros<vec>(5); 
 	//int my_rank = 0; 
+
+	if( n_spins == 20){
+		 initial_temp = 1.0; final_temp = 2.4; temp_step = 1.4; 
+	}
+	else{ 
+		initial_temp = 2.0; final_temp = 2.3; temp_step = 0.02; 
+	}
 	
 	// MPI initialization 
 	int my_rank, numprocs; 
@@ -51,17 +58,11 @@ int main(int argc, char *argv[]){
 	}
 	if( my_rank == 0 && argc > 1 ){
 		ostringstream os1; 
-		os1 << "Output/Output_L_" << n_spins << ".txt"; 
+		os1 << "Output/Output_L_" << n_spins << "_dt" << temp_step << ".txt"; 
 		string outfile1 = os1.str(); 
 		ofile1.open(outfile1.c_str()); 
 	}
 
-	if( n_spins == 20){
-		 initial_temp = 1.0; final_temp = 2.4; temp_step = 1.4; 
-	}
-	else{ 
-		initial_temp = 2.0; final_temp = 2.3; temp_step = 0.05; 
-	}
 
 	int no_intervalls = mcs/numprocs; 
 	int myloop_begin = my_rank*no_intervalls +1; 
@@ -81,6 +82,12 @@ int main(int argc, char *argv[]){
 
 	int acc_confs; 
 	for(double temp = initial_temp; temp <= final_temp; temp+=temp_step){
+
+		if( my_rank == 0 ){
+			cout << "---------------" << endl; 
+			cout << "T = " << temp << endl; 
+			cout << "---------------" << endl; 
+		}
 
 		E = M = acc_confs = 0; 	
 		spin_matrix = ones<mat>(n_spins, n_spins);
@@ -139,11 +146,11 @@ int main(int argc, char *argv[]){
 		if(n_spins == 20) ofile.close(); 
 		TimeEnd = MPI_Wtime(); 
 		TotalTime = TimeEnd - TimeStart; 
-		
-		if( my_rank == 0 ){
+
+
+		if( my_rank == 0 && n_spins == 20 ){
 
 			cout << "--------------------" << endl; 
-			cout << "Time = " << TotalTime << " on number of processors: " << numprocs << endl; 
 			cout << "Temperature = " << temp << endl; 	
 
 			for( int i = 0; i<5; i++) average(i) = average(i)/((double) mcs); 	
@@ -163,6 +170,7 @@ int main(int argc, char *argv[]){
 
 	}	
 
+	if(my_rank == 0) cout << "Time = " << TotalTime << " on number of processors: " << numprocs << endl; 
 	MPI_Finalize(); 
 	ofile1.close(); 
 	return 0; 
@@ -213,16 +221,16 @@ void output(int n_spins, int mcs, double temperature, vec total_average){
 	double M2total_average = total_average(3)*norm; 
 	double Mabstotal_average = total_average(4)*norm; 
 
-	double Evariance = (E2total_average - Etotal_average*Etotal_average); ///n_spins/n_spins; 
-	double Mvariance = (M2total_average - Mtotal_average*Mtotal_average); ///n_spins/n_spins; 
+	double Evariance = (E2total_average - Etotal_average*Etotal_average)/n_spins/n_spins; 
+	double Mvariance = (M2total_average - Mabstotal_average*Mabstotal_average)/n_spins/n_spins; 
 
 	ofile1 << setiosflags(ios::showpoint | ios::uppercase); 
 	ofile1 << setw(15) << setprecision(8) << temperature; 
-	ofile1 << setw(15) << setprecision(8) << Etotal_average; ///n_spins/n_spins;
+	ofile1 << setw(15) << setprecision(8) << Etotal_average/n_spins/n_spins;
 	ofile1 << setw(15) << setprecision(8) << Evariance/temperature/temperature; 
-	ofile1 << setw(15) << setprecision(8) << Mtotal_average; ///n_spins/n_spins; 
+	ofile1 << setw(15) << setprecision(8) << Mtotal_average/n_spins/n_spins; 
 	ofile1 << setw(15) << setprecision(8) << Mvariance/temperature; 
-	ofile1 << setw(15) << setprecision(8) << Mabstotal_average << endl; ///n_spins/n_spins << endl; 
+	ofile1 << setw(15) << setprecision(8) << Mabstotal_average/n_spins/n_spins << endl; 
 
 }
 

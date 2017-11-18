@@ -74,18 +74,102 @@ given by the sum over all spins:
 \begin{align} 
 M = \sum_k^N s_k. 
 \end{align}
-In order to further evaluate this model we need to introduce some concepts from statistical physics. 
+
+A natural next step is to calculate expectation values within this theory, i.e. mean energy, 
+$\left\langle E \right\rangle$, and mean magnetization $\left\langle M \right\rangle$. To be able to do 
+so we need to introduce some concepts from statistical physics.  
 
 \subsection{Elements from statistical physics}
 
-
+In order to calculate expectation values we need a probability distribution. In our case this is the 
+Boltzmann distribution, given as 
+\begin{align*}
+P_i(\beta) = \frac{e^{-\beta E_i}}{Z}, 
+\end{align*}
+where $\beta = 1/k_B T$ (where $k_B$ is Boltzmann's constant and $T$ is temperature), $E_i$ is the 
+energy of state $i$ and $Z$ is the partition function. The partition function is given as 
+\begin{align*}
+Z = \sum_{i=1}^n e^{-\beta E_i}, 
+\end{align*}
+where the sum runs over all possible (micro)states of the system. The expectation value of some 
+general quantity $A$ can now be calculated as 
+\begin{align*}
+\left\langle A \right\rangle = \sum_{i=1}^n A_i P_i(\beta) = \frac{1}{Z} \sum_{i=1}^n A_i e^{-\beta E_i}, 
+\end{align*} 
+and the variance of $A$ is given as 
+\begin{align*}
+\sigma_A^2 = \left\langle A^2 \right\rangle - \left\langle A \right\rangle^2. 
+\end{align*}
+By considering the variances of $E$ and $M$ we can also calculate specific heat, $C_V$, and 
+susceptibility, $\chi$, as 
+\begin{align*}
+C_V = \frac{1}{k_BT^2}\sigma_E^2 \quad \text{and} \quad \chi = \frac{1}{k_B T}\sigma_M^2. 
+\end{align*}
 
 \subsection{Analytical solutions}
 
+Using the above described framework we can study the Ising model for a $2\times 2$ lattice analytically. 
+This means that we have $4$ objects which each can have $s=\pm 1$. Both in this and later analysis we 
+will make use of so-called periodic boundary conditions, which means that we let the first and last 
+spins in a lattice row be neighbours when summing up the energy. 
+
+We label the spins in the $2\times 2$ lattice with $k \in \left\lbrace 1,2,3,4\right\rbrace$, and the 
+energy is then given by 
+\begin{align*}
+E & = -J(s_1 s_2 + s_2 s_1 + s_1 s_3 + s_3 s_1 +s_2 s_4 +s_4 s_2 + s_3 s_4 + s_4 s_3) \\
+  & = -2J(s_1 s_2 + s_1 s_3 + s_2 s_4 + s_3 s_4),  	
+\end{align*}  
+and the magnetization as 
+\begin{align*}
+M = s_1 + s_2 + s_3 + s_4. 
+\end{align*}
+
+\begin{table}[ht!]
+\caption{Degeneracy, energy and magnetization for the different spin configurations in the $2\times 2$
+lattice.}
+\label{tab:2times2}
+\begin{center}
+\begin{tabular}{cccc} \hline\hline
+$\#$ spin-up & Degeneracy & $E$ & $M$ \\ \hline
+$4$ & $1$ & $-8J$ & $4$ \\ 
+$3$ & $4$ & $0$ & $2$ \\
+$2$ & $2$ & $8J$ & $0$ \\  
+$2$ & $4$ & $0$ & $0$ \\ 
+$1$ & $4$ & $0$ & $-2$ \\ 
+$0$ & $1$ & $-8J$ & $-4$ \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Table \ref{tab:2times2} lists the possible values for these quantities for all possible spin 
+configurations, along with the degeneracy for each spin configuration. Using this we find that the 
+partition function is given as 
+\begin{align*}
+Z = 12 + 2e^{8J\beta} + 2e^{-8J\beta} = 12 + 4 \cosh(8J\beta). 
+\end{align*} 
+
+
 \section{Code}
 
-\section{Results}
+All code written for the project can be found in the following git-repository:  \vspace{0.5cm} \\ 
+\fbox{
+\href{https://github.com/evensha/FYS4150/tree/master/Project4/Programs}
+{https://github.com/evensha/FYS4150/tree/master/Project4/Programs} 
+} \vspace{0.5cm} \\ 
+
 
 \section{Summary and conclusions}
+
+\begin{thebibliography}{40}
+
+\bibitem{Lecture Notes} M. Hjort-Jensen (2015), \textit{Computational Physics - Lecture Notes Fall 2015}, 
+Department of Physics, University of Oslo. \\ 
+\href{https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Lectures/lectures2015.pdf}
+{https://github.com/CompPhysics/ComputationalPhysics/blob/master\\/doc/Lectures/lectures2015.pdf}
+
+\bibitem{Armadillo} C. Sanderson, R. Curtin (2016), Armadillo: a template-based C++ library for linear 
+algebra, \textit{Journal of Open Source Software}, Vol. 1, p. 26.  
+
+\end{thebibliography} 
 
 \end{document}
