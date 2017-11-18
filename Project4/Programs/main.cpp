@@ -39,13 +39,12 @@ int main(int argc, char *argv[]){
 	vec w = zeros<vec>(33); 
 	vec average = zeros<vec>(5); 
 	vec total_average = zeros<vec>(5); 
-	//int my_rank = 0; 
 
 	if( n_spins == 20){
 		 initial_temp = 1.0; final_temp = 2.4; temp_step = 1.4; 
 	}
 	else{ 
-		initial_temp = 2.0; final_temp = 2.3; temp_step = 0.02; 
+		initial_temp = 2.0; final_temp = 2.305; temp_step = 0.01; 
 	}
 	
 	// MPI initialization 
@@ -70,7 +69,6 @@ int main(int argc, char *argv[]){
 	if( (my_rank == numprocs-1) && (myloop_end < mcs ) ) myloop_end = mcs; 
 
 	// Broadcast to all nodes common variables 
-
 	MPI_Bcast(&n_spins, 1, MPI_INT, 0, MPI_COMM_WORLD); 
 	MPI_Bcast(&initial_temp, 1, MPI_INT, 0, MPI_COMM_WORLD); 
 	MPI_Bcast(&final_temp, 1, MPI_INT, 0, MPI_COMM_WORLD); 
@@ -98,7 +96,6 @@ int main(int argc, char *argv[]){
 					double s = ran1(&idum); 
 					if( s < 0.5 ) spin_matrix(x,y) = -1; 
 					else spin_matrix(x,y) = 1; 
-					//cout << spin_matrix(x,y) << endl; 
 				}
 			}
 		}
@@ -109,12 +106,7 @@ int main(int argc, char *argv[]){
 		for( int i = 0; i<5; i++) total_average(i) = 0; 
 
 		initialize(n_spins, temp, spin_matrix, E, M);	
-		/*
-		cout << "--------------------" << endl; 	
-		cout << "Initial values:" << endl; 
-		cout << "Energy: " << E << endl; 
-		cout << "Magnetization: " << M << endl; 
-		*/
+
 		if( n_spins == 20){
 			ostringstream os; 
 			os << "Output/Output_" << spins << "_" << temp << ".txt"; 
@@ -142,7 +134,6 @@ int main(int argc, char *argv[]){
 			output(n_spins, mcs, temp, total_average); 
 		}
 		
-		//output(n_spins, mcs, temp, average); 
 		if(n_spins == 20) ofile.close(); 
 		TimeEnd = MPI_Wtime(); 
 		TotalTime = TimeEnd - TimeStart; 
@@ -159,7 +150,6 @@ int main(int argc, char *argv[]){
 
 			cout << "Final values (averages): " << endl;   
 			cout << "Energy: " << average(0) << endl; 
-			//cout << "Magnetization (mean): " << average(3) << endl; 
 			cout << "Magnetization (abs): " << average(4) << endl; 
 			cout << "Specific heat: " << C_v << endl; 
 			cout << "Suceptibility: " << chi << endl; 
@@ -198,7 +188,7 @@ void Metropolis(int n_spins, long& idum, mat& spin_matrix, double& E, double& M,
 			int iy = (int) (ran1(&idum)*(double)n_spins); 
 			int deltaE = 2*spin_matrix(iy,ix)*(  spin_matrix(iy, periodic(ix,n_spins,-1)) + spin_matrix(periodic(iy,n_spins,-1),ix)	
 										 										+	 spin_matrix(iy, periodic(ix,n_spins, 1)) + spin_matrix(periodic(iy,n_spins, 1),ix) );
-			//if( deltaE == 32 ) cout << "What!!!" << endl; 
+
 			if( ran1(&idum) <= w(deltaE + 16) ){
 				a++; 
 				spin_matrix(iy,ix) *= -1; 
@@ -213,7 +203,6 @@ void Metropolis(int n_spins, long& idum, mat& spin_matrix, double& E, double& M,
 
 
 void output(int n_spins, int mcs, double temperature, vec total_average){
-	//cout << "Inside output function!!" << endl; 
 	double norm = 1/((double) (mcs)); 
 	double Etotal_average = total_average(0)*norm; 
 	double E2total_average = total_average(1)*norm; 
