@@ -3,6 +3,10 @@
 \BOOKMARK [2][-]{subsection.2.1}{The Ising model}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{Elements from statistical physics}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.3}{Analytical solutions}{section.2}% 5
-\BOOKMARK [1][-]{section.3}{Code}{}% 6
-\BOOKMARK [1][-]{section.4}{Results}{}% 7
-\BOOKMARK [1][-]{section.5}{Summary and conclusions}{}% 8
+\BOOKMARK [2][-]{subsection.2.4}{Phase transitions}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Code}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{The main program}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{The Metropolis algorithm}{section.3}% 9
+\BOOKMARK [1][-]{section.4}{Results}{}% 10
+\BOOKMARK [2][-]{subsection.4.1}{Phase transitions}{section.4}% 11
+\BOOKMARK [1][-]{section.5}{Summary and conclusions}{}% 12
