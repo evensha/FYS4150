@@ -19,7 +19,7 @@ inline int periodic(int i, int limit, int add){
 }
 
 
-void initialize(int, double, mat, double&, double&);
+void initialize(int, double, mat&, double&, double&, int, long&);
 void Metropolis(int, long&, mat&, double&, double&, int&, vec); 
 void output(int, int, double, vec); 
 
@@ -40,11 +40,18 @@ int main(int argc, char *argv[]){
 	vec average = zeros<vec>(5); 
 	vec total_average = zeros<vec>(5); 
 
+	if( rand_spins  == 1 ){
+		spins = "random"; 
+	}
+
 	if( n_spins == 20){
-		 initial_temp = 1.0; final_temp = 2.4; temp_step = 1.4; 
+		 initial_temp = 1.0; final_temp = 2.40; temp_step = 1.4; 
+	}
+	else if ( n_spins == 2 ){
+		initial_temp = final_temp = temp_step = 1.0; 
 	}
 	else{ 
-		initial_temp = 2.0; final_temp = 2.305; temp_step = 0.01; 
+		initial_temp = 2.0; final_temp = 2.301; temp_step = 0.01; 
 	}
 	
 	// MPI initialization 
@@ -61,7 +68,6 @@ int main(int argc, char *argv[]){
 		string outfile1 = os1.str(); 
 		ofile1.open(outfile1.c_str()); 
 	}
-
 
 	int no_intervalls = mcs/numprocs; 
 	int myloop_begin = my_rank*no_intervalls +1; 
@@ -88,24 +94,12 @@ int main(int argc, char *argv[]){
 		}
 
 		E = M = acc_confs = 0; 	
-		spin_matrix = ones<mat>(n_spins, n_spins);
-		if( rand_spins  == 1 ){
-			spins = "random"; 
-			for(int x = 0; x<n_spins; x++){
-				for(int y = 0; y<n_spins; y++){
-					double s = ran1(&idum); 
-					if( s < 0.5 ) spin_matrix(x,y) = -1; 
-					else spin_matrix(x,y) = 1; 
-				}
-			}
-		}
-
 		for( int de = -16; de <= 16; de++) w(de+16) = 0; 
 		for( int de = -16; de <= 16; de+=8) w(de+16) = exp(-de/temp); 
 		for( int i = 0; i<5; i++) average(i) = 0; 
 		for( int i = 0; i<5; i++) total_average(i) = 0; 
 
-		initialize(n_spins, temp, spin_matrix, E, M);	
+		initialize(n_spins, temp, spin_matrix, E, M, rand_spins, idum);	
 
 		if( n_spins == 20){
 			ostringstream os; 
@@ -119,7 +113,7 @@ int main(int argc, char *argv[]){
 		for( int cycles = myloop_begin; cycles <= myloop_end; cycles++){
 			Metropolis(n_spins, idum, spin_matrix, E, M, acc_confs, w); 
 			average(0) += E; average(1) += E*E; average(2) += M; average(3) += M*M; average(4) += fabs(M); 
-			if( n_spins == 20){
+			if( n_spins == 20 && my_rank == 0){
 			ofile << cycles << setw(20) << E << setw(20) << average(0)/((double) cycles) << setw(20) << 
 																		 M << setw(20) << average(4)/((double) cycles) << setw(20) << acc_confs << endl; 
 			}
@@ -139,18 +133,18 @@ int main(int argc, char *argv[]){
 		TotalTime = TimeEnd - TimeStart; 
 
 
-		if( my_rank == 0 && n_spins == 20 ){
+		if( my_rank == 0 && (n_spins == 20 or n_spins ==2) ){
 
 			cout << "--------------------" << endl; 
 			cout << "Temperature = " << temp << endl; 	
 
-			for( int i = 0; i<5; i++) average(i) = average(i)/((double) mcs); 	
-			double C_v = average(1) - average(0)*average(0); 
-			double chi = average(3) - average(2)*average(2); 
+			for( int i = 0; i<5; i++) total_average(i) = total_average(i)/((double) mcs); 	
+			double C_v = total_average(1) - total_average(0)*total_average(0); 
+			double chi = total_average(3) - total_average(2)*total_average(2); 
 
 			cout << "Final values (averages): " << endl;   
-			cout << "Energy: " << average(0) << endl; 
-			cout << "Magnetization (abs): " << average(4) << endl; 
+			cout << "Energy: " << total_average(0) << endl; 
+			cout << "Magnetization (abs): " << total_average(4) << endl; 
 			cout << "Specific heat: " << C_v << endl; 
 			cout << "Suceptibility: " << chi << endl; 
 			cout << "--------------------" << endl; 
@@ -168,7 +162,21 @@ int main(int argc, char *argv[]){
 }
 
 
-void initialize(int n_spins, double temperature, mat spin_matrix, double &E, double &M){
+void initialize(int n_spins, double temperature, mat& spin_matrix, double &E, double &M, int rand_spins, long &idum){
+
+	if( rand_spins == 1 ){
+		for(int i = 0; i<n_spins; i++){
+			for(int j = 0; j<n_spins; j++){
+				double s = ran1(&idum); 
+				if( s < 0.5 ) spin_matrix(i,j) = -1; 
+				else spin_matrix(i,j) = 1; 
+
+			}
+		}
+	}
+	else{
+		spin_matrix = ones<mat>(n_spins, n_spins);
+	}
 
 	for(int i = 0; i<n_spins; i++){
 		for(int j = 0; j<n_spins; j++){

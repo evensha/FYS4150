@@ -2,15 +2,13 @@ from matplotlib.pyplot import *
 from numpy import *
 import sys
 
-#infile40 = open('Output/Output_L_40.txt','r')
-#infile60 = open('Output/Output_L_60.txt','r')
-#infile80 = open('Output/Output_L_80.txt','r')
-#infile100 = open('Output/Output_L_100.txt','r')
+font = {'size':18}
+matplotlib.rc('font', **font)
 
-files = {'40':open('Output/Output_L_40.txt','r'), '60':open('Output/Output_L_60.txt','r'), '80':open('Output/Output_L_80.txt','r'),
-'100':open('Output/Output_L_100.txt','r')}
-#files = {'80':open('Output/Output_L_80.txt','r')}
-T = [2.0, 2.025, 2.05, 2.075, 2.1, 2.125, 2.15, 2.175, 2.2, 2.225, 2.25, 2.275, 2.3]
+files = {'40':open('Output/Output_L_40_dt0.01.txt','r'), '60':open('Output/Output_L_60_dt0.01.txt','r'), 
+'80':open('Output/Output_L_80_dt0.01.txt','r'), '100':open('Output/Output_L_100_dt0.01.txt','r')}
+
+T = []
 
 E = {}
 C_v = {}
@@ -24,8 +22,10 @@ for L in files.keys():
 	M[L] = []
 	Chi[L] = []
 	AbsM[L] = []
-	for line in files[L]: 
+	for line in files[L]:
 		words = line.split()
+		if L == '40':
+			T.append(float(words[0]))  
 		E[L].append(float(words[1])) 
 		C_v[L].append(float(words[2]))
 		M[L].append(float(words[3]))
@@ -37,17 +37,47 @@ for L in files.keys():
 	Chi[L] = array(Chi[L])
 	AbsM[L] = array(AbsM[L])
 
+L_values = []
+for i in files.keys(): 
+	L_values.append(int(i))
+
+L_values.sort()
+
 
 figure()
-for L in files.keys():
-	plot(T,C_v[L])
-show()
+for L in L_values:
+	plot(T,C_v[str(L)])
+legend(['L=40', 'L=60', 'L=80', 'L=100'], loc = 2)
+xlabel('T')
+ylabel(r'$C_V$')
+xlim(2,2.3)
+savefig("Output/CV_T.png", bbox_inches = 'tight')
 
+figure()
+for L in  L_values:
+	plot(T,Chi[str(L)])
+legend(['L=40', 'L=60', 'L=80', 'L=100'], loc = 2)
+xlabel('T')
+ylabel(r'$\chi$')
+xlim(2,2.3)
+savefig("Output/Chi_T.png", bbox_inches = 'tight')
 
+figure()
+for L in L_values:
+	plot(T,E[str(L)])
+legend(['L=40', 'L=60', 'L=80', 'L=100'], loc = 2)
+xlabel('T')
+ylabel('E')
+xlim(2,2.3)
+savefig("Output/E_T.png", bbox_inches = 'tight')
 
-
-
-
-
+figure()
+for L in L_values:
+	plot(T,AbsM[str(L)])
+legend(['L=40', 'L=60', 'L=80', 'L=100'], loc = 2)
+xlabel('T')
+ylabel('|M|')
+xlim(2,2.3)
+savefig("Output/M_T.png", bbox_inches = 'tight')
 
 

@@ -37,7 +37,7 @@ Even S. Håland
 \section*{Abstract}
 
 In this project we perform Monte Carlo simulations of magnetic systems using the Ising model. We do 
-comparisons between our simulations and a analytically solvable system, as well as studies of 
+comparisons between our simulations and an analytically solvable system, as well as studies of 
 equilibration time for larger systems. We also study phase transitions in the model, and estimate 
 the critical temperature in the thermodynamical limit to be $k_BT_C/J=2.269$, which is in very good 
 agreement with the exact value for this quantity. 
@@ -55,7 +55,8 @@ particular we will study phase transitions in such systems.
 We will start by studying some analytical solutions to the Ising model by considering a $2\times 2$ 
 lattice. Then we will make a code that simulates the evolution of such systems for larger lattices. We 
 will see how the system evolves depending on temperature and the initial state of the system, and we 
-will finally study phase transitions, and extract the critical temperature in the thermodynamical limit.  
+will finally study phase transitions, and extract the critical temperature for phase transitions in 
+the thermodynamical limit.  
 
 In our simulations we will use the Metropolis algorithm for accepting or rejecting the Monte Carlo 
 trials. We will also, as these simulations are quite time consuming, parallelize the code, so that 
@@ -75,7 +76,7 @@ is given by
 E = -J\sum_{<kl>}^{N} s_k s_l, 
 \end{align}
 where $J$ is a coupling constant and $<kl>$ indicates that we sum over neighbouring spins only, i.e. 
-one object is only "talking" to its closest neighbours. The total magnetization of the system is simply 
+an object is only "talking" to its closest neighbours. The total magnetization of the system is simply 
 given by the sum over all spins: 
 \begin{align} 
 M = \sum_k^N s_k. 
@@ -190,7 +191,8 @@ where $a$ is a constant and $\nu$ is given by
 \end{align*}
 where $\xi$ is called the \textit{correlation length}, which defines the length scale at which microscopic 
 variables are correlated. By measuring the critical temperature for finite sized lattices we can 
-extract $T_C$ in the thermodynamical limit ($T_C(L=\infty)$), which is done towards the end. We do 
+extract $T_C$ in the thermodynamical limit ($T_C(L=\infty)$), which is done towards the end of the 
+result section. We do 
 however need estimates of $T_C$ for two different $L$'s, since equation \ref{eq:T_C} contains two 
 unknown quantities ($T_C(L=\infty)$ and $a$). The exact result (calculated by Lars Onsager) is given by 
 \begin{align}
@@ -229,7 +231,7 @@ The first thing we do in the main program is to define some useful functions:
 \begin{itemize}
 \item \texttt{periodic}: Handles the periodic boundary conditions when summing up the energy of a lattice.
 \item \texttt{initialize}: Initialize the spin matrix and calculates initial energy and magnetization. 
-The spin matrix is initialize either with ordered spins (all spins up), or a random spin configuration. 
+The spin matrix is initialized either with ordered spins (all spins up), or a random spin configuration. 
 Random spins are generated using the \texttt{ran1} function from the library (\texttt{lib.cpp}).
 \item \texttt{Metropolis}: Implements the Metropolis algorithm with the Metropolis test. This will be 
 discussed in a bit more detail later. 
@@ -249,13 +251,13 @@ is tailored so that the temperatures taken into account depends on the lattice s
 
 For each new temperature we call the \texttt{initialize} function, and we also set up an array 
 containing the five possible energy differences (or rather the 
-ration between probabilities for different energies, $\exp(-\beta\Delta E)$), and an array for 
+ratios between probabilities for different energies, $\exp(-\beta\Delta E)$), and an array for 
 storing the final average values for a given temperature. Then we call the initialize function which 
 calculates initial energy and magnetization. 
 For the $L = 20$ case we would like to study the evolution of the mean values, so in this case we make 
 an output file to which we write updated average values after each MC cycle.
 
-Finally we are ready to start running the Monte Carlo cycles. For each cycle we call the  
+Finally we are ready to start running the simulation. For each cycle we call the  
 \texttt{Metropolis} function, update the average values and write to file (if required). When the 
 MC loop is finished we write the final average values to file, and move to the next temperature.  
   
@@ -269,7 +271,7 @@ We start by establishing an initial state with some energy, $E_0$, which is done
 we pick out a random lattice position, and try to flip this spin. Then we compute the new energy, $E_1$, 
 and look at the energy difference between the new and the previous state, $\Delta E = E_1 - E_0$. 
 If $\Delta E\leq 0$ we accept the new spin configuration, while if $\Delta E > 0$ we pick a random 
-number $r$, and compare it to the probability ration $w=\exp(-\beta\Delta E)$. If $r\leq w$ we 
+number $r$, and compare it to the probability ratio $w=\exp(-\beta\Delta E)$. If $r\leq w$ we 
 accept the configuration. 
 
 Whenever a configuration is accepted we need to update energies and magnetization. The algorithm is 
@@ -279,8 +281,9 @@ is called a \textit{Monte Carlo cycle}.
 \section{Results}
 
 We previously calculated analytical expressions for the expectation values of $E$ and $|M|$, as well as 
-the heat capacity, $C_V$, and the susceptibility, $\chi$. By inserting $T = J = k_B = 1.0$ in these 
-expressions we can compare the values with those obtained in our MC simulation. This is done in 
+the heat capacity, $C_V$, and the susceptibility, $\chi$. By inserting $T = 1.0$ and $J=k_B = 1.0$ 
+in these expressions we can compare the values with those obtained in our MC simulation. ($J=k_B = 1.0$ 
+are used in all calculations and simulations in this project.) This is done in 
 Table \ref{tab:analytical_vs_sim} for various number of MC cycles. We see that by using a million 
 MC cycles we get good agreement between analytical and simulated values. 
 
@@ -304,7 +307,7 @@ Now that we have established that our algorithm is able to produce reasonable re
 to extend the lattice. We start by considering $L=20$, and want to see how many MC cycles we need for the 
 system reach equilibrium by studying the evolution of the mean energy and the mean magnetization.  
 Results for two different temperatures ($T=1.0$ and $T=2.4$) are shown in Figure \ref{fig:L20_ordered} 
-(all spins up initially) and \ref{fig:L20_random} (random initial spins). 
+(all spins up initially) and Figure \ref{fig:L20_random} (random initial spins). 
 
 \begin{figure}[ht!]
 	\centering
@@ -368,7 +371,7 @@ the most likely states are reached quite quickly, so the energy/magnetization st
 same, so that the average is smoothly converging. However, for $T=2.4$ we again see more fluctuations, 
 but the equilibrium is actually reached faster than with ordered initial spins. 
 
-The behaviour we observe is governed by the Boltzmann distribution, $e^{E/k_BT}$. This basically tells 
+The behaviour we observe is governed by the Boltzmann distribution, $e^{-E/k_BT}$. This basically tells 
 us that by increasing the temperature we increase the likelihood for entering a larger number of 
 states. This is also supported by Figure \ref{fig:Acc_confs}, which shows how the number of accepted 
 states in our simulation evolves with number of MC cycles, as well as Figure \ref{fig:E_prob_dist}, 
@@ -460,9 +463,9 @@ $4$ & $9.8$ min\\ \hline
 
 The final step is to extract the critical temperature in the thermodynamical limit, as discussed in 
 section 2.4. When doing these calculations we need somewhat higher precision in the estimates of 
-$T_C$, so (since we can established the approximate values of $T_C$ from Figure \ref{fig:phase}), 
-the simulations has been run again with the same number of MC cycles, but with $T\in [2.65,2.85]$ and 
-$\Delta T = 0.001$. By looking at $C_V$ in the output files for $L=60$ and $L=100$
+$T_C$, so it is practical (since we have established the approximate values of $T_C$ from Figure
+\ref{fig:phase}) to run the simulations again with the same number of MC cycles, but with 
+$T\in [2.65,2.85]$ and $\Delta T = 0.001$. By looking at $C_V$ in the output files for $L=60$ and $L=100$
 (found as \texttt{Output\_L\_60\_dt0.001.txt} and \texttt{Output\_L\_60\_dt0.001.txt} in the 
 Output folder in the previously mentioned git repository) we find that $T_C(L=60)=2.279$ and 
 $T_C(L=100)=2.275$. Using these values together with Equation \ref{eq:T_C} gives us 
@@ -471,14 +474,14 @@ T_C(L=\infty) = \frac{2.279 - 100/60\cdot 2.275}{1- 100/60} = 2.269,
 \end{align*}
 as critical temperature in the thermodynamical limit, 
 which is precisely the same as the exact result. (I'm a bit surprised that the estimation was \textit{that}
-accurate. It is not clear to me if this is some sort of magic coincidence, or if the simulation actually 
-is that good.) 
+accurate. It is not clear to me if this is some sort of magic coincidence from my numbers, or if 
+the simulation actually is that good.) 
 
 \section{Summary and conclusions}
 
 In this project we have done Monte Carlo simulations of magnetic systems by using the Ising model. We 
 found that we are able to obtain good precision in our simulations, compared to analytical values 
-for a $2\times 2$ lattice. We have also seen that the time need to reach equilibrium depends on both 
+for a $2\times 2$ lattice. We have also seen that the time needed to reach equilibrium depends on both 
 initial spin configuration and temperature, and that by increasing the temperature the energy will 
 fluctuate more, as more states are available, as described by the Boltzmann distribution. 
 
