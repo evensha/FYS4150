@@ -2,6 +2,9 @@ from matplotlib.pyplot import *
 from numpy import *
 import sys
 
+font = {'size':18}
+matplotlib.rc('font', **font)
+
 spins = sys.argv[1]
 temps = [1, 2.4]
 #temp = sys.argv[2] 
@@ -67,59 +70,69 @@ figure()
 plot(t1, E1mean) 
 xlabel('# MC cycles')
 ylabel('Energy')
-title('L=20, T=1')
-#xlim(0,50000)
-#ylim(-525, -475)
+title('T=1')
+if(spins == "ordered"):
+	xlim(0,10000)
+	ylim(-800, -798)
+if(spins == "random"): 
+	xlim(0,500000)
+	ylim(-800,-600)
 #show() 
-savefig("Output/Energy_"+spins+"_1.png")
+savefig("Output/Energy_"+spins+"_1.png", bbox_inches = 'tight')
 
 figure() 
 plot(t1, M1mean) 
 xlabel('# MC cycles')
 ylabel('Magnetization')
-title('L=20, T=1')
-#xlim(0,10000)
-#ylim(399,400)
+title('T=1')
+if(spins == "ordered"):
+	xlim(0,10000)
+	ylim(399,400)
+if(spins == "random"): 
+	xlim(0,500000)
+	ylim(300,400)
 #show() 
-savefig("Output/Magnetization_"+spins+"_1.png")
+savefig("Output/Magnetization_"+spins+"_1.png", bbox_inches = 'tight')
 
 figure() 
 plot(t2, E2mean) 
 xlabel('# MC cycles')
 ylabel('Energy')
-title('L=20, T=2.4')
-#xlim(0,50000)
-#ylim(-525, -475)
+title('T=2.4')
+if(spins == "ordered"): 
+	#xlim(0,500000)
+	ylim(-510, -480)
+if(spins == "random"): 
+	xlim(0,500000)
+	ylim(-520,-475)
 #show() 
-savefig("Output/Energy_"+spins+"_2.4.png")
+savefig("Output/Energy_"+spins+"_2.4.png", bbox_inches = 'tight')
 
 figure() 
 plot(t2, M2mean) 
 xlabel('# MC cycles')
 ylabel('Magnetization')
-title('L=20, T=2.4')
-#xlim(0,10000)
-#ylim(399,400)
+title('T=2.4')
+if(spins == "ordered"): 
+	#xlim(0,10000)
+	ylim(150,210)
+if(spins == "random"): 
+	xlim(0,500000)
+	ylim(175,250)
 #show() 
-savefig("Output/Magnetization_"+spins+"_2.4.png")
+savefig("Output/Magnetization_"+spins+"_2.4.png", bbox_inches = 'tight')
+
 
 figure()
-plot(t1,a1) 
-plot(t1,a2)
-legend(['T = 1', 'T=2.4'])
+loglog(t1,a1) 
+loglog(t1,a2)
+legend(['T = 1', 'T=2.4'],loc = 2)
 xlabel('# MC cycles')
 ylabel('Accepted configurations')
 #show()
-savefig("Output/Accepted_configurations_"+spins+".png")
+savefig("Output/Accepted_configurations.png", bbox_inches = 'tight')
 
-data = E1[30000:-1]
-binwidth = 0.001
-
-figure()
-hist(data,bins = arange(min(data), max(data)+binwidth, binwidth))
-savefig("Output/Hist_energies.png")
 """
-
 Energies1 = unique(E1[200000:-1])
 Energies2 = unique(E2[200000:-1])
 E1 = E1[200000:-1]
@@ -161,13 +174,15 @@ figure()
 plot(Energies1,p1)
 xlabel('E')
 ylabel('P(E)')
-savefig('Output/Energy_PDF_T=1.png')
+title('T=1')
+savefig('Output/Energy_PDF_T=1.png', bbox_inches = 'tight')
 
 figure()
 plot(Energies2,p2)
 xlabel('E')
 ylabel('P(E)')
-savefig('Output/Energy_PDF_T=2.4.png')
+title('T=2.4')
+savefig('Output/Energy_PDF_T=2.4.png', bbox_inches = 'tight')
 
 
 
