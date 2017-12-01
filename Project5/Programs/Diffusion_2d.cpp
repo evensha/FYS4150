@@ -26,6 +26,9 @@ int main( int argc, char *argv[] ){
 	double diff = 0; 
 	double delta_u = 0; 
 
+	cout << "dt = " << delta_t << endl; 
+	cout << "t1 = " << t1 << endl; 
+
 	mat u = zeros<mat>(n+1,n+1); 
 	mat unew = zeros<mat>(n+1,n+1); 
 	mat u_temp = zeros<mat>(n+1, n+1); 

@@ -31,7 +31,7 @@ for line in infile_CN:
 	u2_CN.append(float(words[1]))
 
 N = len(u1_FE)
-
+#print N
 #print N
 
 x = linspace(0,1,N)
@@ -40,10 +40,10 @@ u_ana_2 = zeros(N)
 u_ana_1[N-1] = 1.0
 u_ana_2[N-1] = 1.0
 
-t1 = 0.5*(1/float(N))**2*10
-t2 = 0.5*(1/float(N))**2*100
-print t1 
-print t2
+t1 = 0.5*(1/float(N))**2*1000
+t2 = 0.5*(1/float(N))**2*10000
+#print t1 
+#print t2
 
 
 for i in range(1,len(x)-1):
@@ -53,7 +53,7 @@ for i in range(1,len(x)-1):
 	u_ana_1[i] = x[i] - 2/pi*u_ana_1[i]
 	u_ana_2[i] = x[i] - 2/pi*u_ana_2[i]
 
-print u_ana_1
+#print u_ana_1
 #print u_ana_2
 """
 figure(); 
@@ -82,7 +82,7 @@ xlabel('x')
 ylabel('u(x)')
 title(r'$\Delta x = 1/10, t=%.2f$' %t1 )
 savefig('Output/Diffusion_1d_t1.png')
-show()
+#show()
 
 figure(); 
 plot(x, u2_FE)
@@ -96,4 +96,19 @@ title(r'$\Delta x = 1/10, t=%.2f$' %t2 )
 savefig('Output/Diffusion_1d_t2.png')
 #show()
 
+figure(); 
+plot(x, abs(u1_FE-u_ana_1))
+plot(x, abs(u1_BE-u_ana_1))
+plot(x, abs(u1_CN-u_ana_1))
+legend(['FE', 'BE', 'CN'], loc = 2)
+savefig('Output/Delta_t1_1d.png')
+#show()
+
+figure(); 
+plot(x, abs(u2_FE-u_ana_2))
+plot(x, abs(u2_BE-u_ana_2))
+plot(x, abs(u2_CN-u_ana_2))
+legend(['FE', 'BE', 'CN'], loc = 2)
+savefig('Output/Delta_t2_1d.png')
+#show()
 
