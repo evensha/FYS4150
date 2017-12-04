@@ -34,6 +34,13 @@ Even S. Håland
 \normalsize
 \section*{Abstract}
 
+In this project we study numerical and analytical solutions of the one and two dimensional diffusion 
+equation. For the one-dimensional problem we implement three different methods; one explicit scheme 
+(forward Euler) and two implicit schemes (backward Euler and Crank-Nicolson). We study the differences 
+between them, as well as there stability, and how well they are able to approximate the analytical 
+solution. We find (a bit surprisingly) that the backward Euler method is the one that is working best. 
+For the two-dimensional problem we have only implemented an explicit solver, and we will see that this 
+works fine as long as its stability condition is satisfied. 
 
 \end{center}
 \end{titlepage}
@@ -492,7 +499,7 @@ consequences of increasing the time step by a factor of two, to $\Delta t = \Del
   	\label{fig:1d_diff}	
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht!]
 	\centering 
  	\begin{subfigure}[b]{0.495\textwidth}
 		\includegraphics[width=\textwidth]{../Programs/Output/Diffusion_1d_t1_u.png}
@@ -511,7 +518,75 @@ consequences of increasing the time step by a factor of two, to $\Delta t = \Del
 
 \subsection{Two dimensions}
 
+Also in two dimensions we consider two different time points, $t_1 = 0.01$ and $t_2 = 1.0$. We first 
+consider $h=1/100$ and $\Delta t = h^2/2$ (i.e. the stability limit for the FE method). Solutions 
+at these two times are shown in Figure \ref{eq:2d}. At $t_2$ we can see that the system has reached the 
+steady state, since the surface has been "stretched out". In Figure \ref{fig:2d_delta} we see the 
+absolute differences between the analytical solution and the numerical one. We see that (as for the 
+one-dimensional problem) the approximation is better in the steady state, which seems natural as the 
+slope is steeper and the "structure" of the surface is more complicated at $t_1$. It is also noteworthy 
+that these plots suggests that our guess at the steady state solution was probably correct.       
+
+\begin{figure}[ht!]
+	\centering 
+	\begin{subfigure}[b]{0.495\textwidth}
+		\includegraphics[width=\textwidth]{../Programs/Output/Diffusion_2d_t1.png}
+        \caption{}
+        %\label{}
+  	\end{subfigure}
+  	\begin{subfigure}[b]{0.495\textwidth}
+		\includegraphics[width=\textwidth]{../Programs/Output/Diffusion_2d_t2.png}
+        \caption{}
+        %\label{}
+  	\end{subfigure}	
+  	\caption{Numerical solution to the 2D diffusion equation at two different times; 
+  	(a) $t_1$ and (b) $t_2$.}
+  	\label{fig:2d}
+\end{figure}
+
+\begin{figure}[ht!]
+	\centering 
+ 	\begin{subfigure}[b]{0.495\textwidth}
+		\includegraphics[width=\textwidth]{../Programs/Output/Delta_2d_t1.png}
+        \caption{}
+        %\label{}
+  	\end{subfigure}
+  	\begin{subfigure}[b]{0.495\textwidth}
+		\includegraphics[width=\textwidth]{../Programs/Output/Delta_2d_t2.png}
+        \caption{}
+        %\label{}
+  	\end{subfigure}	
+  	\caption{Difference between analytical and numerical solutions for the 2D diffusion equation at 
+  	two different times; (a) $t_1$ and (b) $t_2$.}
+  	\label{fig:2d_delta}
+\end{figure}
+
+So we have now seen that we are able to approximate the analytical solution quite well with the 
+explicit solver. The disadvantage of using the explicit solver is however, like we also saw in the 
+one-dimensional case, that the stability requirement is quite strict. In Figure \ref{fig:2d_us} we 
+see how the solution at $t_2$ look like when only slightly reducing the time step to 
+$\Delta = 1/1.99 h^2$. (Notice carefully the scale one the $z$-axis in this figure.) 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.5]{../Programs/Output/Diffusion_2d_t2_us.png}
+\caption{Numerical solution of the 2D diffusion equation at $t_2$ made with the explicit solver using 
+$\Delta t = 1/1.99 h^2$.}
+\label{fig:2d_us}
+\end{center}
+\end{figure}
+
 \section{Summary and conclusions}
+
+In this project we have solved the diffusion equation, both numerically and analytically, in one and 
+two dimensions. For the one-dimensional problem we study three different solution schemes; the 
+explicit forward Euler method, and the implicit backward Euler and Crank-Nicolson methods. We saw that 
+the backward Euler was the one that seemed to be working best. We also saw that the advantage of the 
+implicit solvers is that they are stable for any choices of step size, while the forward Euler solver 
+has a strict stability requirement. 
+
+For the two-dimensional problem we only implemented an explicit algorithm, and we saw that it gives 
+good approximations to the numerical solution, as long as we stay within the stability limit.  
 
 \begin{thebibliography}{40}
 
