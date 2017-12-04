@@ -44,6 +44,7 @@ int main( int argc, char *argv[] ){
 
 void Forward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 
+	// Set up vectors 
 	vec u = zeros<vec>(n+1);  				
 	vec unew = zeros<vec>(n+1); 
 
@@ -51,8 +52,6 @@ void Forward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 	vec u_t2 = zeros<vec>(n+1); 
 
 	double alpha = dt/(dx*dx); 
-
-	ofile.open("Output/Output_FE.txt"); 
 	
 	// Boundary conditions 
 	u(0) = unew(0) = 0.0; 
@@ -78,6 +77,12 @@ void Forward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 		u = unew; 
 	}
 
+	// Write results to file 
+	ostringstream os; 
+	os << "Output/Output_FE_" << n << ".txt"; 
+	string outfile = os.str(); 
+	ofile.open(outfile.c_str()); 
+
 	for( int i = 0; i<=n; i++ ){ // write u to file for t1 and t2 
 		ofile << u_t1(i) << setw(20) << u_t2(i) << endl; 
 	}
@@ -90,6 +95,7 @@ void Forward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 
 void Backward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 
+	// Set up vectors 
 	vec u, unew, d, b; 
 	u = unew = zeros<vec>(n+1);
 	d = zeros<vec>(n+1); 
@@ -97,8 +103,6 @@ void Backward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 	double alpha = dt/(dx*dx); 	
 	vec u_t1 = zeros<vec>(n+1); 
 	vec u_t2 = zeros<vec>(n+1); 
-
-	ofile.open("Output/Output_BE.txt");
 
 	// Boundary conditions 
 	u(0) = unew(0) = 0.0; 
@@ -133,6 +137,12 @@ void Backward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 		u = unew; 
 	}
 
+	// Write results to file 
+	ostringstream os; 
+	os << "Output/Output_BE_" << n << ".txt"; 
+	string outfile = os.str(); 
+	ofile.open(outfile.c_str()); 
+
 	for( int i = 0; i<=n; i++ ){ // write u to file for t1 and t2 
 		ofile << u_t1(i) << setw(20) << u_t2(i) << endl; 
 	}
@@ -145,6 +155,7 @@ void Backward_Euler(double dx, double dt, int t_f, int t1, int t2, int n){
 
 void Crank_Nicolson(double dx, double dt, int t_f, int t1, int t2, int n){
 
+	// Set up vectors 
 	vec u, unew, r, d, b; 
 	u = unew = r = zeros<vec>(n+1);
 	d = zeros<vec>(n+1); 
@@ -152,8 +163,6 @@ void Crank_Nicolson(double dx, double dt, int t_f, int t1, int t2, int n){
 	double alpha = dt/(dx*dx); // (dt+dt/2.0)/(dx*dx); 	
 	vec u_t1 =  zeros<vec>(n+1); 
 	vec u_t2 = zeros<vec>(n+1); 
-
-	ofile.open("Output/Output_CN.txt");
 
 	// Boundary conditions 
 	u(0) = unew(0) = r(0) = 0.0; 
@@ -190,6 +199,12 @@ void Crank_Nicolson(double dx, double dt, int t_f, int t1, int t2, int n){
 		if( t == t2 ) u_t2 = unew; 
 		u = unew; 
 	}
+
+	// Write results to file 
+	ostringstream os; 
+	os << "Output/Output_CN_" << n << ".txt"; 
+	string outfile = os.str(); 
+	ofile.open(outfile.c_str()); 
 
 	for( int i = 0; i<=n; i++ ){ // write u to file for t1 and t2 
 		ofile << u_t1(i) << setw(20) << u_t2(i) << endl; 

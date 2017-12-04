@@ -2,9 +2,14 @@ from matplotlib.pyplot import *
 from numpy import *
 import sys
 
-infile_FE = open('Output/Output_FE.txt', 'r')
-infile_BE = open('Output/Output_BE.txt', 'r')
-infile_CN = open('Output/Output_CN.txt', 'r')
+font = {'size':18}
+matplotlib.rc('font', **font)
+
+N =  int(sys.argv[1])
+
+infile_FE = open('Output/Output_FE_%d.txt' %N, 'r')
+infile_BE = open('Output/Output_BE_%d.txt' %N, 'r')
+infile_CN = open('Output/Output_CN_%d.txt' %N, 'r')
 
 u1_FE = []
 u2_FE = []
@@ -30,18 +35,15 @@ for line in infile_CN:
 	u1_CN.append(float(words[0])) 
 	u2_CN.append(float(words[1]))
 
-N = len(u1_FE)
-#print N
-#print N
 
-x = linspace(0,1,N)
-u_ana_1 = zeros(N)
-u_ana_2 = zeros(N) 
-u_ana_1[N-1] = 1.0
-u_ana_2[N-1] = 1.0
+x = linspace(0,1,N+1)
+u_ana_1 = zeros(N+1)
+u_ana_2 = zeros(N+1) 
+u_ana_1[N] = 1.0
+u_ana_2[N] = 1.0
 
-t1 = 0.5*(1/float(N))**2*1000
-t2 = 0.5*(1/float(N))**2*10000
+t1 = 0.05
+t2 = 0.5
 #print t1 
 #print t2
 
@@ -78,10 +80,10 @@ plot(x, u1_BE)
 plot(x, u1_CN)
 plot(x, u_ana_1)
 legend(['FE', 'BE', 'CN', 'Ana'], loc = 2)
-xlabel('x')
-ylabel('u(x)')
-title(r'$\Delta x = 1/10, t=%.2f$' %t1 )
-savefig('Output/Diffusion_1d_t1.png')
+xlabel(r'$x$')
+ylabel(r'$u(x)$')
+title(r'$\Delta x = 1/%d, t=%.2f$' %(N+1,t1) )
+savefig('Output/Diffusion_1d_%d_t1.png' %N, bbox_inches = 'tight')
 #show()
 
 figure(); 
@@ -89,26 +91,30 @@ plot(x, u2_FE)
 plot(x, u2_BE)
 plot(x, u2_CN)
 plot(x, u_ana_2)
-legend(['FE', 'BE', 'CN', 'Ana'])
-xlabel('x')
-ylabel('u(x)')
-title(r'$\Delta x = 1/10, t=%.2f$' %t2 )
-savefig('Output/Diffusion_1d_t2.png')
+legend(['FE', 'BE', 'CN', 'Ana'], loc = 2)
+xlabel(r'$x$')
+ylabel(r'$u(x)$')
+title(r'$\Delta x = 1/%d, t=%.2f$' %(N+1,t2) )
+savefig('Output/Diffusion_1d_%d_t2.png' %N, bbox_inches = 'tight')
 #show()
-
+"""
 figure(); 
 plot(x, abs(u1_FE-u_ana_1))
 plot(x, abs(u1_BE-u_ana_1))
 plot(x, abs(u1_CN-u_ana_1))
+xlabel(r'$x$')
+ylabel(r'$\Delta u$')
 legend(['FE', 'BE', 'CN'], loc = 2)
-savefig('Output/Delta_t1_1d.png')
+savefig('Output/Delta_t1_1d_%d.png' %N, bbox_inches = 'tight')
 #show()
 
 figure(); 
 plot(x, abs(u2_FE-u_ana_2))
 plot(x, abs(u2_BE-u_ana_2))
 plot(x, abs(u2_CN-u_ana_2))
+xlabel(r'$x$')
+ylabel(r'$\Delta u$')
 legend(['FE', 'BE', 'CN'], loc = 2)
-savefig('Output/Delta_t2_1d.png')
+savefig('Output/Delta_t2_1d_%d.png' %N, bbox_inches = 'tight')
 #show()
-
+"""
