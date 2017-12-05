@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  4 DEC 2017 15:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.9.12)  5 DEC 2017 19:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -880,151 +880,152 @@ LaTeX Font Info:    Try loading font information for T1+cmtt on input line 237.
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 ) [4] [5] [6] [7]
-<../Programs/Output/Diffusion_1d_9_t1.png, id=130, 535.5207pt x 427.8384pt>
+[8]
+<../Programs/Output/Diffusion_1d_9_t1.png, id=137, 535.5207pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_9_t1.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_9_t1.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_9_t1.png used on input
- line 450.
+ line 452.
 (pdftex.def)             Requested size: 209.90779pt x 167.69844pt.
 
-<../Programs/Output/Diffusion_1d_9_t2.png, id=132, 535.5207pt x 427.8384pt>
+<../Programs/Output/Diffusion_1d_9_t2.png, id=139, 535.5207pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_9_t2.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_9_t2.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_9_t2.png used on input
- line 455.
+ line 457.
 (pdftex.def)             Requested size: 209.90779pt x 167.69844pt.
 
-<../Programs/Output/Diffusion_1d_99_t1.png, id=133, 535.5207pt x 427.8384pt>
+<../Programs/Output/Diffusion_1d_99_t1.png, id=140, 535.5207pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_99_t1.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_99_t1.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_99_t1.png used on inpu
-t line 460.
+t line 462.
 (pdftex.def)             Requested size: 209.90779pt x 167.69844pt.
 
-<../Programs/Output/Diffusion_1d_99_t2.png, id=134, 535.5207pt x 427.8384pt>
+<../Programs/Output/Diffusion_1d_99_t2.png, id=141, 535.5207pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_99_t2.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_99_t2.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_99_t2.png used on inpu
-t line 465.
+t line 467.
 (pdftex.def)             Requested size: 209.90779pt x 167.69844pt.
- [8]
-<../Programs/Output/Delta_t1_1d_9.png, id=141, 555.0336pt x 413.3844pt>
+
+<../Programs/Output/Delta_t1_1d_9.png, id=142, 555.0336pt x 413.3844pt>
 File: ../Programs/Output/Delta_t1_1d_9.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_t1_1d_9.png>
 Package pdftex.def Info: ../Programs/Output/Delta_t1_1d_9.png used on input lin
-e 478.
+e 480.
 (pdftex.def)             Requested size: 209.90779pt x 156.33708pt.
 
-<../Programs/Output/Delta_t2_1d_9.png, id=142, 565.8741pt x 413.3844pt>
+<../Programs/Output/Delta_t2_1d_9.png, id=143, 565.8741pt x 413.3844pt>
 File: ../Programs/Output/Delta_t2_1d_9.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_t2_1d_9.png>
 Package pdftex.def Info: ../Programs/Output/Delta_t2_1d_9.png used on input lin
-e 483.
+e 485.
 (pdftex.def)             Requested size: 209.90779pt x 153.3409pt.
 
-<../Programs/Output/Delta_t1_1d_99.png, id=143, 555.0336pt x 413.3844pt>
+<../Programs/Output/Delta_t1_1d_99.png, id=144, 555.0336pt x 413.3844pt>
 File: ../Programs/Output/Delta_t1_1d_99.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_t1_1d_99.png>
 Package pdftex.def Info: ../Programs/Output/Delta_t1_1d_99.png used on input li
-ne 488.
+ne 490.
 (pdftex.def)             Requested size: 209.90779pt x 156.33708pt.
 
-<../Programs/Output/Delta_t2_1d_99.png, id=144, 577.4373pt x 413.3844pt>
+<../Programs/Output/Delta_t2_1d_99.png, id=145, 577.4373pt x 413.3844pt>
 File: ../Programs/Output/Delta_t2_1d_99.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_t2_1d_99.png>
 Package pdftex.def Info: ../Programs/Output/Delta_t2_1d_99.png used on input li
-ne 493.
+ne 495.
 (pdftex.def)             Requested size: 209.90779pt x 150.27534pt.
 
-<../Programs/Output/Diffusion_1d_t1_u.png, id=145, 550.6974pt x 427.8384pt>
+<../Programs/Output/Diffusion_1d_t1_u.png, id=146, 550.6974pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_t1_u.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_t1_u.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_t1_u.png used on input
- line 505.
+ line 507.
 (pdftex.def)             Requested size: 209.90779pt x 163.07642pt.
 
-<../Programs/Output/Diffusion_1d_t2_u.png, id=146, 533.3526pt x 427.8384pt>
+<../Programs/Output/Diffusion_1d_t2_u.png, id=147, 533.3526pt x 427.8384pt>
 File: ../Programs/Output/Diffusion_1d_t2_u.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_1d_t2_u.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_1d_t2_u.png used on input
- line 510.
+ line 512.
 (pdftex.def)             Requested size: 209.90779pt x 168.37738pt.
-
-<../Programs/Output/Diffusion_2d_t1.png, id=149, 578.16pt x 433.62pt>
+ [9 <../Programs/Output/Diffusion_1d_9_t1.png> <../Programs/Output/Diffusion_1d
+_9_t2.png> <../Programs/Output/Diffusion_1d_99_t1.png> <../Programs/Output/Diff
+usion_1d_99_t2.png>]
+<../Programs/Output/Diffusion_2d_t1.png, id=160, 578.16pt x 433.62pt>
 File: ../Programs/Output/Diffusion_2d_t1.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_2d_t1.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_2d_t1.png used on input l
-ine 533.
+ine 535.
 (pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
 
-<../Programs/Output/Diffusion_2d_t2.png, id=150, 578.16pt x 433.62pt>
+<../Programs/Output/Diffusion_2d_t2.png, id=161, 578.16pt x 433.62pt>
 File: ../Programs/Output/Diffusion_2d_t2.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_2d_t2.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_2d_t2.png used on input l
-ine 538.
+ine 540.
 (pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
-
-<../Programs/Output/Delta_2d_t1.png, id=151, 578.16pt x 433.62pt>
+ [10 <../Programs/Output/Delta_t1_1d_9.png> <../Programs/Output/Delta_t2_1d_9.p
+ng> <../Programs/Output/Delta_t1_1d_99.png> <../Programs/Output/Delta_t2_1d_99.
+png> <../Programs/Output/Diffusion_1d_t1_u.png> <../Programs/Output/Diffusion_1
+d_t2_u.png>]
+<../Programs/Output/Delta_2d_t1.png, id=173, 578.16pt x 433.62pt>
 File: ../Programs/Output/Delta_2d_t1.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_2d_t1.png>
 Package pdftex.def Info: ../Programs/Output/Delta_2d_t1.png used on input line 
-550.
+552.
 (pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
 
-<../Programs/Output/Delta_2d_t2.png, id=152, 578.16pt x 433.62pt>
+<../Programs/Output/Delta_2d_t2.png, id=174, 578.16pt x 433.62pt>
 File: ../Programs/Output/Delta_2d_t2.png Graphic file (type png)
 
 <use ../Programs/Output/Delta_2d_t2.png>
 Package pdftex.def Info: ../Programs/Output/Delta_2d_t2.png used on input line 
-555.
+557.
 (pdftex.def)             Requested size: 209.90779pt x 157.42638pt.
- [9 <../Programs/Output/Diffusion_1d_9_t1.png> <../Programs/Output/Diffusion_1d
-_9_t2.png> <../Programs/Output/Diffusion_1d_99_t1.png> <../Programs/Output/Diff
-usion_1d_99_t2.png>]
-<../Programs/Output/Diffusion_2d_t2_us.png, id=165, 578.16pt x 433.62pt>
+
+<../Programs/Output/Diffusion_2d_t2_us.png, id=176, 578.16pt x 433.62pt>
 File: ../Programs/Output/Diffusion_2d_t2_us.png Graphic file (type png)
 
 <use ../Programs/Output/Diffusion_2d_t2_us.png>
 Package pdftex.def Info: ../Programs/Output/Diffusion_2d_t2_us.png used on inpu
-t line 572.
+t line 574.
 (pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
- [10 <../Programs/Output/Delta_t1_1d_9.png> <../Programs/Output/Delta_t2_1d_9.p
-ng> <../Programs/Output/Delta_t1_1d_99.png> <../Programs/Output/Delta_t2_1d_99.
-png> <../Programs/Output/Diffusion_1d_t1_u.png> <../Programs/Output/Diffusion_1
-d_t2_u.png>] [11 <../Programs/Output/Diffusion_2d_t1.png> <../Programs/Output/D
-iffusion_2d_t2.png> <../Programs/Output/Delta_2d_t1.png> <../Programs/Output/De
-lta_2d_t2.png>]
+ [11 <../Programs/Output/Diffusion_2d_t1.png> <../Programs/Output/Diffusion_2d_
+t2.png> <../Programs/Output/Delta_2d_t1.png> <../Programs/Output/Delta_2d_t2.pn
+g>]
 
 Package 'standalone' INFO: See file 'Project5_report.stp' for list of sub-pream
 bles.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 597.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 604.
 [12 <../Programs/Output/Diffusion_2d_t2_us.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 597.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 604.
  (./Project5_report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 597.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 597.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 604.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 604.
 Package rerunfilecheck Info: File `Project5_report.out' has not changed.
 (rerunfilecheck)             Checksum: 88DCF9C1630DEF7162895D46BB65ED0E;854.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 597.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 604.
  ) 
 Here is how much of TeX's memory you used:
- 9938 strings out of 494333
- 149265 string characters out of 6163939
- 249133 words of memory out of 5000000
- 12985 multiletter control sequences out of 15000+600000
+ 9940 strings out of 494333
+ 149301 string characters out of 6163939
+ 251168 words of memory out of 5000000
+ 12986 multiletter control sequences out of 15000+600000
  21974 words of font info for 61 fonts, out of 8000000 for 9000
  372 hyphenation exceptions out of 8191
  67i,15n,100p,334b,536s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1046,10 +1047,10 @@ e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on Project5_report.pdf (13 pages, 828596 bytes).
+Output written on Project5_report.pdf (13 pages, 888314 bytes).
 PDF statistics:
- 513 PDF objects out of 1000 (max. 8388607)
- 214 compressed objects within 3 object streams
- 41 named destinations out of 1000 (max. 500000)
+ 533 PDF objects out of 1000 (max. 8388607)
+ 218 compressed objects within 3 object streams
+ 42 named destinations out of 1000 (max. 500000)
  188 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -34,7 +34,7 @@ Even S. Håland
 \normalsize
 \section*{Abstract}
 
-In this project we study numerical and analytical solutions of the one and two dimensional diffusion 
+In this project we study numerical and analytical solutions of the one- and two-dimensional diffusion 
 equation. For the one-dimensional problem we implement three different methods; one explicit scheme 
 (forward Euler) and two implicit schemes (backward Euler and Crank-Nicolson). We study the differences 
 between them, as well as there stability, and how well they are able to approximate the analytical 
@@ -115,7 +115,7 @@ bit easier.
 Note also that both in this section and later we will use a short-hand notation for derivatives, 
 reading 
 \begin{align*}
-\frac{\partial f}{\partial x} = f_x \quad \text{and} \quad \frac{\partial^2 f}{\partial x^2} = f_{xx}. 
+f_x = \frac{\partial f}{\partial x} \quad \text{and} \quad f_{xx} = \frac{\partial^2 f}{\partial x^2}. 
 \end{align*}
 
 \subsection{One dimension}
@@ -124,7 +124,7 @@ For the one dimensional equation (eq. \ref{eq:1d}) we assume that the solution c
 \begin{align*}
 u(x,t) = F(x)T(t) + u_s(x), 
 \end{align*}
-where $u_s(x)$ is the steady state solution, which naturally is independent of time. We know that 
+where $u_s(x)$ is the steady state solution, which naturally is independent of time. We know that the 
 steady state solution will be a straight line, i.e. $u_s(x)=x$, with the given boundaries. 
 
 Inserting our proposed $u(x,t)$ into the diffusion equation leaves us with 
@@ -140,7 +140,7 @@ The general solutions to these equations are
 \begin{align*}
 F(x) = A \cos(\lambda x) + B \sin (\lambda x)  \quad \text{and} \quad  T(t) = C e^{-\lambda^2t}, 
 \end{align*}
-where $A,B,C$ are constants. The first boundary conditions, $u(0,t)=0$, implies that $B=0$, which leaves 
+where $A,B,C$ are constants. The first boundary condition, $u(0,t)=0$, implies that $B=0$, which leaves 
 us with the preliminary solution 
 \begin{align*}
 u(x,t) = A' \sin(\lambda x) e^{-\lambda^2 t} + x,   
@@ -152,7 +152,7 @@ A'\sin (\lambda) = 0.
 (Remember that the exponential is never zero.)
 Now we have two options. We can choose $A'=0$, but this gives a trivial and non-interesting solution. A 
 more interesting alternative is to choose $\lambda = n\pi$, where $n=1,2,3,\dots$. This means 
-that the general solution is written as a Fourier series, 
+that the general solution must be written as a (Fourier) series, 
 \begin{align*}
 u(x,t) = \sum_{n=1}^\infty A_n \sin(n\pi x) e^{-n^2\pi^2t} + x. 
 \end{align*}  
@@ -201,8 +201,8 @@ where $\kappa$ is a constant, hence
 \begin{align*}
 G_{xx} + \kappa^2 G = 0 \quad \text{and} \quad H_{yy} + \nu^2 H = 0, 
 \end{align*}
-where $\nu^2 = \lambda^2 - \kappa^2$. These have the same form as the spatial part of the 1D problem, 
-and we can also eliminate the cosine part of the solution using the boundary conditions 
+where $\nu^2 = \lambda^2 - \kappa^2$. These equations have the same form as the spatial part of the 1D 
+problem, and we can also eliminate the cosine part of the solutions using the boundary conditions 
 $u(0,y,t) = u(x,0,t) = 0$. This gives a preliminary solution of the form 
 \begin{align*}
 u(x,y,t) = A \sin(\kappa x) B \sin (\nu y ) e^{-\lambda^2 t} + xy,  
@@ -226,7 +226,7 @@ u(x,y,t) = xy - \frac{4}{\pi^2} \sum_{n=1}^\infty \sum_{m=1}^\infty
 \section{Algorithms and code}  
 
 Having solved the equations analytically we will now move to the numerical part of the project, and 
-discuss the algorithm we have implemented. All code written for the project is found in 
+discuss the algorithms we have implemented. All code written for the project is found in 
 the following git repository: \vspace{0.5cm} \\ 
 \fbox{
 \href{https://github.com/evensha/FYS4150/tree/master/Project5/Programs}
@@ -246,8 +246,8 @@ C++ programs, as well as calculate the analytical solution(s).
 \subsection{One dimension}
 
 For solving the one dimensional equation we have implemented three different algorithms, which will
-be briefly described in the following. Where we use equal step lengths, with the spatial step, $\Delta x$, 
-always given by 
+be briefly described in the following. We always use equal step lengths, with the spatial step, $\Delta x$, 
+given by 
 \begin{align*}
 \Delta x = \frac{1}{n+1},  
 \end{align*}  
@@ -297,7 +297,9 @@ an explicit scheme. This does however come with a price, as the algorithm is sta
 \begin{align*}
 \Delta t \leq \frac{1}{2} \Delta x^2, 
 \end{align*}
-meaning that we need small (and hence many) time steps. The algorithm is implemented in the function 
+meaning that we need small (and hence many) time steps. (A more careful discussion of stability limits, 
+both for this scheme and the other ones, can be found for instance in ref. \cite{Lecture Notes}.) 
+The algorithm is implemented in the function 
 \texttt{Forward\_Euler} in the one-dimensional program. 
 
 \subsubsection{Backward Euler}
@@ -423,19 +425,19 @@ comparisons with the analytical solution.
 
 \subsection{One dimension}
 
-In one dimension we will study the solution two different time points, $t_1$ and $t_2$, where we 
+In one dimension we will study the solution two different time points, $t_1=0.05$ and $t_2=0.5$, where we 
 have chosen these points so that the system is in "motion" at $t_1$, while at $t_2$ it has reached 
 the steady state. We will also look at two different choices of $\Delta x$, and choose $\Delta t$ as 
 dictated by the stability limit of the forward Euler method. 
 
 The numerical solutions using each of the solvers are plotted together with the analytical solution 
-in Figure \ref{fig:1d} for $t_1$ and $t_2$, using $\Delta x = 1/10$ in the upper plots and 
-$\Delta t = 0.01$ in the lower plots. The 
+in Figure \ref{fig:1d} for $t_1$ and $t_2$, using $\Delta x = 0.1$ in the upper plots and 
+$\Delta x = 0.01$ in the lower plots. The 
 information we are able to extract from these plots is however quite limited, as all solvers seem to 
 give good agreement with the analytical solution. 
 
 It might be more interesting to study Figure 
-\ref{fig:1d_diff} which shows the absolute value of the difference between the analytical solution and 
+\ref{fig:1d_diff}, which shows the absolute value of the difference between the analytical solution and 
 each of the numerical ones. Here we see that the solver that (in general) seems to be performing best is 
 backward Euler. This is a bit surprising, as the truncation error in the Crank-Nicolson method should be
 smaller, suggesting that there might be something slightly wrong with the implementation of the 
@@ -565,7 +567,7 @@ So we have now seen that we are able to approximate the analytical solution quit
 explicit solver. The disadvantage of using the explicit solver is however, like we also saw in the 
 one-dimensional case, that the stability requirement is quite strict. In Figure \ref{fig:2d_us} we 
 see how the solution at $t_2$ look like when only slightly reducing the time step to 
-$\Delta = 1/1.99 h^2$. (Notice carefully the scale one the $z$-axis in this figure.) 
+$\Delta t = (1/1.99) h^2$. (Notice carefully the scale one the $z$-axis in this figure.) 
 
 \begin{figure}
 \begin{center}
@@ -591,6 +593,11 @@ good approximations to the numerical solution, as long as we stay within the sta
 \begin{thebibliography}{40}
 
 \bibitem{Rottmann} K. Rottman (2003). \textit{Matematisk formelsamling}, Spektrum forlag, Norway. 
+
+\bibitem{Lecture Notes} M. Hjort-Jensen (2015), \textit{Computational Physics - Lecture Notes Fall 2015}, 
+Department of Physics, University of Oslo. \\ 
+\href{https://github.com/CompPhysics/ComputationalPhysics/blob/master/doc/Lectures/lectures2015.pdf}
+{https://github.com/CompPhysics/ComputationalPhysics/blob/master\\/doc/Lectures/lectures2015.pdf}
 
 \end{thebibliography}
 
